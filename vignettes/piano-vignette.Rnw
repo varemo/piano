@@ -1,0 +1,705 @@
+% \VignetteIndexEntry{Piano - Platform for Integrative Analysis of Omics data}
+% \VignetteDepends{piano}
+
+% !TeX encoding = latin1
+\documentclass[11pt,a4paper]{article}
+
+% General packages
+\usepackage[swedish,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{ae}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{alltt}
+\usepackage{tocloft}
+\usepackage{hyperref}
+
+
+% Margins
+\usepackage[top=3cm, bottom=3.5cm, left=2.5cm, right=2.5cm]{geometry}
+\addtolength{\textheight}{-0.5cm}
+
+% Line spacing
+%\linespread{1.1}
+
+% Paragraph separation
+%\setlength{\parindent}{0pt} 
+%\setlength{\parskip}{2ex}
+
+% No brackets in reference list:
+\makeatletter
+\renewcommand\@biblabel[1]{#1.} 
+\makeatother
+
+
+% Captions
+\usepackage{caption}
+\setlength{\captionmargin}{0.3cm}
+\renewcommand{\captionfont}{\small\sf}
+\renewcommand{\captionlabelfont}{\small\bf\sffamily}
+\newcommand{\fighead}{\bf\sffamily}
+
+% Shortcuts
+\newcommand{\pkg}{\texttt}
+\newcommand{\fun}{\texttt}
+
+
+
+% ------------------- Begin document -------------------
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+<<echo=false, results=hide>>=
+library(piano)
+@
+
+\vspace*{0.3cm}
+\begin{center}\Huge\textbf{piano}
+
+\vspace{0.3cm}
+\Large Platform for Integrative Analysis of Omics data 
+
+\vspace{0.3cm}
+\normalsize \textit{An R-package for enriched gene set analysis}
+
+\vspace{2cm}
+\huge \textbf{Vignette}
+
+\vspace{11cm}
+\normalsize\noindent \textbf{Leif Väremo, Intawat Nookaew}
+
+\vspace{0.3cm}
+\small\noindent \today
+
+\vspace{0.3cm}
+\small\noindent {Systems and Synthetic Biology\\
+Department of Chemical and Biological Engineering\\ 
+Chalmers University of Technology\\ 
+SE-412 96 Gothenburg, Sweden}
+\end{center}
+
+\thispagestyle{empty}
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+\normalsize
+\section{Introduction}
+
+The \pkg{piano} package is intended as a platform for performing gene set analysis (GSA) using a selection of available methods (some of which are also implemented in separate packages or other software). The advantage with using \pkg{piano} is that all of these methods can be run using the same setup, resulting in minimal effort for the user when switching between methods. Additionally, \pkg{piano} contains a new approach which divides the gene set results into directionality classes, giving deeper information. Further on, \pkg{piano} contains functions to perform consensus analysis using different GSA methods. The details are presented in \cite{varemo2013} and are briefly discussed in Section~\ref{sec:gsa} - Gene set analysis.
+
+Piano also contains simple functions for basic microarray analysis. The purpose is to offer a seamless analysis workflow, starting from raw microarray data and ending with GSA results. Of course other packages and software can be used for the microarray processing and analysis prior to using \pkg{piano} for GSA, and of course other data than microarray data (e.g. RNA-seq data) can be used as input to the GSA.
+
+Section \ref{sec:start} covers installation, Section \ref{sec:ma} covers microarray analysis and Section \ref{sec:gsa} covers GSA. More specific information, than mentioned in this introduction, regarding these topics can be found in each section below.
+
+
+\subsection{Contact}
+For questions regarding \pkg{piano}, contact the authors, Leif Väremo and Intawat Nookaew at \mbox{\texttt{piano.rpkg@gmail.com}}.
+
+\subsection{Citation}
+If you use \pkg{piano} in your research please cite:
+
+\begin{quote}
+Väremo, L.,~Nielsen, J.,~Nookaew, I. (2013) Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. \textit{Nucleic Acids Research}. doi:10.1093/nar/gkt111
+\end{quote}
+
+\newpage
+\section{Getting started}
+\label{sec:start}
+
+A general introduction to R and apropriate tutorials can be found online, e.g. on the CRAN webpage (\url{http://cran.r-project.org/}).
+
+\subsection{Installation and first run}
+
+Install \pkg{piano} by typing in R:
+
+\begin{Schunk}
+\begin{Sinput}
+> source("http://www.bioconductor.org/biocLite.R")
+> biocLite("piano")
+\end{Sinput}
+\end{Schunk}
+
+\noindent Once everything is installed you can load \pkg{piano} into your workspace:
+
+<<>>==
+library(piano)
+@
+
+\noindent{Note that this command has to be run every time you restart R in order to be able to use the functions in \pkg{piano}}. To get immediate help on \pkg{piano} or any of its functions (e.g. \fun{runGSA}), type:
+
+\begin{Schunk}
+\begin{Sinput}
+> ?piano
+> ?runGSA
+\end{Sinput}
+\end{Schunk}
+
+\subsection{Optional requirements}
+
+\noindent If you plan to use \pkg{piano} for basic microarray analysis (e.g. normalization of raw-data, quality control and differential expression analysis) it is suggested that you also install the following packages for full functionality:
+\begin{Schunk}
+\begin{Sinput}
+> pkgs <- c("yeast2.db", "limma", "affy", "plier", "affyPLM", "gtools", "plotrix")
+> source("http://www.bioconductor.org/biocLite.R")
+> biocLite(pkgs)
+\end{Sinput}
+\end{Schunk}
+
+\noindent If you wish to import SBML models to be used to define gene sets you will need the Bioconductor package \pkg{rsbml}. Note that \pkg{rsbml} requires the open-source API LibSBML to be installed on your system (see \url{http://sbml.org/Downloads} and \pkg{rsbml} at \href{http://bioconductor.org}{Bioconductor}).
+
+In order to run all the examples in this vignette, you will also need the Bioconductor package \pkg{biomaRt}.
+
+
+\newpage
+\section{Microarray analysis}
+\label{sec:ma}
+
+This section will cover the use of \pkg{piano} for basic microarray analysis. For instructions on the major purpose of \pkg{piano}, gene set analysis (GSA), please see the next section. A common starting point of gene set analysis is gene expression data, commonly provided by microarrays although the use of other technologies, such as RNA-sequencing, are increasing. The purpose with the microarray analysis functions in \pkg{piano} is to provide the user with basic and simple steps to transform raw data into statistics that are appropriate as input to the GSA. Of course it is perfectly possible to use other packages or software to analyze data prior to continuing with GSA using \pkg{piano}, and of course the input data to \fun{runGSA} is not limited to gene expression data.
+
+Essentially, the microarray analysis functions are wrappers around the popular and widely used packages \pkg{affy} and \pkg{limma}. Hence, for more advanced analysis the user is referred directly to those packages. The microarray analysis workflow in \pkg{piano} is as follows: (1) loading raw or normalized data for preprocessing (\fun{loadMAdata}), (2) performing quality control (\fun{runQC}) and (3) checking for differential expression (\fun{diffExp}). After these steps it is possible, if one wishes, to continue with GSA.
+
+\subsection{Loading the data}
+
+The starting point for the microarray analysis is the \fun{loadMAdata} function. Typically you want to load a set of CEL files. This also requires a setup file which describes the experimental setup and assigns each CEL file to a specific condition. This file can be created e.g. in Notepad or Excel and saved as a tab-delimited text file. If you name the file "setup.txt" \fun{loadMAdata} will find it automatically. It is also possible to create the setup directly in R:
+
+<<>>==
+# An example setup:
+oxygen <- c("aerobic","anaerobic")
+limitation <- c("Clim","Nlim")
+mySetup <- cbind(oxygen[c(1,1,1,2,2,2,1,1,1,2,2,2)],
+               limitation[c(1,1,1,1,1,1,2,2,2,2,2,2)])
+
+# The rownames correspond to the CEL-file names (CAE1.CEL etc):
+rownames(mySetup) <- c("CAE1","CAE2","CAE3","CAN1","CAN2","CAN3",
+                     "NAE1","NAE2","NAE3","NAN1","NAN2","NAN3")
+colnames(mySetup) <- c("oxygen","limitation")
+
+# The final setup object can look like this:
+mySetup
+@
+
+\noindent No matter if you make the setup in R or in a tab delimited text file, the format should be as follows: The first column (the rownames if in R) should contain the names of the CEL files and additional columns should assign attributes in some category to each array.
+
+Once you have your setup, either as a file or an object in R, make sure that you are in the directory of your CEL files, then run:
+
+
+\begin{Schunk}
+\begin{Sinput}
+> # If you have the experimental setup in a file named setup.txt in the 
+> # working directory:
+> myArrayData <- loadMAdata()
+>
+> # If you have the experimental setup in an object mySetup:
+myArrayData <- loadMAdata(setup=mySetup)
+\end{Sinput}
+\end{Schunk}
+
+\noindent The above commands are assuming that you are using yeast 2.0 CEL files, and in this case the correct annotation and filtering will be applied automatically. If you are using other arrays (or want to use a custom annotation) you can add the annotation separately. This is done through the argument \fun{annotation}, pointed to either a \fun{data.frame} or the file-name of a tab delimited text file containing the columns: Probeset ID (the rownames if you use a \fun{data.frame}), Gene Name, Chromosome and Chromosome location. If only the Gene Names are available the two other columns can be set to arbitrary values (e.g. 1), but are still required. The Chromosome and Chromosome location info is only used in the polar plot (see below).
+
+The \fun{loadMAdata} function will normalize the raw data (by default using the \fun{plier} algorithm). Further on, you can choose whether or not to filter the normalized data, through the \fun{filter} argument. If you set this to \fun{TRUE} only probesets that are included in the annotation will be kept for further analysis.
+
+It is also possible to load already normalized data, either from a separate file or from a \fun{data.frame} in R. The first column (or rownames if object in R) should be the probeset IDs and correspond to the ones used in the annotation. The column headers should match the names used in the setup. Note that if you are loading pre-normalized Yeast 2.0 data, you need to specify \fun{platform="yeast2"} in order to get automatic annotation. In other cases just leave this argument to its default (\fun{platform=NULL}) and supply separate optional annotation as described above.
+
+For more details see the help page on \fun{loadMAdata} (\fun{> ?loadMAdata}). To have an example in this vignette we will load data included in the \pkg{piano} package, which is microarray data from yeast cultivated in aerobic and anaerobic conditions using either carbon limited or nitrogen limited media \cite{nookaew2012}. When we load this data we also use the \fun{datadir} argument to specify the location of the data, since it is not in our working directory:
+
+<<>>=
+# Get path to example data and setup files:
+dataPath <- system.file("extdata", package="piano")
+
+# Load pre-normalized data:
+myArrayData <- loadMAdata(datadir=dataPath, 
+                          dataNorm="norm_data.txt.gz", 
+                          platform="yeast2")
+@
+
+\noindent The \fun{loadMAdata} function will return a list-like object of class \fun{ArrayData}, in this case stored in \fun{myArrayData}, containing the elements: \fun{dataRaw}, \fun{dataNorm}, \fun{setup} and \fun{annotation}:
+
+<<>>==
+myArrayData
+@
+
+\noindent You can examine these elements to see that they were correctly loaded:
+
+<<>>==
+# Check the setup:
+myArrayData$setup
+# Check the annotation (top 10 rows):
+myArrayData$annotation[1:10,]
+@
+
+\noindent Note that depending on the input \fun{dataRaw} and/or \fun{annotation} may be excluded.
+
+\subsection{Quality control}
+
+There are many quality control methods implemented in R. The \fun{runQC} function collects a selection of these methods and lets you run them on your loaded and preprocessed data (Figure \ref{fig:qc}). The methods that are possible to run depends on if you started from raw data or not. To run all quality control methods possible for your data, simply type:
+
+<<>>==
+runQC(myArrayData)
+@
+
+\noindent In this case a warning message will be given that \fun{rnaDeg} and \fun{nuseRle} could not be run due to that no raw data was available (since we started with pre-normalized data using \fun{loadMAdata}). If you wish to run only selected quality control methods this can be specified by a true/false statement for each appropriate argument. For instance:
+
+<<>>==
+# To only run the PCA:
+runQC(myArrayData, rnaDeg=FALSE, nuseRle=FALSE, hist=FALSE,
+      boxplot=FALSE, pca=TRUE)
+# Additionally, for the PCA you can specify other colors:
+runQC(myArrayData, rnaDeg=FALSE, nuseRle=FALSE, hist=FALSE,
+      boxplot=FALSE, pca=TRUE, colors=c("cyan","orange"))
+@
+
+\noindent The quality control may result in the decision to remove some bad arrays, in that case remove those and reload your data again with \fun{loadMAdata}.
+
+\begin{figure}[!b]
+\centering
+\fbox{\includegraphics[width=15cm]{qcfig.pdf}}
+\caption{Example of figures that are produced by the \texttt{runQC} function.}
+\label{fig:qc}
+\end{figure}
+
+
+\subsection{Differential expression analysis}
+
+Once you have loaded and preprocessed the data and checked the quality, the next step is to check for differentially expressed genes. The \pkg{piano} package uses the linear models approach of the \pkg{limma} package \cite{smyth2005}. Differential expression analysis can be carried out in many ways. Since the microarray analysis of \pkg{piano} aims to be simple and straight-forward, the options are limited to the most common approach. Here, you are required to define two conditions that are to be compared, and genes that differ in expression between these conditions will be detected. In order to see the conditions that are assigned to each microarray, use the \fun{extractFactors} function:
+
+<<>>==
+extractFactors(myArrayData)
+@
+
+\noindent The conditions is simply a merge of the columns of the setup, if these get to specific, try to reduce the number of columns in the setup. In our case we have four unique conditions. As an example, we choose to compare yeast cultured in aerobic conditions to yeast in anaerobic conditions, for carbon limited and nitrogen limited media, separately. To do so, we will use the \fun{diffExp} function:
+
+<<>>==
+pfc <- diffExp(myArrayData, contrasts=c("aerobic_Clim - anaerobic_Clim", 
+                                        "aerobic_Nlim - anaerobic_Nlim"))
+@
+\begin{figure}[!t]
+\centering
+\fbox{\includegraphics[width=15cm]{diffexpfig.pdf}}
+\caption{Example of figures that are produced by the \texttt{diffExp} function.}
+\label{fig:diffexp}
+\end{figure}
+\noindent Note that the compared conditions, called contrasts, are defined in a character vector, where each condition is separated from the condition it will be compared to, with a "\fun{ - }" (do not forget the spaces). The names of the conditions should match those returned by \fun{extractFactors}. The \fun{diffExp} function returns a list (stored in \fun{pfc} in the example above) with the elements \fun{pValues}, \fun{foldChanges} and \fun{resTable}, containing the statistics returned by \fun{topTable} (in \pkg{limma}). By default the p-values are adjusted for multiple testing using FDR. To view e.g. the top five significant genes for each contrast:
+
+<<>>==
+# Sort genes in "aerobic_Clim - anaerobic_Clim" according to adjusted p-value:
+ii <- sort(pfc$resTable[[1]]$adj.P.Val, index.return=TRUE)$ix
+pfc$resTable[[1]][ii[1:5],]
+# Sort genes in "aerobic_Nlim - anaerobic_Nlim" according to adjusted p-value:
+ii <- sort(pfc$resTable[[2]]$adj.P.Val, index.return=TRUE)$ix
+pfc$resTable[[2]][ii[1:5],]
+@
+
+The \fun{diffExp} function also produces three plots (Figure \ref{fig:diffexp}): a Venn diagram, a polar plot and a heatmap. The Venn diagram shows the number of differentially expressed genes for each contrast (by default at a significance level of 0.001, see argument \fun{significance}). The polar plot gives a visualization of differential expression by plotting the -log10(p-values) against chromosomal location of each gene. The heatmap shows the expression levels of significant genes (in at least one contrast, significance cutoff controlled by the argument \fun{heatmapCutoff}) for all microarrays and clusters similar expression patterns together. Each of these plots can be turned on/off through the argument \fun{plot}.
+
+The gene-level statistics, returned by \fun{diffExp}, can be used to select genes of interest for further investigation but also passed on to additional global analyses. One common analysis in this context is gene set analysis which is the main part of \pkg{piano} and is presented in the next section. 
+
+\newpage
+\section{Gene set analysis}
+\label{sec:gsa}
+
+This section will give an overview of how to run gene set analysis (GSA) using \pkg{piano}. To not get too technical, some details are left out here, but described more in detail in the documentation of each function (e.g. \fun{> ?runGSA}) as well as in the \pkg{piano} publication and its supplementary material\cite{varemo2013}. Please use these sources if interested in deeper details.
+
+This section is organized in the following way: first a short introduction to GSA is given (\ref{sec:gsaintro}), followed by a description of input data (\ref{sec:gsainput}) and available GSA methods (\ref{sec:gsamet}). Next the main function \fun{runGSA} is described (\ref{sec:rungsa}). After this, some examples are presented to showcase what is possible to do (\ref{sec:gsaex}). Finally, the last part describes how different GSA runs (using different settings) can be combined into a consensus result (\ref{sec:gsacon}).
+
+\subsection{Introduction to gene set analysis}
+\label{sec:gsaintro}
+GSA is collective name of statistical methods that analyze the significance of genes, in terms of gene sets. To give a common example, genes can be grouped by GO terms so that a statistic for each GO term (gene sets in this case) can be calculated, representing the enrichment of significant genes within each GO term. One advantage with GSA is that the biological interpretation of gene-level data can be easier to assess using groups of genes that share some common property, rather than considering each single gene separately. Simply put, the GSA methods take gene-level statistics as input (i.e. a statistical value for each gene) and calculates gene set statistics for each defined group of genes (gene sets). The gene-level statistics are commonly taken from differential expression analysis of transcription data, but can in principle also be based on genome-wide association studies, proteomics or metabolomics data. For the examples in this vignette we will focus on gene-level statistics from gene expression studies.
+
+\subsection{GSA input data}
+\label{sec:gsainput}
+
+To run GSA, two inputs are needed: 
+\begin{itemize}
+\item Gene-level statistics
+\item Gene set collection (GSC) 
+\end{itemize}
+The gene-level statistics are simply represented by a one-columned dataframe (or a named vector) of numeric values (usually p-values or t-values from a differential expression analysis) with some kind of gene IDs as rownames. Just to see an example of this we can use the gene-level p-values of one of the contrasts from the microarray analysis (described in the previous section):
+
+<<>>==
+# Get p-values from the aerobic_Clim vs anaerobic_Clim comparison:
+myPval <- as.matrix(pfc$pValues)[,"aerobic_Clim - anaerobic_Clim"]
+# Display the first five values and gene IDs:
+myPval[1:5]
+@
+
+\noindent Apart from gene-level statistics, an optional but common input is \fun{directions}. This simply gives the direction of expression change of each gene (e.g. fold-changes). This is used to separate up-regulated and down-regulated genes e.g. when p-values are used as gene-level statistics. If t-values are used as input, there is no need for \fun{directions}, since this is given by the sign of each t-value.
+
+The gene set collection should describe the grouping of genes into gene sets. This can be defined in many ways and is handled by the \fun{loadGSC} function. This function loads a gene set collection into the correct format required by the \fun{runGSA} function. A simple dummy example:
+
+<<>>==
+# Custom gene to gene set mapping:
+genes2genesets <- cbind(paste("gene",c("A","A","A","B","B","C","C","C","D"),sep=""),
+                        paste("set",c(1,2,3,1,3,2,3,4,4),sep=""))
+genes2genesets
+# Load into correct format:
+myGsc <- loadGSC(genes2genesets)
+# View summary:
+myGsc
+# View all gene sets:
+myGsc$gsc
+@
+
+\noindent After loading a gene set collection using \fun{loadGSC} it is always recommended to look at the output (in this case \fun{myGsc}) so that the given information was correctly interpreted, i.e. that the gene sets and genes were not swapped and that the distribution of gene set sizes (number of member genes) seem valid. Using a two-column mapping of all gene to gene set associations, as in the above example, is a simple way to load custom gene set collections, however some general formats are also recognized by \fun{loadGSC}: gmt, sbml and sif (see \fun{loadGSC} documentation for more info). Note that the gene names in the gene set collection have to match the gene names used for the gene-level statistics, i.e. an appropriate gene-level statistics format for the above example would be:
+
+<<>>==
+myStats <- c(-1.5,-0.5,1,2)
+names(myStats) <- paste("gene",c("A","B","C","D"),sep="")
+myStats
+@
+
+Note that although the gene names have to match between the gene-level statistics and the gene set collection, not all genes have to be represented in both. Only genes that have a gene-level statistic and belong to at least one gene set are used in the GSA. (Detailed note: Actually, all given gene-level statistics are used for permutation-based significance estimation, regardless if they belong to a gene set.)
+
+\subsection{Available GSA methods}
+\label{sec:gsamet}
+
+Once you have gene-level statistics and have loaded a gene set collection using \fun{loadGSC} you can perform a GSA using \fun{runGSA}. This function collects a number of GSA methods into the same platform, meaning that it is easy to test different methods using the same settings, format and input. The available GSA methods are:
+\begin{itemize}
+\item Fisher's combined probability test \cite{fisher1932}
+\item Stouffer's method \cite{stouffer1949}
+\item Reporter features \cite{patil2005, oliveira2008}
+\item Parametric analysis of gene set enrichment (PAGE, also implemented in Bioconductor package \pkg{PGSEA}) \cite{kim2005}
+\item Tail strength (also implemented in R package \pkg{samr}) \cite{taylor2006}
+\item Wilcoxon rank-sum test (also used by \pkg{limma})
+\item Gene set enrichment analysis (GSEA, R script also available at www.broadinstitute.org/gsea) \cite{mootha2003, subramanian2005}
+\item Mean (also used by \pkg{limma} and R package \pkg{GSA})
+\item Median
+\item Sum
+\item Maxmean (also implemented in \pkg{GSA}) \cite{efron2007}
+\end{itemize}
+For details on these methods, see corresponding references, R packages and the \pkg{piano} publication \cite{varemo2013} (in particular the supplementary methods). The following GSA methods can only accept p-values as input: \fun{fisher}, \fun{stouffer}, \fun{reporter} and \fun{tailStrength}. The following methods can only accept t-values (or similarly formatted statistic): \fun{maxmean}, \fun{gsea} and \fun{page}.
+
+Each GSA method will calculate a statistic for each gene set in the gene set collection. The significance (gene set p-values) of these gene set statistics can generally be calculated in three ways: from a theoretical null distribution, by randomizing the gene labels or by randomizing the sample labels. For \fun{fisher}, \fun{stouffer}, \fun{reporter}, \fun{wilcoxon} and \fun{page}, the gene set p-values can be calculated from a theoretical null-distribution. For all methods, gene sampling or sample permutation can be used.
+
+
+\subsection{The \fun{runGSA} function}
+\label{sec:rungsa}
+The main function of \pkg{piano} is \fun{runGSA}. This section will go into how to use it and its different arguments and settings, and describe its output (see also the separate \fun{runGSA} help documentation). Additional down-stream functions will be described as they are used in the examples in section \ref{sec:gsaex}.
+
+\subsubsection{A simple run}
+The \fun{runGSA} function has many arguments, but a minimum requirement is only the arguments \fun{geneLevelStats} and \fun{gsc}. Using the gene set collection and gene-level statistics created in the dummy example in section \ref{sec:gsainput}, a minimal-input run would be executed like this:
+
+<<results=hide>>==
+gsaRes <- runGSA(myStats, gsc=myGsc)
+@
+The gene names in \fun{myStats} have to match the gene names used in \fun{myGsc} and \fun{myGsc} has to be an object of class \fun{GSC}, as returned by \fun{loadGSC}.
+
+\subsubsection{The output of \fun{runGSA}}
+\noindent Let's start with looking at the output of \fun{runGSA}. First, to get a summary of the GSA run and results stored in \fun{gsaRes} (assuming you ran the previous line of code), type :
+<<>>==
+gsaRes
+@
+Here we get details of the number of genes and gene sets that were used in the analysis, and a summary of the settings that were used as well as the total runtime. The full output structure is a list with the following elements (described in the \fun{runGSA} help text):
+<<>>==
+names(gsaRes)
+@
+This list contains both the input and settings, as well as the result, in principle everything associated with the GSA run. We will first focus on the main result statistics. These can be accessed by using the \fun{GSAsummaryTable} function. This is essentially a table of the number of genes in each gene set, the gene set statistics and their p-values (normal and adjusted). What you will notice is that there are three classes: distinct-directional, mixed-directional and non-directional.
+
+These directionality classes aim to describe different aspects of direction of change of gene expression on the gene set level. The non-directional class disregards the direction of change and simply uses the absolute values of the gene-level statistics to calculate the gene set statistics and the associated p-values. The distinct-directional class takes direction of change into account, so that gene sets with genes both significantly up-regulated and significantly down-regulated will cancel out. Finally, the mixed-directional class considers the up-regulated subset and the down-regulated subset of a gene set separately. Each subset is scored according to the proportion of significant genes. Let's use an example to understand this. 
+
+Imagine a small gene set with four genes (all significant) and the following gene-level statistics:
+<<echo=FALSE>>==
+c(-4, -3, 2, 3.5)
+@
+Now, the gene set statistic of the distinct-directional class would simply be (if using the mean method):
+<<>>==
+mean(c(-4, -3, 2.5, 4.5))
+@
+We immediately see that the genes in the gene set do not change in a distinct direction, they show equal parts of up- and down-regulation. That is, the gene set as a whole does not show significant patterns of either distinct down- or up-regulation. However, disregarding the direction of change, using the non-directional class, the gene set suddenly appears to be highly significant:
+<<>>==
+mean(abs(c(-4, -3, 2.5, 4.5)))
+@
+This is because all genes are displaying changes in expression levels between the compared conditions (albeit in different directions). Looking at the subsets of up- and down-regulated genes on their own also reveals that the gene set has significant parts of both up- and down regulation:
+<<>>==
+mean(abs(c(-4, -3)))
+mean(abs(c(2.5, 4.5)))
+@
+By calculating and reporting the gene set statistics for all three directionality classes, we get a more detailed picture of each gene set.
+
+This is just a dummy example with four genes, but in a real scenario we may end up with a gene set with the following p-values:
+<<echo=FALSE>>==
+tmp<-c(0.0001,0.0001,0.9999,0.0001,0.005)
+names(tmp) <- c("p (non.dir)","p (dist.dir.up)","p (dist.dir.dn)","p (mix.dir.up)","p (mix.dir.dn)")
+tmp
+@
+Here we see, due to the low non-directional p-value, that the gene set in general is enriched with significant genes (disregardful of direction of regulation), that the genes tend to be coordinately (or distinctly) up-regulated but that also the portion of down-regulated genes are on their own mostly significant. This is probably due to that the gene set contains many (e.g. 95) genes that are up-regulated and only a few (e.g. 5) that are down regulated. 
+<<echo=FALSE>>==
+tmp<-c(100,95,5)
+names(tmp)<-c("Genes (tot)","Genes (up)","Genes (down)")
+tmp
+@
+These 5 genes can still be highly significant although the gene set as a whole shows distinct patterns of up-regulation. Again, taking all these values in to account, rather than basing our conclusions on only one of the p-values, we get a better picture of in what way the gene set is significant. The concept is outlined in Figure \ref{fig:rungsa} and discussed more in detail in the \pkg{piano} publication \cite{varemo2013}.
+
+\begin{figure}
+\centering
+\includegraphics[width=12cm]{rungsa.png}
+\caption{Conceptual overview of the \fun{runGSA} workflow.}
+\label{fig:rungsa}
+\end{figure}
+
+
+\subsubsection{Adjusting settings}
+
+Now that we have an idea of the output (most importantly, p-values for each gene set in each directionality class), we will focus on the different settings. The default GSA method (i.e. the method of calculating the gene set statistics from the gene-level statistics) is the mean of the gene-level statistics. Which method to use is controlled by the \fun{geneSetStat} argument. Be aware of that the following GSA methods can only accept p-values as input: \fun{fisher}, \fun{stouffer}, \fun{reporter} and \fun{tailStrength}, and that the following methods can only accept t-values (or similarly formatted statistic): \fun{maxmean}, \fun{gsea} and \fun{page}.
+
+Next, the gene set significance calculation method can be set using the \fun{signifMethod}. The default is gene sampling, meaning that the gene-level statistics are randomly grouped into fake gene sets to generate a background distribution of gene set statistics. The number of time the genes are randomized is controlled by \fun{nPerm}. The original gene set statistics are compared to this background in order to infer the gene set p-values. In a similar manner the sample labels can be randomized (sample permutation), but this has to be done by the user separately (see the \fun{runGSA} help text for more info).  For the GSA methods \fun{fisher}, \fun{stouffer}, \fun{reporter}, \fun{wilcoxon} and \fun{page}, the gene set p-values can also be calculated from a theoretical null-distribution.
+
+The gene set p-values are by default adjusted for multiple testing using FDR. Other methods can be applied through the \fun{adjMethod} argument.
+
+The \fun{gsSizeLim} argument can be used to control the smallest and largest gene set sizes allowed in the analysis. For instance, you may wish to remove gene sets with fewer than five genes (for which you have gene-level statistics for) from the analysis.
+
+The GSEA method is one of the most popular GSA methods and there is dedicated software for this (www.broadinstitute.org/gsea). In the statistical formulation there is a user-controlled parameter that defaults to 1. This can be set through the \fun{gseaParam} argument. For more info on this see \cite{subramanian2005}.
+
+
+\subsection{GSA examples}
+\label{sec:gsaex}
+The applications of GSA using \pkg{piano} can be presented using a few examples. Here we will also introduce the down-stream functions \fun{geneSetSummary}, \fun{GSAsummaryTable} and \fun{networkPlot}.
+
+\subsubsection{Example 1: A yeast microarray data set and GO terms}
+As an example of the seamless integration of the microarray analysis part of \pkg{piano} and the GSA part, we will start with an example using the data from section \ref{sec:ma}. At that point we ended up with an object, \fun{pfc}, containing p-values and fold-changes from the differential expression analysis (using the \fun{diffExp} function):
+<<>>==
+# Get the p-values for the contrast aerobic_Clim - anaerobic_Clim
+myPval <- pfc$pValues$"aerobic_Clim - anaerobic_Clim"
+names(myPval) <- rownames(pfc$pValues)
+myPval[1:5]
+# Get the fold-changes for the contrast aerobic_Clim - anaerobic_Clim
+myFC <- pfc$foldChanges$"aerobic_Clim - anaerobic_Clim"
+names(myFC) <- rownames(pfc$foldChanges)
+myFC[1:5]
+@
+These values are for differentially expressed genes in yeast cultured in aerobic carbon-limited media compared to anaerobic carbon-limited media. As we see for the five first genes, the IDs used are the microarray probeset IDs. This is important to keep in mind when we select or gene set collection. In this example we will use GO terms as gene sets. The \pkg{biomaRt} package is useful to access available databases:
+<<>>==
+library("biomaRt")
+# Select ensembl database and S. cerevisiae dataset:
+ensembl <- useMart("ensembl", dataset="scerevisiae_gene_ensembl")
+# Map Yeast 2.0 microarray probeset IDs to GO:
+mapGO <- getBM(attributes=c('affy_yeast_2', 'name_1006'), 
+               filters = 'affy_yeast_2', 
+               values = names(myPval), 
+               mart = ensembl)
+# Remove blanks ("")
+mapGO <- mapGO[mapGO[,2]!="",]
+# Check the 10 first rows to see what we got:
+mapGO[1:10,]
+@
+Now that we have a mapping between our probeset IDs and GO terms we can load it into the correct format using \fun{loadGSC}:
+<<>>==
+myGsc <- loadGSC(mapGO)
+@
+We have all our input data and can move on with the \fun{runGSA} function:
+\begin{Schunk}
+\begin{Sinput}
+> gsaRes <- runGSA(myPval,myFC,gsc=myGsc,gsSizeLim=c(5,300))
+\end{Sinput}
+\begin{Soutput}
+Checking arguments...done!
+Calculating gene set statistics...done!
+Calculating gene set significance...done!
+Adjusting for multiple testing...done!
+\end{Soutput}
+\begin{Sinput}
+> gsaRes
+\end{Sinput}
+\begin{Soutput}
+Final gene/gene-set association: 4257 genes and 981 gene sets
+  Details:
+  Calculating gene set statistics from 4257 out of 5705 gene-level statistics
+  Using all 5705 gene-level statistics for significance estimation
+  Removed 0 genes from GSC due to lack of matching gene statistics
+  Removed 0 gene sets containing no genes after gene removal
+  Removed additionally 2783 gene sets not matching the size limits
+  Loaded additional information for 0 gene sets
+
+Gene statistic type: p-like
+Method: mean
+Gene-set statistic name: mean 
+Significance: Gene sampling
+Adjustment: fdr
+Gene set size limit: (5,300)
+Permutations: 10000 
+Total run time: 4.75 min
+\end{Soutput}
+\end{Schunk}
+Here we limit the analysis to gene sets with at least 5 genes and at most 300 genes. We can save the results to a file (e.g. for editing in Microsoft Excel):
+<<eval=FALSE>>==
+GSAsummaryTable(gsaRes, save=TRUE, file="gsaResTab.xls")
+@
+To get info on a specific gene set:
+\begin{Schunk}
+\begin{Sinput}
+> gs <- geneSetSummary(gsaRes, "oxidoreductase activity")
+> gs$stats
+\end{Sinput}
+\begin{Soutput}
+                  Name     Value
+1          Genes (tot) 243.00000
+2   Stat (dist.dir.up)   0.47973
+3      p (dist.dir.up)   0.03510
+4  p adj (dist.dir.up)   0.40038
+5   Stat (dist.dir.dn)   0.52027
+6      p (dist.dir.dn)   0.96490
+7  p adj (dist.dir.dn)   1.00000
+8       Stat (non-dir)   0.15741
+9          p (non-dir)   0.00000
+10     p adj (non-dir)   0.00000
+11          Genes (up) 127.00000
+12   Stat (mix.dir.up)   0.15511
+13      p (mix.dir.up)   0.00130
+14  p adj (mix.dir.up)   0.10140
+15          Genes (dn) 116.00000
+16   Stat (mix.dir.dn)   0.15992
+17      p (mix.dir.dn)   0.00250
+18  p adj (mix.dir.dn)   0.10083
+\end{Soutput}
+\end{Schunk}
+For this particular gene set we can see that it is enriched by significant genes (p-value in the non-directional class is low). However, the gene set as a whole is not regulated in a distinct direction (p-values in the distinct-directional class are not significant), although we see that both the subsets of up-regulated and down-regulated genes are slightly significant (mixed-directional class). This makes sense since roughly half of the genes are up-regulated and the other half are down-regulated (127 and 116 genes, respectively).
+
+If we want to visualize the results we can use the function \fun{networkPlot} (Figure \ref{fig:networkplot}):
+<<eval=FALSE>>==
+nw <- networkPlot(gsaRes,class="non")
+@
+\begin{figure}[!t]
+\centering
+\fbox{\includegraphics[width=15cm]{networkplot.pdf}}
+\caption{The figure produced by \fun{networkPlot}.}
+\label{fig:networkplot}
+\end{figure}
+Here we select the gene sets that are significant (p<0.001) in the non-directional class (i.e. GO terms that are enriched with significant genes, but may contain a mix of up- and down-regulated genes). The network plot shows the relation between gene sets by connecting those that share member genes. The thickness of the edges correspond to the number of shared genes. The size of the nodes correspond to the size of the gene sets. We can see that the GO term we checked in detail above (oxidoreductase activity) is included in the plot and that it is highly overlapping with the GO term oxidation-reduction process. We can access the full names of all gene sets included in the plot through the returned object:
+<<eval=FALSE>>==
+nw$geneSets
+@
+
+
+\subsubsection{Example 2: Reporter metabolites}
+An alternative to using GO terms as gene sets is to use so called Reporter Metabolites \cite{patil2005}. Here, a genome-scale metabolic network reconstruction is used to group genes into sets so that genes that belong to the same gene set are coding for enzymes that catalyze reactions where a specific metabolite takes part. In other words, each gene set is named after a specific metabolite and contains the enzyme coding genes that catalyze reactions in which the metabolite takes part. Enriched, or significant, gene sets (Reporter Metabolites) can be interpreted as metabolic hotspots, or metabolites around which important transcriptional changes occur. We can use the \fun{loadGSC} function to load a gene set collection from a genome-scale metabolic model:
+<<eval=FALSE>>==
+# An example usage:
+myGsc <- loadGSC("myModel.xml")
+@
+In order to save time and space (since the model file size can be large and the extraction of gene sets can take a while), we have already loaded the gene to gene set associations from a \textit{S. cerevisiae} metabolic network \cite{nookaew2008} and included it in \pkg{piano}. Let's load it:
+<<>>==
+metMap <- system.file("extdata", "probe2metabolites_iIN800.txt.gz", 
+                      package="piano")
+metMap <- read.delim(metMap)
+myGsc <- loadGSC(metMap)
+@
+Again, we will use the gene-level statistics (p-values and fold-changes) from section \ref{sec:ma}:
+<<>>==
+gsaRes <- runGSA(myPval,myFC,gsc=myGsc,
+                 geneSetStat="reporter",
+                 signifMethod="nullDist", nPerm=1000,
+                 gsSizeLim=c(5,100))
+@
+<<>>==
+gsaRes
+@
+Here we decrease the number of permutations to 1000 and only include gene sets that contain between 5 and 100 genes (this is only to make the example run faster). As you can see, we choose the gene set statistics to be calculated according to the Reporter features algorithm (\fun{geneSetStat="reporter"}). This is the original algorithm for calculating Reporter Metabolites \cite{patil2005} (but of course other GSA methods can be used as well).
+
+Now, we will use the network plot again, but with some different settings than those in the previous example:
+<<>>==
+nw <- networkPlot(gsaRes, class="distinct", direction="both",
+                  significance=0.005, label="numbers")
+@
+\begin{figure}[!t]
+\centering
+\fbox{\includegraphics[width=15cm]{networkplot2.pdf}}
+\caption{The figure produced by \fun{networkPlot}.}
+\label{fig:networkplot2}
+\end{figure}
+Here we plot the gene sets that are significant (p<0.005) in either the up-regulated or down-regulated distinct-directional class. Instead of using the gene set names (metabolites in this case) as node labels, we use numbers instead, in order to make it less messy (Figure \ref{fig:networkplot2}). In order to map the numbers to the names we can type:
+<<>>==
+nw$geneSets
+@
+
+If we wish to get a list of all gene sets that are significant above some cutoff we can use the \fun{GSAsummaryTable} function:
+<<>>==
+gsaResTab <- GSAsummaryTable(gsaRes)
+# Which columns contain p-values:
+grep("p \\(",colnames(gsaResTab),value=T)
+grep("p \\(",colnames(gsaResTab))
+@
+We see that the p-values in the non-directional class (significant gene sets if enriched by significant genes, disregardful of up- or down-regulation) are found in column 10. To get a list of gene sets with non-directional p<0.0001:
+<<>>==
+ii <- which(gsaResTab[,10]<0.0001)
+gsaResTab$Name[ii]
+@
+To get a list of gene sets that are significant (p<0.0001) in at least one directionality class:
+<<>>==
+# Get minimum p-value for each gene set:
+minPval <- apply(gsaResTab[,c(4,7,10,14,18)],1,min,na.rm=TRUE)
+# Select significant gene sets:
+ii <- which(minPval<0.0001)
+gsaResTabSign <- gsaResTab[ii,c(1,4,7,10,14,18)]
+# Look at the first 10 gene sets:
+gsaResTabSign[1:10,]
+@
+
+
+
+\subsection{Consensus scoring of gene sets}
+\label{sec:gsacon}
+\begin{figure}
+\centering
+\includegraphics[width=12cm]{consensus.png}
+\caption{Multiple results from different GSA runs can be combined using the \fun{consensusScores} function.}
+\label{fig:consensus}
+\end{figure}
+When you are familiar with running different GSAs using \fun{runGSA}, you may ask yourself which settings are the best. We will let you decide on that matter, but offer here a new approach to combine the results from different runs of GSA into a consensus result (Figure \ref{fig:consensus}). This approach is discussed in detail in the \pkg{piano} publication \cite{varemo2013} and will not be further presented here, except for some examples of how to apply it.
+
+In order to compute consensus scores we first need to run multiple GSAs. Let's use the p-values and t-values as gene-level statistics from the example in section \ref{sec:ma}:
+<<eval=FALSE>>==
+myTval <- pfc$resTable[["aerobic_Clim - anaerobic_Clim"]]$t
+names(myTval) <- pfc$resTable[["aerobic_Clim - anaerobic_Clim"]]$ProbesetID
+@
+Now we will run multiple GSAs with different settings, using the GO gene sets from one of the previous examples:
+<<eval=FALSE>>==
+myGsc <- loadGSC(mapGO)
+gsaRes1 <- runGSA(myTval,geneSetStat="mean",gsc=myGsc,
+                  nPerm=1000,gsSizeLim=c(10,800))
+gsaRes2 <- runGSA(myTval,geneSetStat="median",gsc=myGsc,
+                  nPerm=1000,gsSizeLim=c(10,800))
+gsaRes3 <- runGSA(myTval,geneSetStat="sum",gsc=myGsc,
+                  nPerm=1000,gsSizeLim=c(10,800))
+gsaRes4 <- runGSA(myTval,geneSetStat="maxmean",gsc=myGsc,
+                  nPerm=1000,gsSizeLim=c(10,800))
+gsaRes5 <- runGSA(myPval,myFC,geneSetStat="fisher",gsc=myGsc,
+                  nPerm=1000,gsSizeLim=c(10,800))
+gsaRes6 <- runGSA(myPval,myFC,geneSetStat="stouffer",gsc=myGsc,
+                  nPerm=1000,gsSizeLim=c(10,800))
+gsaRes7 <- runGSA(myPval,myFC,geneSetStat="tailStrength",gsc=myGsc,
+                  nPerm=1000,gsSizeLim=c(10,800))
+@
+Once we have several GSA results that we wish to combine we can use the \fun{consensusHeatmap} function:
+<<eval=FALSE>>==
+resList <- list(gsaRes1,gsaRes2,gsaRes3,gsaRes4,gsaRes5,gsaRes6,gsaRes7)
+names(resList) <- c("mean","median","sum","maxmean","fisher",
+                    "stouffer","tailStrength")
+ch <- consensusHeatmap(resList,cutoff=30,method="mean")
+@
+Figure \ref{fig:heatmap} shows the resulting plot with the gene set consensus scores. In this case, the consensus score is the mean rank given each gene set by the different GSA runs. This means that a low score (e.g. 1) is a gene set that is ranked high by most of the GSA methods. To also get an idea of the significance level of the consensus scored gene sets, the median p-values can be accessed through:
+<<eval=FALSE>>==
+ch$pMat
+@
+We can see from the heatmap that the gene sets clustered at the upper part are showing patterns of mostly down-regulation whereas the gene sets in the lower part are showing patterns of mainly up-regulation. Please see \cite{varemo2013} for more information about the consensus scoring approach.
+
+\begin{figure}
+\centering
+\includegraphics[width=12cm]{heatmap.pdf}
+\caption{Heatmap of consensus scores.}
+\label{fig:heatmap}
+\end{figure}
+
+% -- References --
+\newpage
+\bibliographystyle{naturenobf}
+\bibliography{references}
+
+\end{document}
+
+
+
+
+
+

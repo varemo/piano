@@ -1,0 +1,28 @@
+export(
+  loadMAdata,
+  runQC,
+  extractFactors,
+  diffExp,
+  polarPlot,
+  loadGSC,
+  runGSA,
+  GSAsummaryTable,
+  geneSetSummary,
+  networkPlot,
+  consensusScores,
+  consensusHeatmap
+)
+
+S3method(print, ArrayData)
+S3method(print, GSC)
+S3method(print, GSAres)
+
+import(
+  Biobase,
+  igraph
+)
+
+importFrom(gplots, heatmap.2, venn)
+importFrom(marray, maColorBar)
+importFrom(relations, relation_class_ids, relation_consensus)
+
