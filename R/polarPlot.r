@@ -111,24 +111,24 @@ polarPlot <- function(pValues, chromosomeMapping,
   } else {
     dev.new()
   }
-  radial.plot(c(0,rep(max(pretty(c(0,maxRadius))),nChr)*1.1),rp.type="r",
+  suppressWarnings(radial.plot(c(0,rep(max(pretty(c(0,maxRadius))),nChr)*1.1),rp.type="r",
               radial.pos=radialChrPos,line.col="gray75", show.radial.grid=FALSE, 
               radlab=TRUE, labels=chrNames, label.pos=radialChrLabPos, clockwise=TRUE,
-              show.grid=TRUE,radial.lim=c(0,maxRadius))
+              show.grid=TRUE,radial.lim=c(0,maxRadius)))
   # Add the first p-value lines
   if(nContrasts > 1) {
     lengths <- -log10(plotData[,plotOrder[1]])
   } else {
     lengths <- -log10(plotData)
   }
-  radial.plot(lengths, radial.pos=radialPos, rp.type="r", clockwise=TRUE, add=TRUE, 
-              line.col=colors[plotOrder[1]])
+  suppressWarnings(radial.plot(lengths, radial.pos=radialPos, rp.type="r", clockwise=TRUE, add=TRUE, 
+              line.col=colors[plotOrder[1]]))
   # Add additional p-values lines
   if(nContrasts > 1) {
     for(i in 2:ncol(plotData)) {
       lengths <- -log10(plotData[,plotOrder[i]])
-      radial.plot(lengths, radial.pos=radialPos, rp.type="r", clockwise=TRUE, add=TRUE, 
-                  line.col=colors[plotOrder[i]])
+      suppressWarnings(radial.plot(lengths, radial.pos=radialPos, rp.type="r", clockwise=TRUE, add=TRUE, 
+                  line.col=colors[plotOrder[i]]))
     }
   }
   if(save == TRUE) {
@@ -155,14 +155,14 @@ polarPlot <- function(pValues, chromosomeMapping,
         dev.new()
       }
       maxRadius <- max(-log10(plotData))
-      radial.plot(c(0,rep(max(pretty(c(0,maxRadius))),nChr)*1.1),rp.type="r",
+      suppressWarnings(radial.plot(c(0,rep(max(pretty(c(0,maxRadius))),nChr)*1.1),rp.type="r",
                   radial.pos=radialChrPos,line.col="gray75", show.radial.grid=FALSE, 
                   radlab=TRUE, labels=chrNames, label.pos=radialChrLabPos, clockwise=TRUE,
-                  show.grid=TRUE,radial.lim=c(0,maxRadius))
+                  show.grid=TRUE,radial.lim=c(0,maxRadius)))
       # Add the first p-value lines
       lengths <- -log10(plotData[,plotOrder[i]])
-      radial.plot(lengths, radial.pos=radialPos, rp.type="r", clockwise=TRUE, 
-                  add=TRUE, line.col=colors[i])
+      suppressWarnings(radial.plot(lengths, radial.pos=radialPos, rp.type="r", clockwise=TRUE, 
+                  add=TRUE, line.col=colors[i]))
       if(save == TRUE) {
         tmp <- dev.off()
       }

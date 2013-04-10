@@ -1,50 +1,78 @@
-version 0.99-1
+New in version 1.0.1
 
-	* Added citation DOI to vignette.
+   Minor changes:
 
-        * Fixed bug in geneSetSummary when no directions are available.
+   - Temporarily added suppressWarnings() in polarPlot() around the calls to 
+     radial.plot() since warnings appeared for example("radial.plot") in
+     plotrix v3.4-6.
 
-        * Updated the man page for consensusScores, added correct output description.
+   - Updated citation BibTeX information.
 
-	* Fixed a bug in diffExp() regarding the result table, when gene names (annotation) are not available
-
-	* Fixed a bug in diffExp() so that the heatmap shows gene names if available, otherwise the probeset IDs
-
-	* Updated the Description field in the DESCRIPTION file.
-
-	* Removed man page for internal functions.
-
-	* Removed contrastName as output from runGSA and geneSetSummary, including man pages.
-
-	* Changed the man page for consensusHeatmap clarifying that the cutoff argument is consensus score (not rank)
-
-	* Updated the man page for loadGSC, clarifying the input.
-
-	* Reworked the vignette to fit Bioconductor, removed section on R introduction.
-
-	* Change name of folder for example data from exampleData to extdata, and updated man pages and vignette.
-
-	* Changed so that total number of gene-level statistics are printed during run, instead of total number of unique genes.
-
-	* Removed 'typical usages' section from man page of loadMAdata since this is covered in the vignette.
-
-	* Removed the arguments 'venn', 'heatmap' and 'polarPlot' from diffExp and replaced them with a new argument: 'plot'.
-
-	* Updated the examples for diffExp, networkPlot, consensusHeatmap and consensusScores to show how to handle the returned object.
-
-	* The consensusScores function now does not return its result invisibly.
-
-	* Added CITATION file.
-
-	* Added NEWS file.
+   - Fixed typos in DESCRIPTION and piano-package.Rd.
 
 
-version 0.99-0
-	
-	* Added more links to similar packages in runGSA help page.
+New in version 1.0.0
 
-	* Updated the installation instructions in the Vignette to fit Bioconductor.
+   Important changes:
 
-        * Updated the loadMAdata function to use the justPlier function from package plier, instead of a modified version.
- 
-	* Removed internal function justPlierSpec.
+   - Removed the arguments 'venn', 'heatmap' and 'polarPlot' from diffExp and 
+     replaced them with a new argument: 'plot'.
+
+   - The consensusScores function now does not return its result invisibly.
+
+   - The argument order in consensusScores has changed: 'plot' has been moved 
+     from last place to after 'method'.
+
+   Minor changes:
+
+   - Added citation DOI to vignette.
+
+   - Fixed bug in geneSetSummary when no directions are available.
+
+   - Updated the man page for consensusScores, added correct output description.
+
+   - Fixed a bug in diffExp() regarding the result table, when gene names 
+     (annotation) are not available
+
+   - Fixed a bug in diffExp() so that the heatmap shows gene names if available, 
+     otherwise the probeset IDs
+
+   - Updated the Description field text in the DESCRIPTION file.
+
+   - Removed man page for internal functions.
+
+   - Removed contrastName as output from runGSA and geneSetSummary, including 
+     man pages.
+
+   - Changed the man page for consensusHeatmap clarifying that the cutoff 
+     argument is consensus score (not rank)
+
+   - Updated the man page for loadGSC, clarifying the input.
+
+   - Reworked the vignette to fit Bioconductor, removed section on R 
+     introduction.
+
+   - Change name of folder for example data from exampleData to extdata, and 
+     updated man pages and vignette.
+
+   - Changed so that total number of gene-level statistics are printed during 
+     run, instead of total number of unique genes.
+
+   - Removed 'typical usages' section from man page of loadMAdata since this 
+     is covered in the vignette.
+
+   - Updated the examples for diffExp, networkPlot, consensusHeatmap and 
+     consensusScores to show how to handle the returned object.
+
+   - Added CITATION file.
+
+   - Added NEWS file.
+
+   - Added more links to similar packages in runGSA help page.
+
+   - Updated the installation instructions in the Vignette to fit Bioconductor.
+
+   - Updated the loadMAdata function to use the justPlier function from package 
+     plier, instead of a modified version.
+
+   - Removed internal function justPlierSpec.
