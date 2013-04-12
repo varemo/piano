@@ -21,7 +21,13 @@
    }
 }
 \details{
-   This function is used to create a gene-set collection object to be used with \code{\link{runGSA}}. By using the functionality of e.g. the \code{biomaRt} package, a gene-set collection with custom gene names (matching the statistics used in \code{\link{runGSA}}) can easily be compiled into a two-column data.frame (column order: genes, gene sets) and loaded with \code{type="data.frame"}. If a sif-file is used it is assumed that the first column contains gene sets and the third column contains genes. 
+   This function is used to create a gene-set collection object to be used with \code{\link{runGSA}}. 
+   
+   The "gmt" files available from the Molecular Signatures Database (\url{http://www.broadinstitute.org/gsea/msigdb/}) can be loaded using \code{loadGSC}. This website is a valuable resource and contains several different collections of gene sets.
+   
+   By using the functionality of e.g. the \code{biomaRt} package, a gene-set collection with custom gene names (matching the statistics used in \code{\link{runGSA}}) can easily be compiled into a two-column data.frame (column order: genes, gene sets) and loaded with \code{type="data.frame"}. 
+   
+If a sif-file is used it is assumed that the first column contains gene sets and the third column contains genes. 
    
 In order to load an SBML-file it is required that libSBML and \code{rsbml} is installed. Note that the SBML loading is an experimental feature and is highly dependent on the version and format of the SBML file and requires it to contain gene association. By examining the returned \code{GSC} object it is easy to see if the correct gene sets were loaded.
 }

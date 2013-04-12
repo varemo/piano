@@ -2,10 +2,10 @@ citHeader("To cite package 'piano' in publications use:")
 
 citEntry(entry="article",
          title = "Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods",
-         author = personList(as.person("Leif V\\\"aremo"),
+         author = personList(as.person("Leif V\\\"{a}remo"),
                              as.person("Jens Nielsen"),
                              as.person("Intawat Nookaew")),
          year = "2013",
          journal = "Nucleic Acids Research",
    volume = "doi:10.1093/nar/gkt111",
-         textVersion = "Varemo, L., Nielsen, J. and Nookaew, I. Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. Nucleic Acids Research. (2013) doi:10.1093/nar/gkt111")
+         textVersion = "Väremo, L., Nielsen, J. and Nookaew, I. Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. Nucleic Acids Research. (2013) doi:10.1093/nar/gkt111")
