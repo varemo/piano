@@ -8,4 +8,4 @@ citEntry(entry="article",
          year = "2013",
          journal = "Nucleic Acids Research",
    volume = "doi:10.1093/nar/gkt111",
-         textVersion = "Väremo, L., Nielsen, J. and Nookaew, I. Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. Nucleic Acids Research. (2013) doi:10.1093/nar/gkt111")
+         textVersion = "V\u00E4remo, L., Nielsen, J. and Nookaew, I. Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. Nucleic Acids Research. (2013) doi:10.1093/nar/gkt111")

@@ -15,8 +15,6 @@ New in version 1.0.1
 
    - Added URL in DESCRIPTION.
 
-   - Added "Encoding: latin1" in DESCRIPTION to display citation info correctly.
-
 
 New in version 1.0.0
 ====================

@@ -1,8 +1,8 @@
 Package: piano
 Type: Package
 Title: Platform for integrative analysis of omics data
-Version: 1.1.2
-Date: 2013-04-12
+Version: 1.1.3
+Date: 2013-04-15
 Author@R: c(person("Leif", "Varemo", email = "piano.rpkg@gmail.com",
         role = "aut"), person("Intawat", "Nookaew", email =
         "piano.rpkg@gmail.com", role = "aut"))
@@ -18,4 +18,3 @@ biocViews: Microarray, Preprocessing, QualityControl,
         DifferentialExpression, DataImport, DataRepresentation,
         Visualization
 URL: http://www.sysbio.se/piano
-Encoding: latin1
