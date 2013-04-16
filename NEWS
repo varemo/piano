@@ -1,6 +1,10 @@
 New in version 1.0.1
 ====================
 
+   Important changes:
+
+   - Fixed bug in loadGSC() so that gmt-files are now loaded correctly.
+
    Minor changes:
 
    - Temporarily added suppressWarnings() in polarPlot() around the calls to 

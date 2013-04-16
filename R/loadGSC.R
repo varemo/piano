@@ -31,25 +31,27 @@ loadGSC <- function(file, type="auto", addInfo) {
    
    # Read gmt-file:
    if(type == "gmt") {
-      tmp <- try(gsc <- as.data.frame(read.delim(file, fill=TRUE, header=FALSE, quote="", as.is=TRUE), 
-                                      stringsAsFactors=FALSE), silent=TRUE)
-      if(class(tmp) == "try-error") {
-         stop("file could not be read and converted into a data.frame")
-      }
       
-      # Create additional information table:
-      if(addUserInfo == "skip") addInfo <- gsc[,1:2]
-      
-      # Convert into list object:
+      con <- file(file)
+      tmp <- try(suppressWarnings(open(con)), silent=TRUE)
+      if(class(tmp) == "try-error") stop("file could not be read")
+      if(addUserInfo == "skip") addInfo <- vector()
       gscList <- list()
-      for(iGeneSet in 1:nrow(gsc)) {
-         tmp <- gsc[iGeneSet,3:ncol(gsc)]
-         gscList[[iGeneSet]] <- unique(tmp[tmp != "" & tmp != " "])
+      i <- 1
+      tmp <- try(suppressWarnings(
+      while(length(l<-scan(con,nlines=1,what="character",quiet=T)) > 0) {
+         if(addUserInfo == "skip") addInfo <- rbind(addInfo,l[1:2])
+         tmp <- l[3:length(l)]
+         gscList[[l[1]]] <- unique(tmp[tmp != "" & tmp != " " & !is.na(tmp)])
+         i <- i + 1
       }
-      names(gscList) <- gsc[,1]
+      ), silent=TRUE)
+      if(class(tmp) == "try-error") stop("file could not be read")
+      close(con)
       
       # Remove duplicate gene sets:
-      gsc <- gscList[!duplicated(gsc[,1])]
+      gsc <- gscList[!duplicated(names(gscList))]
+      if(addUserInfo == "skip") addInfo <- unique(addInfo)
       #info$redundantGS <- length(gscList) - length(gsc)
    
       
