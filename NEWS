@@ -1,3 +1,11 @@
+New in version 1.2.0
+====================
+
+   Important changes:
+
+   - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
+
+
 New in version 1.0.1
 ====================
 

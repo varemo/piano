@@ -10,6 +10,7 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
   if(!try(require(limma))) stop("package limma is missing")
   
   # Argument check:
+  if(missing(contrasts)) stop("argument contrasts is not defined")
   if(!fitMethod %in% c("ls","robust")) {
     stop("incorrect value of argument fitMethod")
   }
@@ -174,10 +175,17 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
     }
     topTab <- topTable(fitContrasts,coef=i,adjust.method=adjustMethod,sort.by="none",number=nrow(dataForLimma))
     
+    # For limma version compatability:
+    if(!"ID" %in% colnames(topTab)) {
+      topTab <- cbind(rownames(topTab),topTab)
+      colnames(topTab)[1] <- "ID"
+    }
+    
     # If gene names exist, add them:
     tmp <- arrayData$annotation$geneName
     if(!is.null(tmp)) {
        names(tmp) <- rownames(arrayData$annotation)
+       tmp <- as.data.frame(tmp,stringsAsFactors=FALSE)
        topTab <- merge(y=topTab,x=tmp,by.y="ID",by.x="row.names",all.y=TRUE)
        colnames(topTab)[1:2] <- c("ProbesetID","GeneName") 
     } else {
