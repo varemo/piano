@@ -7,5 +7,8 @@ citEntry(entry="article",
                              as.person("Intawat Nookaew")),
          year = "2013",
          journal = "Nucleic Acids Research",
-   volume = "doi:10.1093/nar/gkt111",
-         textVersion = "V\u00E4remo, L., Nielsen, J. and Nookaew, I. Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. Nucleic Acids Research. (2013) doi:10.1093/nar/gkt111")
+   volume = "41",
+   number = "8",
+   pages = "4378-4391",
+   doi = "10.1093/nar/gkt111", 
+         textVersion = "V\u00E4remo, L., Nielsen, J. and Nookaew, I. (2013) Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. Nucleic Acids Research. 41 (8), 4378-4391. doi: 10.1093/nar/gkt111")
