@@ -6,6 +6,14 @@ New in version 1.2.0
    - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
 
 
+New in version 1.0.4
+====================
+
+   Minor changes:
+
+   - Fixed bug in loadMAdata so that also compressed CEL-files (*.CEL.gz) can be loaded correctly.
+
+
 New in version 1.0.3
 ====================
 

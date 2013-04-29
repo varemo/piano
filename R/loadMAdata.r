@@ -29,7 +29,9 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     # Load CEL-files
     .verb("Loading CEL files...", verbose)
     dataRaw <- ReadAffy(celfile.path=datadir, ...)
-    colnames(exprs(dataRaw)) <- gsub(".CEL","",colnames(exprs(dataRaw)))
+    colnames(exprs(dataRaw)) <- gsub(".CEL","",colnames(exprs(dataRaw)), ignore.case=TRUE)
+    colnames(exprs(dataRaw)) <- gsub(".gz","",colnames(exprs(dataRaw)), ignore.case=TRUE)
+    if(sum(duplicated(colnames(exprs(dataRaw)))) > 0) stop("found samples with identical names")
     .verb("...done", verbose)
   } else if(!missing(dataNorm)) {
     if(class(dataNorm) == "character") {
@@ -41,7 +43,9 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
       .verb("Loading data in text file...", verbose)
       dataNorm <- as.data.frame(read.delim(dataFilePath, header=TRUE, sep="\t",
                                 row.names=1, as.is=TRUE,quote=""),stringsAsFactors=FALSE)
-      colnames(dataNorm) = gsub(".CEL","",colnames(dataNorm))
+      colnames(dataNorm) = gsub(".CEL","",colnames(dataNorm), ignore.case=TRUE)
+      colnames(dataNorm) = gsub(".gz","",colnames(dataNorm), ignore.case=TRUE)
+      if(sum(duplicated(colnames(dataNorm))) > 0) stop("found samples with identical names")
       .verb("...done", verbose)
     #
     } else {
@@ -64,7 +68,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     .verb("Loading setup file...", verbose)
     setup <- as.data.frame(read.delim(setupFilePath, header=TRUE, sep="\t",
                            row.names=1, as.is=TRUE,quote=""),stringsAsFactors=FALSE)
-    rownames(setup) = gsub(".CEL","",rownames(setup))
+    rownames(setup) = gsub(".CEL","",rownames(setup), ignore.case=TRUE)
+    rownames(setup) = gsub(".gz","",rownames(setup), ignore.case=TRUE)
     .verb("...done", verbose)
   } else {
     setup <- as.data.frame(setup, stringsAsFactors=FALSE)
@@ -81,19 +86,22 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
                                                                            usemm=FALSE, concpenalty=0.08, 
                                                                            plieriteration=30000)))
 	    dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
-	    colnames(dataNorm) <- gsub(".CEL","",colnames(dataNorm))
+	    colnames(dataNorm) <- gsub(".CEL","",colnames(dataNorm), ignore.case=TRUE)
+       colnames(dataNorm) <- gsub(".gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)
 	  } else if(normalization == "rma") {
       .verb("Preprocessing using RMA with quantile normalization...", verbose)
       dataNorm <- rma(dataRaw,verbose=FALSE)
       dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
-	    colnames(dataNorm) <- gsub(".CEL","",colnames(dataNorm))
+	    colnames(dataNorm) <- gsub(".CEL","",colnames(dataNorm), ignore.case=TRUE)
+       colnames(dataNorm) <- gsub(".gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)
 	  } else if(normalization == "mas5") {
 	    .verb("Preprocessing using MAS 5.0 with quantile normalization...", verbose)
       dataNorm <- mas5(dataRaw,verbose=FALSE)
       dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
-	    colnames(dataNorm) <- gsub(".CEL","",colnames(dataNorm))
+	    colnames(dataNorm) <- gsub(".CEL","",colnames(dataNorm), ignore.case=TRUE)
+	    colnames(dataNorm) <- gsub(".gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)
 	  }
   } else {
