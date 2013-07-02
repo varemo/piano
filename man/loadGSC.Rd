@@ -29,7 +29,7 @@
    
 If a sif-file is used it is assumed that the first column contains gene sets and the third column contains genes. 
    
-In order to load an SBML-file it is required that libSBML and \code{rsbml} is installed. Note that the SBML loading is an experimental feature and is highly dependent on the version and format of the SBML file and requires it to contain gene association. By examining the returned \code{GSC} object it is easy to see if the correct gene sets were loaded.
+A genome-scale metabolic model in SBML format can be used to define gene sets. In this case, metabolites will be the gene sets, containing all the genes that code for enzymes catalyzing reactions in which the metabolite takes part in. In order to load an SBML-file it is required that libSBML and \code{rsbml} is installed. Note that the SBML loading is an experimental feature and is highly dependent on the version and format of the SBML file and requires it to contain gene associations for the reactions. By examining the returned \code{GSC} object it is easy to see if the correct gene sets were loaded.
 }
 \value{
    A list like object of class \code{GSC} containing two elements. The first is \code{gsc}, a list of the gene sets, each element a character vector of genes. The second element is \code{addInfo}, a data.frame containing the optional additional information.

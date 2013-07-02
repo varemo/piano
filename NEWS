@@ -5,6 +5,15 @@ New in version 1.2.0
 
    - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
 
+New in version 1.0.5
+====================
+
+   Minor changes:
+
+   - Updated diffExp() to only use vennDiagram() of the limma package for Venn diagram plotting.
+
+   - Updated the SBML section in the loadGSC() man page.
+
 
 New in version 1.0.4
 ====================

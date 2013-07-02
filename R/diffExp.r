@@ -73,29 +73,32 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
       vennInfo <- decideTests(fitContrasts,adjust.method=adjustMethod,p.value=significance)
       # Plot
       if(saveFig == FALSE) {
-        if(length(contrasts) <= 3) {
+        #if(length(contrasts) <= 3) {
           dev.new()
           vennDiagram(vennInfo, cex=1, main=paste("Venn diagram (p-value adjustment: ",adjustMethod,", p<",significance,")",sep=""),
-                      circle.col=colors, names="")
+                      circle.col=colors, names=LETTERS[1:length(contrasts)])
           dev.new()
           plot.new()
           title(main="Legend Venn diagram")
-          legend(x=0.05, y=0.8, legend=colnames(fitContrasts),fill=colors)
-
-        } else {
-          dev.new()
-          vennInfoTmp <- as.data.frame(vennInfo,stringsAsFactors=FALSE)
-          vennInfoTmp[vennInfoTmp == -1] <- 1
-          colnames(vennInfoTmp) <- LETTERS[1:ncol(vennInfoTmp)]
-          venn(vennInfoTmp)
-          
-          dev.new()
-          plot.new()
-          title(main="Legend Venn diagram")
+          #legend(x=0.05, y=0.8, legend=colnames(fitContrasts),fill=colors)
           for(i in 1:length(contrasts)) {
-            text(x=0.2, y=(1-0.05*i), paste(LETTERS[i],": ",contrasts[i],sep=""), adj=c(0,0))
+             text(x=0.2, y=(1-0.05*i), paste(LETTERS[i],": ",contrasts[i],sep=""), adj=c(0,0))
           }
-        }
+
+        #} else {
+          #dev.new()
+          #vennInfoTmp <- as.data.frame(vennInfo,stringsAsFactors=FALSE)
+          #vennInfoTmp[vennInfoTmp == -1] <- 1
+          #colnames(vennInfoTmp) <- LETTERS[1:ncol(vennInfoTmp)]
+          #venn(vennInfoTmp)
+          
+          #dev.new()
+          #plot.new()
+          #title(main="Legend Venn diagram")
+          #for(i in 1:length(contrasts)) {
+          #  text(x=0.2, y=(1-0.05*i), paste(LETTERS[i],": ",contrasts[i],sep=""), adj=c(0,0))
+          #}
+        #}
       }
       .verb("...done", verbose)
       #Save
@@ -111,17 +114,17 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
         if(file.exists(vennFilePath)) {
           .verb(paste("Warning: ",vennFileName," already exists in directory: overwriting old file...",sep=""), verbose)
         }
-        if(length(contrasts) <= 3) {
+        #if(length(contrasts) <= 3) {
           pdf(file=vennFilePath,paper="a4")
           vennDiagram(vennInfo, cex=1, main=paste("Venn diagram (p-value adjustment: ",adjustMethod,", p<",significance,")",sep=""),
-                      circle.col=c("red","green","blue"), names="")
-        } else {
-          vennInfoTmp <- as.data.frame(vennInfo,stringsAsFactors=FALSE)
-          vennInfoTmp[vennInfoTmp == -1] <- 1
-          colnames(vennInfoTmp) <- LETTERS[1:ncol(vennInfoTmp)]
-          pdf(file=vennFilePath, paper="a4", onefile=FALSE)
-          venn(vennInfoTmp)
-        }
+                      circle.col=colors, names=LETTERS[1:length(contrasts)])
+        #} else {
+          #vennInfoTmp <- as.data.frame(vennInfo,stringsAsFactors=FALSE)
+          #vennInfoTmp[vennInfoTmp == -1] <- 1
+          #colnames(vennInfoTmp) <- LETTERS[1:ncol(vennInfoTmp)]
+          #pdf(file=vennFilePath, paper="a4", onefile=FALSE)
+          #venn(vennInfoTmp)
+        #}
         tmp <- dev.off()
         .verb("...done", verbose)
         
@@ -134,15 +137,15 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
         }
         pdf(file=vennFilePath, paper="a4")
         plot.new()
-        if(length(contrasts) <= 3) {
-          title(main="Legend Venn diagram")
-          legend(x=0.05, y=0.8, legend=colnames(fitContrasts),fill=c("red","green","blue"))
-        } else {
+        #if(length(contrasts) <= 3) {
+          #title(main="Legend Venn diagram")
+          #legend(x=0.05, y=0.8, legend=colnames(fitContrasts),fill=c("red","green","blue"))
+        #} else {
           title(main="Legend Venn diagram")
           for(i in 1:length(contrasts)) {
             text(x=0.2, y=(1-0.05*i), paste(LETTERS[i],": ",contrasts[i],sep=""), adj=c(0,0))
           }
-        }
+        #}
         tmp <- dev.off()
         .verb("...done", verbose)
       }
