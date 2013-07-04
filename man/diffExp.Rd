@@ -78,8 +78,7 @@ diffExp(arrayData, contrasts, chromosomeMapping, fitMethod = "ls",
   
   Note that the \code{fitMethod="robust"} may need longer time to run.
   
-  A Venn diagram can be drawn for up to five contrasts (\code{diffExp()} will use either \code{vennDiagram}
-  , for 1-3 contrasts, or \code{venn}, for 4-5 contrasts).
+  A Venn diagram can be drawn for up to five contrasts (\code{diffExp()} will use \code{vennDiagram}).
   
   The heatmap shows normalized expression values of the genes that pass the
   \code{heatmapCutoff} in at least one contrast.
