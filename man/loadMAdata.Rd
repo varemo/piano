@@ -59,7 +59,8 @@
 
   The setup shold be either a tab delimited text file with column headers or a
   \code{data.frame}. The first column should contain the names of the CEL files
-  or the column names used for the normalized data. Additional columns should
+  or the column names used for the normalized data, please be sure to use names valid as 
+  column names, e.g. avoid names starting with numbers. Additional columns should
   assign attributes in some category to each array. (For an example run the example
   below and look at the object \code{myArrayData$setup}.)
   

@@ -6,6 +6,14 @@ New in version 1.2.0
    - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
 
 
+New in version 1.0.6
+====================
+
+   Minor changes:
+
+   - Updated loadMAdata() man page.
+
+
 New in version 1.0.5
 ====================
 
