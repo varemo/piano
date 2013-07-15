@@ -18,6 +18,7 @@
           permDirections=NULL,
           nPerm=1e4,
           gseaParam=1,
+          ncpus=1,
           verbose=TRUE)
 }
 \arguments{
@@ -53,6 +54,9 @@
    }
    \item{gseaParam}{
       the exponent parameter of the GSEA approach. This defaults to 1, as recommended by the GSEA authors.
+   }
+   \item{ncpus}{
+      the number of cpus to use. If larger than 1, the gene permutation part will be run in parallel and thus decrease runtime. Requires R package \pkg{snowfall} to be installed. Should be set so that \code{nPerm/ncpus} is a positive integer.
    }
    \item{verbose}{
       a logical. Whether or not to display progress messages during the analysis.

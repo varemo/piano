@@ -1,5 +1,6 @@
 GSCsignificanceBatch <- function(statistics, statType, signs, gsc, statMethod, signMethod, permStatistics, permSigns,
-                                 nGenes, nGenesUp, nGenesDn, gsStatsAll, gsStatsAllTestUp, gsStatsAllTestDn, gsStatsAbs, gsStatsUp, gsStatsDn, nPerm, gseaParam) {
+                                 nGenes, nGenesUp, nGenesDn, gsStatsAll, gsStatsAllTestUp, gsStatsAllTestDn, gsStatsAbs, 
+                                 gsStatsUp, gsStatsDn, nPerm, gseaParam, ncpus) {
    
    #*********************************************
    # Gene permutation:
@@ -8,13 +9,47 @@ GSCsignificanceBatch <- function(statistics, statType, signs, gsc, statMethod, s
    if(signMethod == "geneperm" | (statMethod == "reporter" & signMethod == "distribution") ) {
       
       # Calculate gene set statistics distributions for each size:
-      res <- GSCstatGenePerm(statistics, signs, gsc, statType, statMethod, nGenes, nGenesUp, nGenesDn, nPerm, gseaParam)
-      gsStatsAllPerm <- res$gsStatsAllPerm
-      gsStatsAllTestUpPerm <- res$gsStatsAllTestUpPerm
-      gsStatsAllTestDnPerm <- res$gsStatsAllTestDnPerm
-      gsStatsAbsPerm <- res$gsStatsAbsPerm
-      gsStatsUpPerm <- res$gsStatsUpPerm
-      gsStatsDnPerm <- res$gsStatsDnPerm
+      if(ncpus>1) { # Run fast, on multiple CPUs:
+         if(!try(suppressMessages(require(snowfall)))) stop("package snowfall is missing")
+         # Initialize parallelization:
+         tmp<-capture.output(suppressMessages(sfInit(parallel=T,cpus=ncpus)))
+         # Run in parallel:
+         tmp <- sfLapply(1:ncpus,GSCstatGenePerm, statistics, signs, gsc, statType, statMethod, 
+                         nGenes, nGenesUp, nGenesDn, nPerm/ncpus, gseaParam)
+         # Stop parallelization:
+         suppressMessages(sfStop())
+         # Handle output:
+         gsStatsAllPerm <- vector()
+         gsStatsAllTestUpPerm <- vector()
+         gsStatsAllTestDnPerm <- vector()
+         gsStatsAbsPerm <- vector()
+         gsStatsUpPerm <- vector()
+         gsStatsDnPerm <- vector()
+         for(i in 1:ncpus) {
+            gsStatsAllPerm <- cbind(gsStatsAllPerm,tmp[[i]]$gsStatsAllPerm[[1]])
+            gsStatsAllTestUpPerm <- cbind(gsStatsAllTestUpPerm,tmp[[i]]$gsStatsAllTestUpPerm[[1]])
+            gsStatsAllTestDnPerm <- cbind(gsStatsAllTestDnPerm,tmp[[i]]$gsStatsAllTestDnPerm[[1]])
+            gsStatsAbsPerm <- cbind(gsStatsAbsPerm,tmp[[i]]$gsStatsAbsPerm[[1]])
+            gsStatsUpPerm <- cbind(gsStatsUpPerm,tmp[[i]]$gsStatsUpPerm[[1]])
+            gsStatsDnPerm <- cbind(gsStatsDnPerm,tmp[[i]]$gsStatsDnPerm[[1]])
+         }
+         gsStatsAllPerm <- list(gsStatsAllPerm)
+         gsStatsAllTestUpPerm <- list(gsStatsAllTestUpPerm)
+         gsStatsAllTestDnPerm <- list(gsStatsAllTestDnPerm)
+         gsStatsAbsPerm <- list(gsStatsAbsPerm)
+         gsStatsUpPerm <- list(gsStatsUpPerm)
+         gsStatsDnPerm <- list(gsStatsDnPerm)  
+         
+      } else { # Run slower on one CPU:
+         res <- GSCstatGenePerm(NULL, statistics, signs, gsc, statType, statMethod, 
+                                nGenes, nGenesUp, nGenesDn, nPerm, gseaParam)
+         gsStatsAllPerm <- res$gsStatsAllPerm
+         gsStatsAllTestUpPerm <- res$gsStatsAllTestUpPerm
+         gsStatsAllTestDnPerm <- res$gsStatsAllTestDnPerm
+         gsStatsAbsPerm <- res$gsStatsAbsPerm
+         gsStatsUpPerm <- res$gsStatsUpPerm
+         gsStatsDnPerm <- res$gsStatsDnPerm
+      }
       
       
    #*********************************************

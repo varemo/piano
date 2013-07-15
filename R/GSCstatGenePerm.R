@@ -1,4 +1,4 @@
-GSCstatGenePerm <- function(statistics, signs, gsc, statType, method, nGenes, nGenesUp, nGenesDn, nPerm, gseaParam) {
+GSCstatGenePerm <- function(dummy, statistics, signs, gsc, statType, method, nGenes, nGenesUp, nGenesDn, nPerm, gseaParam) {
 
    # Create result list object:
    res <- list()

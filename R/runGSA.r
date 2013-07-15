@@ -9,6 +9,7 @@ runGSA <- function(geneLevelStats,
                    permDirections=NULL,
                    nPerm=1e4,
                    gseaParam=1,
+                   ncpus=1,
                    verbose=TRUE) {
    
 
@@ -24,7 +25,7 @@ runGSA <- function(geneLevelStats,
       cat("Checking arguments...")
    }
    tmp <- checkLoadArg(geneLevelStats, directions, geneSetStat, signifMethod, 
-                       adjMethod, gsc, gsSizeLim, permStats, permDirections, nPerm, gseaParam, verbose)
+                       adjMethod, gsc, gsSizeLim, permStats, permDirections, nPerm, gseaParam, ncpus, verbose)
    
    # Get the output (revert back to original variable names):
    statistics      <- tmp$statistics
@@ -90,7 +91,8 @@ runGSA <- function(geneLevelStats,
    
    if(!(statMethod == "wilcoxon" & signMethod == "distribution")) {
    tmp <- GSCsignificanceBatch(statistics, statType, signs, gsc, statMethod, signMethod, permStatistics, permSigns,
-                               nGenes, nGenesUp, nGenesDn, gsStatsAll, gsStatsAllTestUp, gsStatsAllTestDn, gsStatsAbs, gsStatsUp, gsStatsDn, nPerm, gseaParam)
+                               nGenes, nGenesUp, nGenesDn, gsStatsAll, gsStatsAllTestUp, gsStatsAllTestDn, gsStatsAbs, 
+                               gsStatsUp, gsStatsDn, nPerm, gseaParam, ncpus)
    
    }
    

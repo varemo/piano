@@ -5,6 +5,9 @@ New in version 1.2.0
 
    - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
 
+   - Added argument ncpus to runGSA(). Enables parts of this function to run in 
+     parallel, thus decreasing runtime. Requires R package snowfall.
+
 
 New in version 1.0.6
 ====================

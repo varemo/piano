@@ -9,6 +9,7 @@ checkLoadArg <- function(statistics,
                          permSigns,
                          nPerm,
                          gseaParam,
+                         ncpus,
                          verbose) {
    
    
@@ -18,6 +19,10 @@ checkLoadArg <- function(statistics,
    
    # Check verbose:
    if(class(verbose) != "logical") stop("argument verbose has to be TRUE or FALSE")
+   
+   # Check ncpus:
+   if(class(ncpus) != "numeric") stop("argument ncpus should be an integer")
+   if(length(ncpus) != 1) stop("argument ncpus should be an integer")
    
    # Check statMethod:
    tmp <- try(statMethod <- match.arg(statMethod, c("fisher","stouffer","reporter","tailStrength","wilcoxon",
@@ -59,6 +64,7 @@ checkLoadArg <- function(statistics,
    # Check nPerm:
    if(length(nPerm) != 1) stop("length of argument nPerm has to be 1")
    if(nPerm < 100) stop("argument nPerm has to be >100")
+   if(nPerm%%ncpus != 0) stop("argument ncpus should be set so there is an integer x such that x*ncpus=nPerm")
    
    # Check gseaParam:
    if(gseaParam < 1) stop("gseaParam has to be larger than 0")
