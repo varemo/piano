@@ -22,7 +22,7 @@
       a character string giving the direction of regulation, can be either \code{"up"} or \code{"down"}.
    }
    \item{n}{
-      the number of gene sets to select, defaults to 50.
+      consensus rank cutoff. All gene sets with consensus rank (see details below) \code{<=n} will be included in the plot. Defaults to 50.
    }
    \item{adjusted}{
       a logical, whether to use adjusted p-values or not. Note that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the adjusted p-values will be equal to the original p-values.
@@ -53,7 +53,7 @@
    }
 }
 \details{
-   Based on the results given by the elements of \code{resList}, preferably representing similar runs with \code{\link{runGSA}} but with different methods, this function ranks the gene sets for each \code{GSAres} object, based on the selected directionality class. Next, the median rank for each gene set is taken as a score for top-ranking gene sets. The \code{n} highest scoring gene-sets are selected and depicted in a boxplot, showing the distribution of individual ranks (shown as colored points), as well as the median rank (shown as a red line). As an alternative of using the median rank as consensus score, it is possible to choose the mean or using the Borda or Copeland method, through the \code{method} argument.
+   Based on the results given by the elements of \code{resList}, preferably representing similar runs with \code{\link{runGSA}} but with different methods, this function ranks the gene sets for each \code{GSAres} object, based on the selected directionality class. Next, the median rank for each gene set is taken as a score for top-ranking gene sets. The highest scoring gene-sets (with consensus rank, i.e. \code{rank(rankScore,ties.method="min")}, smaller or equal to \code{n}) are selected and depicted in a boxplot, showing the distribution of individual ranks (shown as colored points), as well as the median rank (shown as a red line). As an alternative of using the median rank as consensus score, it is possible to choose the mean or using the Borda or Copeland method, through the \code{method} argument.
    
    All elements of \code{resList} have to be objects containing results for the same number of gene-sets. The ranking procedure handles ties by giving them their minimum rank.
 
@@ -80,4 +80,3 @@
    cs$rankMat["s7",]
 
 }
-

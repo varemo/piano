@@ -8,6 +8,25 @@ New in version 1.2.0
    - Added argument ncpus to runGSA(). Enables parts of this function to run in 
      parallel, thus decreasing runtime. Requires R package snowfall.
 
+   - Added information about genes in each area of the Venn diagram in the output
+     of diffExp().
+
+   - Added volcano plot as optional output of diffExp() and added argument volcanoFC.
+
+   Minor changes:
+
+   - Removed suppressWarnings(), as temporarily introduced in version 1.0.1, in 
+     polarPlot() around the calls to radial.plot() since warnings are now fixed in 
+     package plotrix.
+
+
+New in version 1.0.7
+====================
+
+   Minor changes:
+
+   - Updated consensusScores() man page.
+
 
 New in version 1.0.6
 ====================
@@ -57,11 +76,9 @@ New in version 1.0.2
 New in version 1.0.1
 ====================
 
-   Important changes:
+   Minor changes:
 
    - Fixed bug in loadGSC() so that gmt-files are now loaded correctly.
-
-   Minor changes:
 
    - Temporarily added suppressWarnings() in polarPlot() around the calls to 
      radial.plot() since warnings appeared for example("radial.plot") in

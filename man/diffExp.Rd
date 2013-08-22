@@ -5,12 +5,12 @@
 }
 \description{
   Identifies differentially expressed genes by using the linear model approach of
-  \pkg{limma}. Optionally produces a Venn diagram, heatmap and Polar plot.
+  \pkg{limma}. Optionally produces a Venn diagram, heatmap, Polar plot and volcano plot.
 }
 \usage{
 diffExp(arrayData, contrasts, chromosomeMapping, fitMethod = "ls",
         adjustMethod = "fdr", significance = 0.001,
-        plot = TRUE, heatmapCutoff = 1e-10, colors=c("red","green","blue","yellow",
+        plot = TRUE, heatmapCutoff = 1e-10, volcanoFC = 2, colors=c("red","green","blue","yellow",
         "orange","purple","tan","cyan","gray60","black"),
         save = FALSE, verbose = TRUE)
 }
@@ -39,15 +39,19 @@ diffExp(arrayData, contrasts, chromosomeMapping, fitMethod = "ls",
     for details.
 }
   \item{significance}{
-    number giving the significance cutoff level for the Venn diagram.
+    number giving the significance cutoff level for the Venn diagram and the horizontal line drawn in the volcano plot.
     Defaults to \code{0.001}.
 }
   \item{plot}{
-    should plots be produced? Set either to \code{TRUE} (default) or \code{FALSE} to control all plots, or to a character vector with any combination of \code{"venn"}, \code{"heatmap"} and \code{"polarplot"}, to control the single plots (e.g. \code{plot=c("venn","polarplot")} or \code{plot="heatmap"}).
+    should plots be produced? Set either to \code{TRUE} (default) or \code{FALSE} to control all plots, or to a character vector with any combination of \code{"venn"}, \code{"heatmap"}, \code{"polarplot"} and \code{"volcano"}, to control the single plots (e.g. \code{plot=c("venn","polarplot")} or \code{plot="heatmap"}).
 }
   \item{heatmapCutoff}{
     number giving the significance cutoff level for the heatmap. Defaults to
     \code{1e-10}.
+}
+   \item{volcanoFC}{
+    number giving the x-coordinates of the vertical lines drawn in the volcano plot. Defaults to
+    \code{2}.
 }
   \item{colors}{
     character vector of colors to be used by the Venn diagram and Polar plot.
@@ -83,6 +87,8 @@ diffExp(arrayData, contrasts, chromosomeMapping, fitMethod = "ls",
   The heatmap shows normalized expression values of the genes that pass the
   \code{heatmapCutoff} in at least one contrast.
   
+  A volcano plot is produced for each contrast showing magnitude of change versus significance.
+  
   The Polar plot sorts the genes according to chromosomal location, for each
   chromosome starting with unknown positions followed by increasing number in
   the \emph{chromosome location} column. Genes which do not map to any chromosome
@@ -102,6 +108,7 @@ diffExp(arrayData, contrasts=c("m1 - wt", "m2 - wt"))
   \item{pValues}{\code{data.frame} containing p-values for each contrast}
   \item{foldChanges}{\code{data.frame} containing log2 fold changes for each contrast}
   \item{resTable}{a \code{list} with an element for each contrast, each being a \code{data.frame} with full result information}
+  \item{vennMembers}{\code{list} containing the gene members of each area of the Venn diagram (only returned when a Venn diagram is drawn)}
 }
 \author{
   Leif Varemo \email{piano.rpkg@gmail.com} and

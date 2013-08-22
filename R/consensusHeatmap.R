@@ -44,7 +44,7 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE)
    tmp <- merge(tmp,mdu,by=1)
    tmp <- merge(tmp,mdd,by=1)
    
-   consRankMat <- tmp[,2:6]
+   consRankMat <- tmp[,2:6] # This is consensus scores.
    rownames(consRankMat) <- tmp[,1]
    for(i in 1:ncol(consRankMat)) {
       consRankMat[,i] <- as.numeric(as.character(consRankMat[,i]))

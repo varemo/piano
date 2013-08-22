@@ -1,6 +1,6 @@
 diffExp <- function(arrayData, contrasts, chromosomeMapping,
                                    fitMethod="ls", adjustMethod="fdr", significance=0.001, 
-                                   plot=TRUE, heatmapCutoff=1e-10,
+                                   plot=TRUE, heatmapCutoff=1e-10, volcanoFC=2,
                                    colors=c("red","green","blue","yellow","orange",
                                    "purple","tan","cyan","gray60","black"),
                                    save=FALSE, verbose=TRUE) {
@@ -19,15 +19,16 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
   }
   if(class(plot) == "logical") {
      if(plot) {
-        venn <- heatmap <- polarPlot <- TRUE  
+        venn <- heatmap <- polarPlot <- volcano <- TRUE  
      } else {
-        venn <- heatmap <- polarPlot <- FALSE
+        venn <- heatmap <- polarPlot <- volcano <- FALSE
      }
   } else if(class(plot) == "character") {
-     venn <- heatmap <- polarPlot <- FALSE
+     venn <- heatmap <- polarPlot <- volcano <- FALSE
      if("venn" %in% plot) venn <- TRUE
      if("heatmap" %in% plot) heatmap <- TRUE
      if("polarplot" %in% plot) polarPlot <- TRUE
+     if("volcano" %in% plot) volcano <- TRUE
   } else {
      stop("argument plot has to be either TRUE, FALSE or a character string")
   }
@@ -285,6 +286,75 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
     }
   }
   
+  
+  # Volcano plot
+  if(volcano == TRUE) {
+     .verb("Generating volcano plot...", verbose)
+     
+     if(saveFig == TRUE) {
+        dirStat <- dir.create(savedirFig, recursive=TRUE, showWarnings=FALSE)
+        if(dirStat == TRUE) {
+           .verb(paste("Creating new directory:",savedirFig), verbose)
+        }
+        figFileName = paste("volcano_plot.pdf",sep="")
+        figFilePath = paste(savedirFig,"/",figFileName,sep="")
+        .verb("Saving volcano plot...", verbose)
+        if(file.exists(figFilePath)) {
+           .verb(paste("Warning: ",figFileName," already exists in directory: overwriting old file...",sep=""), verbose)
+        }
+        pdf(file=figFilePath,paper="a4")
+     }
+     
+     for(i in 1:ncol(pValues)) {
+        if(saveFig == FALSE) dev.new()
+        plot(x=foldChanges[,i],y=-log10(pValues[,i]),pch=16,col="gray",
+             main=contrasts[i],xlab="log2 fold change",ylab="-log10 p-value",xlim=c(max(abs(foldChanges[,i])),-max(abs(foldChanges[,i]))))
+        tmp <- cbind(foldChanges[,i],pValues[,i])
+        tmp <- tmp[abs(tmp[,1])>=abs(volcanoFC),]
+        tmp <- tmp[tmp[,2]<=significance,]
+        points(x=tmp[,1],y=-log10(tmp[,2]),pch=16,col="black")
+        abline(h=-log10(significance),col="red",lty=2)
+        abline(v=volcanoFC,col="blue",lty=2)
+        abline(v=-volcanoFC,col="blue",lty=2)
+     }
+     
+     if(saveFig == TRUE) {
+        tmp <- dev.off()
+     }
+     .verb("...done", verbose)
+  }
+  
+  
+  
+  # Get Venn gene membership info:
+  if(venn == TRUE) {
+     combMat <- expand.grid(lapply(1:ncol(pValues),function(x) 0:1))
+     signGeneList <- apply(pValues,2,function(x) which(x < significance))
+     vennList <- list()
+     for(i in 2:nrow(combMat)) { # skip the first row with all zeros
+        if(ncol(combMat)==1) {
+           geneInd <- signGeneList
+        } else {
+           geneInd <- Reduce(intersect, signGeneList[combMat[i,]==1])
+           geneInd <- geneInd[!geneInd %in% unique(unlist(signGeneList[combMat[i,]==0]))]
+        }
+        if(length(topTabList[[1]]$GeneName) > 0) {
+           vennList[[i-1]] <- topTabList[[1]][geneInd,1:2]
+        } else {
+           vennList[[i-1]] <- topTabList[[1]][geneInd,1]
+        }
+        rownames(vennList[[i-1]]) <- NULL
+        names(vennList)[i-1] <- paste("Uniquely in ",paste(LETTERS[1:ncol(pValues)][combMat[i,]==1],collapse=""),sep="")
+     }
+  }
+  
+  
+  
+  # Output
   names(topTabList) <- contrasts
-  return(list(pValues=pValues,foldChanges=foldChanges,resTable=topTabList))
+  if(venn == TRUE) {
+     return(list(pValues=pValues,foldChanges=foldChanges,resTable=topTabList,vennMembers=vennList))
+  } else {
+     return(list(pValues=pValues,foldChanges=foldChanges,resTable=topTabList))
+  }
 }
