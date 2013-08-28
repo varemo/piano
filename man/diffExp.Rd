@@ -105,7 +105,7 @@ diffExp(arrayData, contrasts=c("m1 - wt", "m2 - wt"))
 \value{
   A \code{list} with elements:
 
-  \item{pValues}{\code{data.frame} containing p-values for each contrast}
+  \item{pValues}{\code{data.frame} containing adjusted p-values (according to argument \code{adjustMethod}) for each contrast}
   \item{foldChanges}{\code{data.frame} containing log2 fold changes for each contrast}
   \item{resTable}{a \code{list} with an element for each contrast, each being a \code{data.frame} with full result information}
   \item{vennMembers}{\code{list} containing the gene members of each area of the Venn diagram (only returned when a Venn diagram is drawn)}

@@ -139,7 +139,11 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
    # Plot:
    if(plot) {
       logScale <- ifelse(logScale,"x","") 
-      if(missing(main)) main <- paste(method, " rank, based on p",pValue,sep="")
+      if(missing(main)) {
+         tmp <- paste(" ",direction,sep="")
+         if(tmp==" none") tmp <- ""
+         main <- paste(method, " rank, based on p-values (",class," directional",tmp,")",sep="")
+      }
       if(yaxt == "n") {
          layout(matrix(c(1,2),ncol=2),widths=c(4,1))
          cexPoint <- 0.9

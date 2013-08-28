@@ -292,7 +292,7 @@ ii <- sort(pfc$resTable[[2]]$adj.P.Val, index.return=TRUE)$ix
 pfc$resTable[[2]][ii[1:5],]
 @
 
-The \fun{diffExp} function also produces three plots (Figure \ref{fig:diffexp}): a Venn diagram, a polar plot and a heatmap. The Venn diagram shows the number of differentially expressed genes for each contrast (by default at a significance level of 0.001, see argument \fun{significance}). The polar plot gives a visualization of differential expression by plotting the -log10(p-values) against chromosomal location of each gene. The heatmap shows the expression levels of significant genes (in at least one contrast, significance cutoff controlled by the argument \fun{heatmapCutoff}) for all microarrays and clusters similar expression patterns together. Each of these plots can be turned on/off through the argument \fun{plot}.
+The \fun{diffExp} function also produces some plots (Figure \ref{fig:diffexp}): a Venn diagram, a polar plot, a heatmap and a volcano plot. The Venn diagram shows the number of differentially expressed genes for each contrast (by default at a significance level of 0.001, see argument \fun{significance}). Which genes the number represent can be accessed through the returned object, in this example \fun{pfc$vennMembers}. The polar plot gives a visualization of differential expression by plotting the -log10(p-values) against chromosomal location of each gene. The heatmap shows the expression levels of significant genes (in at least one contrast, significance cutoff controlled by the argument \fun{heatmapCutoff}) for all microarrays and clusters similar expression patterns together. The volcano plot shows the magnitude of change versus the significance. Each of these plots can be turned on/off through the argument \fun{plot}.
 
 The gene-level statistics, returned by \fun{diffExp}, can be used to select genes of interest for further investigation but also passed on to additional global analyses. One common analysis in this context is gene set analysis which is the main part of \pkg{piano} and is presented in the next section. 
 
@@ -320,9 +320,9 @@ The gene-level statistics are simply represented by a one-columned dataframe (or
 
 <<>>==
 # Get p-values from the aerobic_Clim vs anaerobic_Clim comparison:
-myPval <- as.matrix(pfc$pValues)[,"aerobic_Clim - anaerobic_Clim"]
-# Display the first five values and gene IDs:
-myPval[1:5]
+myPval <- pfc$pValues["aerobic_Clim - anaerobic_Clim"]
+# Display the first values and gene IDs:
+head(myPval)
 @
 
 \noindent Apart from gene-level statistics, an optional but common input is \fun{directions}. This simply gives the direction of expression change of each gene (e.g. fold-changes). This is used to separate up-regulated and down-regulated genes e.g. when p-values are used as gene-level statistics. If t-values are used as input, there is no need for \fun{directions}, since this is given by the sign of each t-value.
@@ -461,13 +461,11 @@ The applications of GSA using \pkg{piano} can be presented using a few examples.
 As an example of the seamless integration of the microarray analysis part of \pkg{piano} and the GSA part, we will start with an example using the data from section \ref{sec:ma}. At that point we ended up with an object, \fun{pfc}, containing p-values and fold-changes from the differential expression analysis (using the \fun{diffExp} function):
 <<>>==
 # Get the p-values for the contrast aerobic_Clim - anaerobic_Clim
-myPval <- pfc$pValues$"aerobic_Clim - anaerobic_Clim"
-names(myPval) <- rownames(pfc$pValues)
-myPval[1:5]
+myPval <- pfc$pValues["aerobic_Clim - anaerobic_Clim"]
+head(myPval)
 # Get the fold-changes for the contrast aerobic_Clim - anaerobic_Clim
-myFC <- pfc$foldChanges$"aerobic_Clim - anaerobic_Clim"
-names(myFC) <- rownames(pfc$foldChanges)
-myFC[1:5]
+myFC <- pfc$foldChanges["aerobic_Clim - anaerobic_Clim"]
+head(myFC)
 @
 These values are for differentially expressed genes in yeast cultured in aerobic carbon-limited media compared to anaerobic carbon-limited media. As we see for the five first genes, the IDs used are the microarray probeset IDs. This is important to keep in mind when we select or gene set collection. In this example we will use GO terms as gene sets. The \pkg{biomaRt} package is useful to access available databases:
 <<>>==
@@ -477,7 +475,7 @@ ensembl <- useMart("ensembl", dataset="scerevisiae_gene_ensembl")
 # Map Yeast 2.0 microarray probeset IDs to GO:
 mapGO <- getBM(attributes=c('affy_yeast_2', 'name_1006'), 
                filters = 'affy_yeast_2', 
-               values = names(myPval), 
+               values = rownames(myPval), 
                mart = ensembl)
 # Remove blanks ("")
 mapGO <- mapGO[mapGO[,2]!="",]

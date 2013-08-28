@@ -10,7 +10,8 @@ export(
   geneSetSummary,
   networkPlot,
   consensusScores,
-  consensusHeatmap
+  consensusHeatmap,
+  runGSAhyper
 )
 
 S3method(print, ArrayData)
