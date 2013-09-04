@@ -28,6 +28,8 @@ New in version 1.2.0
 
    - Updated the main legend of the plot from consensusScores() to make it clearer.
 
+   - Updated runGSAhyper() to remove genes in gsc not appearing in user-defined universe.
+
 
 New in version 1.0.7
 ====================

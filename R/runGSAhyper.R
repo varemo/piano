@@ -6,6 +6,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
    if(missing(genes)) {
       stop("argument genes is required")
    } else {
+      genes <- as.vector(as.matrix(genes))
       if(class(genes) != "character") stop("argument genes should be a character vector")  
       if(length(unique(genes)) != length(genes)) stop("argument genes should contain no duplicated entries")
    }
@@ -60,8 +61,11 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
       
    # If universe set, check character vector
       if(class(universe) != "character") stop("argument universe should be a character vector")
-      if(!all(pvalues==0)) stop("if universe is given, genes should be only the genes of interest, i.e. pvalues should all be set to 0.")
+      if(!all(pvalues==0)) stop("if universe is given, genes should be only the genes of interest, i.e. pvalues should all be set to 0.")            
    }
+   
+   # Check that there are no genes in GSC not in universe:
+   if(!all(unique(unlist(gsc$gsc)) %in% universe)) warning("there are genes in gsc that are not in the universe, these will be removed before analysis")
    
    # Check that all(genes%in%universe)==T.
    if(!all(genes%in%universe)) {
@@ -78,6 +82,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
    if(class(tmp) == "try-error") {
       stop("argument adjMethod set to unknown method")
    }
+
    
    ## Argument checking done!
    
@@ -109,7 +114,9 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
                          "Non-significant (not in gene set)")
    rownames(resTab) <- names(gsc)
    for(i in 1:length(gsc)) {
-      gs <- gsc[[i]] # In gene set
+      gs <- gsc[[i]] 
+      gs <- gs[gs%in%universe] # In gene set (and in universe!)
+      #if(length(gs)!=length(gsc[[i]])) message(paste("Removing ",length(gsc[[i]])-length(gs)," genes from gene set ",i,sep=""))
       nogs <- universe[!universe%in%gs] # Not in gene set
       
       
