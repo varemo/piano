@@ -576,10 +576,15 @@ An alternative to using GO terms as gene sets is to use so called Reporter Metab
 # An example usage:
 myGsc <- loadGSC("myModel.xml")
 @
-In order to save time and space (since the model file size can be large and the extraction of gene sets can take a while), we have already loaded the gene to gene set associations from a \textit{S. cerevisiae} metabolic network \cite{nookaew2008} and included it in \pkg{piano}. Let's load it:
+In order to save time and space (since the model file size can be large and the extraction of gene sets can take a while), we have already loaded the gene to gene set associations from two \textit{S. cerevisiae} metabolic networks \cite{nookaew2008,osterlund2013} and included them in \pkg{piano}. Let's load:
 <<>>==
+# To load iTO977:
+metMap <- system.file("extdata", "probe2metabolites_iTO977.txt.gz", 
+                      package="piano")
+# To load iIN800:
 metMap <- system.file("extdata", "probe2metabolites_iIN800.txt.gz", 
                       package="piano")
+# Convert into piano format:
 metMap <- read.delim(metMap)
 myGsc <- loadGSC(metMap)
 @

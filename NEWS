@@ -30,6 +30,9 @@ New in version 1.2.0
 
    - Updated runGSAhyper() to remove genes in gsc not appearing in user-defined universe.
 
+   - Added the yeast metabolic model iTO977 to be loaded with loadGSC(), for detecting 
+     reporter metabolites using gene set analysis.
+
 
 New in version 1.0.7
 ====================
