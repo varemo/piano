@@ -1,4 +1,4 @@
-consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE) {
+consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE, ncharLabel=25) {
    
    # error check:
    tmp <- try(method <- match.arg(method, c("mean","median","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
@@ -75,7 +75,7 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE)
    tmpMat <- plotmat
    tmp <- rownames(tmpMat)
    for(i in 1:length(tmp)) {
-      if(nchar(tmp[i])>25) tmp[i] <- paste(substr(tmp[i],1,25),"...",sep="")
+      if(nchar(tmp[i])>ncharLabel) tmp[i] <- paste(substr(tmp[i],1,ncharLabel),"...",sep="")
    }
    rownames(tmpMat) <- tmp
    hm2out <- heatmap.2(tmpMat[,myorder], Colv=FALSE, dendrogram="row", margins=c(1,1), density.info="none",

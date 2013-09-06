@@ -1,5 +1,5 @@
 networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0.001, geneSets=NULL, overlap=1, lay=1, 
-                        label="names", cexLabel=0.9, cexLegend=1, nodeSize=c(10,40), edgeWidth=c(1,15), 
+                        label="names", cexLabel=0.9, ncharLabel=25, cexLegend=1, nodeSize=c(10,40), edgeWidth=c(1,15), 
                         edgeColor=NULL, scoreColors=NULL, main) {
    
    test <- 1 # Which contrast? Currently only one allowed!
@@ -190,7 +190,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    }
    tmp <- names(gsc)[indSignificant]
    for(i in 1:length(tmp)) {
-      if(nchar(tmp[i])>25) tmp[i] <- paste(substr(tmp[i],1,25),"...",sep="")
+      if(nchar(tmp[i])>ncharLabel) tmp[i] <- paste(substr(tmp[i],1,ncharLabel),"...",sep="")
    }
    if(label == "names") vLabels <- tmp
    else if(label == "numbers") vLabels <- 1:length(indSignificant)

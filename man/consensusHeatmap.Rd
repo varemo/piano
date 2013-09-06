@@ -8,7 +8,7 @@
    Based on multiple result objects from the \code{\link{runGSA}} function, this function computes the consensus scores, based on rank aggregation, for each directionality class and produces a heatmap plot of the results.
 }
 \usage{
-   consensusHeatmap(resList, method = "median", cutoff = 5, adjusted=FALSE)
+   consensusHeatmap(resList, method = "median", cutoff = 5, adjusted=FALSE, ncharLabel=25)
 }
 
 \arguments{
@@ -23,6 +23,9 @@
 }
    \item{adjusted}{
       a logical, whether to use adjusted p-values or not. Note that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the adjusted p-values will be equal to the original p-values.
+   }
+   \item{ncharLabel}{
+      the number of characters to include in the node labels.
    }
 }
 \details{
