@@ -33,7 +33,7 @@ New in version 1.2.0
    - Added the yeast metabolic model iTO977 to be loaded with loadGSC(), for detecting 
      reporter metabolites using gene set analysis.
 
-   - Added argument nchar to networkPlot() and consensusHeatmap() to control the length
+   - Added argument ncharLabel to networkPlot() and consensusHeatmap() to control the length
      of the labels in the plots and add the option to not truncate them.
 
 
