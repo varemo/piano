@@ -3,8 +3,6 @@ New in version 1.2.0
 
    Important changes:
 
-   - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
-
    - Added argument ncpus to runGSA(). Enables parts of this function to run in 
      parallel, thus decreasing runtime. Requires R package snowfall.
 
@@ -16,7 +14,11 @@ New in version 1.2.0
    - Added function runGSAhyper() to perform gene set analysis using Fisher's exact test,
      as an alternative to runGSA.
 
+   - Added support for running networkPlot() on objects returned by runGSAhyper().
+
    Minor changes:
+
+   - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
 
    - Removed suppressWarnings(), as temporarily introduced in version 1.0.1, in 
      polarPlot() around the calls to radial.plot() since warnings are now fixed in 
@@ -28,13 +30,13 @@ New in version 1.2.0
 
    - Updated the main legend of the plot from consensusScores() to make it clearer.
 
-   - Updated runGSAhyper() to remove genes in gsc not appearing in user-defined universe.
-
    - Added the yeast metabolic model iTO977 to be loaded with loadGSC(), for detecting 
-     reporter metabolites using gene set analysis.
+     reporter metabolites using gene set analysis. (See vignette.)
 
    - Added argument ncharLabel to networkPlot() and consensusHeatmap() to control the length
      of the labels in the plots and add the option to not truncate them.
+
+   - Updated error-messages in networkPlot().
 
 
 New in version 1.0.7

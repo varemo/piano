@@ -7,7 +7,7 @@
    Performs gene set analysis (GSA) based on a list of significant genes and a gene set collection, using Fisher's exact test, returning the gene set p-values.
 }
 \usage{
-   runGSAhyper(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
+   runGSAhyper(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,Inf), adjMethod="fdr")
 }
 \arguments{
    \item{genes}{
@@ -24,6 +24,9 @@
    }
    \item{gsc}{
       a gene set collection given as an object of class \code{GSC} as returned by the \code{\link{loadGSC}} function.
+   }
+   \item{gsSizeLim}{
+      a vector of length two, giving the minimum and maximum gene set size (number of member genes) to be kept for the analysis. Defaults to \code{c(1,Inf)}.
    }
    \item{adjMethod}{
       the method for adjusting for multiple testing. Can be any of the methods supported by \code{p.adjust}, i.e. \code{"holm"}, \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or \code{"none"}.
@@ -49,7 +52,8 @@ The main difference between \code{\link{runGSA}} and \code{runGSAhyper} is that 
    \item{pvalues}{a vector of gene set p-values}
    \item{p.adj}{a vector of gene set p-values, adjusted for multiple testing}
    \item{resTab}{a full result table}
-   \item{contingencyTable}{a list of the contingency tables used for each gene set}   
+   \item{contingencyTable}{a list of the contingency tables used for each gene set} 
+   \item{gsc}{the input gene set collection}
 }
 
 \author{
@@ -57,8 +61,7 @@ The main difference between \code{\link{runGSA}} and \code{runGSAhyper} is that 
   Intawat Nookaew \email{piano.rpkg@gmail.com}
 }
 \seealso{
-   \pkg{\link{piano}}, \code{\link{loadGSC}}, \code{\link{runGSA}}, \code{\link{fisher.test}}, \code{\link{phyper}}
-}
+   \pkg{\link{piano}}, \code{\link{loadGSC}}, \code{\link{runGSA}}, \code{\link{fisher.test}}, \code{\link{phyper}}, \code{\link{networkPlot}}}
 \examples{
    # Load example input data (dummy p-values and gene set collection):
    data("gsa_input")

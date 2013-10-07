@@ -10,7 +10,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    
    tmp <- try(pValue <- match.arg(class, c("distinct","mixed","non"), several.ok=FALSE), silent=TRUE)
    if(class(tmp) == "try-error") {
-      stop("argument pValue is not valid")
+      stop("argument class is not valid")
    }
    if(pValue == "non") {
       if(!missing(direction)) warning("argument direction will not be used for pValue='non'")
@@ -45,6 +45,23 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    if(length(edgeWidth) != 2) stop("argument edgeWidth has to have length 2")
    if(class(adjusted) != "logical") stop("argument adjusted has to be TRUE or FALSE")
    if(!missing(main)) if(class(main) != "character") stop("argument main has to be a character string")
+   
+   #########################################################
+   # Adds possibility to use output object from runGSAhyper:
+   if(length(gsaRes) == 5) {
+      if(all(names(gsaRes) == c("pvalues","p.adj","resTab","contingencyTable","gsc"))) {
+         if(pValue != "mix") stop("When using result from runGSAhyper, only class='non' is allowed")
+         gsaRes$pNonDirectional <- matrix(gsaRes$pvalues,ncol=1)
+         gsaRes$pAdjNonDirectional <- matrix(gsaRes$p.adj,ncol=1) 
+         gsaRes$geneSetStat <- "Fisher's exact test"
+         if(adjusted) {
+            maintext <- paste("p.adj<",significance,sep="")
+         } else {
+            maintext <- paste("p<",significance,sep="")
+         }
+      }
+   }
+   #########################################################
    
    
    #*********************************************
@@ -94,7 +111,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    }
    
    # Check if at least two gene sets are selected:
-   if(length(indSignificant) < 3) stop("less than three gene sets were selected, can not plot")
+   if(length(indSignificant) < 3) stop("less than three gene sets were selected, can not plot (tip: adjust the significance cutoff)")
    
    # Get the relevant p-values:
    pSignificant <- pValues[indSignificant]

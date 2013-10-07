@@ -1,6 +1,9 @@
-runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr") {
+runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,Inf), adjMethod="fdr") {
    
    ## Argument checking:
+   
+   # Check gsaSizeLim:
+   if(length(gsSizeLim)!=2) stop("argument gsSizeLim should be a vector of length 2")
    
    # Check genes is character vector of unique genes
    if(missing(genes)) {
@@ -97,12 +100,22 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
    # Get background
    bg <- universe[!universe%in%goi] # Not significant
    
+   # Update gsc, removing genes not in universe, and gene sets not matching size limits:
+   gsc <- gsc$gsc
+   delInd <- vector()
+   for(i in 1:length(gsc)) {
+      gs <- gsc[[i]] 
+      gs <- gs[gs%in%universe] # In universe!
+      if(length(gs) < gsSizeLim[1] | length(gs) > gsSizeLim[2]) delInd <- c(delInd,i)
+      gsc[[i]] <- gs
+   }
+   gsc <- gsc[!c(1:length(gsc))%in%delInd]
+   
    # Print info
    message(paste("Analyzing the overrepresentation of ",length(goi)," genes of interest in ",
-                 length(gsc$gsc)," gene sets, using a background of ",length(bg)," non-interesting genes.",sep=""))
+                 length(gsc)," gene sets, using a background of ",length(bg)," non-interesting genes.",sep=""))
    
    # Loop over genes sets
-   gsc <- gsc$gsc
    p <- rep(NA,length(gsc))
    names(p) <- names(gsc)
    padj <- rep(NA,length(gsc))
@@ -113,9 +126,10 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
                          "Non-significant (in gene set)","Significant (not in gene set)",
                          "Non-significant (not in gene set)")
    rownames(resTab) <- names(gsc)
+      
    for(i in 1:length(gsc)) {
-      gs <- gsc[[i]] 
-      gs <- gs[gs%in%universe] # In gene set (and in universe!)
+      gs <- gsc[[i]] # In gene set (and in universe!)
+      #gs <- gs[gs%in%universe] # In gene set (and in universe!)
       #if(length(gs)!=length(gsc[[i]])) message(paste("Removing ",length(gsc[[i]])-length(gs)," genes from gene set ",i,sep=""))
       nogs <- universe[!universe%in%gs] # Not in gene set
       
@@ -133,18 +147,19 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, adjMethod="fdr")
       
       
       resTab[i,] <- c(p[i],NA,sum(goi%in%gs),sum(bg%in%gs),sum(goi%in%nogs),sum(bg%in%nogs)) 
-      
    }
    
    padj <- p.adjust(p, method=adjMethod)
    resTab[,2] <- padj
+   
+   ### NOTE: If changing output structure, check and update networkPlot accordingly!
    
    res <- list()
    res$pvalues <- p
    res$p.adj <- padj
    res$resTab <- resTab
    res$contingencyTable <- contTabList
-   #res$gsc <- gsc
+   res$gsc <- gsc
    return(res)
    
 }

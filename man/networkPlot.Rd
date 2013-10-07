@@ -14,13 +14,13 @@
 }
 \arguments{
    \item{gsaRes}{
-      an object of class \code{GSAres}, as returned from \code{runGSA()}.
+      an object of class \code{GSAres}, as returned from \code{runGSA()} or an object returned from \code{runGSAhyper()}.
    }
    \item{class}{
-      a character string determining the p-values of which directionality class that should be used as significance information for the plot. Can be one of  \code{"distinct"}, \code{"mixed"}, \code{"non"}.
+      a character string determining the p-values of which directionality class that should be used as significance information for the plot. Can be one of  \code{"distinct"}, \code{"mixed"}, \code{"non"}. Has to be \code{"non"} if the result from \code{runGSAhyper()} is used.
    }
    \item{direction}{
-      a character string giving the direction of regulation, can be either \code{"up"}, \code{"down"} or \code{"both"} (for \code{pValue='distinct'} only).
+      a character string giving the direction of regulation, can be either \code{"up"}, \code{"down"} or \code{"both"} (for \code{pValue="distinct"} only).
    }
    \item{adjusted}{
       a logical, if adjusted p-values should be used, or not. Note that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the adjusted p-values will be equal to the original p-values.
