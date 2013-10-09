@@ -250,7 +250,7 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
       mp <- barplot(summary(dataPrcomp)$importance[2,],names.arg=colnames(dataPrcomp$rotation),
                     las=3,ylab="Proportion of variance",
                     ylim=c(0,1.25*summary(dataPrcomp)$importance[2,][1]),
-                    main="PC imortance")
+                    main="PC importance")
       text(x=cbind(mp,summary(dataPrcomp)$importance[2,]+summary(dataPrcomp)$importance[2,1]*0.15),
            labels=paste(round(summary(dataPrcomp)$importance[3,]*100,1),"%",sep=""),
            srt=90)

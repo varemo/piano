@@ -1,180 +1,187 @@
-New in version 1.2.0
-====================
+CHANGES IN VERSION 1.2.0
+-------------------------
 
-   Important changes:
+NEW FEATURES
 
-   - Added argument ncpus to runGSA(). Enables parts of this function to run in 
-     parallel, thus decreasing runtime. Requires R package snowfall.
+    o Added argument ncpus to runGSA(). Enables parts of this function to run in 
+      parallel, thus decreasing runtime. Requires R package snowfall.
 
-   - Added information about genes in each area of the Venn diagram in the output
-     of diffExp().
+    o Added function runGSAhyper() to perform gene set analysis using Fisher's exact test,
+      as an alternative to runGSA.
 
-   - Added volcano plot as optional output of diffExp() and added argument volcanoFC.
+    o Added information about genes in each area of the Venn diagram in the output
+      of diffExp().
 
-   - Added function runGSAhyper() to perform gene set analysis using Fisher's exact test,
-     as an alternative to runGSA.
+    o Added volcano plot as optional output of diffExp() and added argument volcanoFC.
 
-   - Added support for running networkPlot() on objects returned by runGSAhyper().
+    o Added argument ncharLabel to networkPlot() and consensusHeatmap() to control the 
+      length of the labels in the plots and add the option to not truncate them.
 
-   Minor changes:
+    o Added the yeast metabolic model iTO977 to be loaded with loadGSC(), for detecting 
+      reporter metabolites using gene set analysis. (See vignette.)
 
-   - Updated diffExp() to handle changes in lmFit() and topTable() from limma.
+    o Added support for running networkPlot() on objects returned by runGSAhyper().
 
-   - Removed suppressWarnings(), as temporarily introduced in version 1.0.1, in 
-     polarPlot() around the calls to radial.plot() since warnings are now fixed in 
-     package plotrix.
+USER-VISIBLE CHANGES
 
-   - Updated minor details in vignette.
+    o Minor updates to the vignette.
 
-   - Updated diffExp() man page.
+    o Updated diffExp() man page.
 
-   - Updated the main legend of the plot from consensusScores() to make it clearer.
+    o Updated the main legend of the plot from consensusScores() to make it clearer.
 
-   - Added the yeast metabolic model iTO977 to be loaded with loadGSC(), for detecting 
-     reporter metabolites using gene set analysis. (See vignette.)
+    o Updated error-messages in networkPlot().
 
-   - Added argument ncharLabel to networkPlot() and consensusHeatmap() to control the length
-     of the labels in the plots and add the option to not truncate them.
+    o Fixed typo in PC variance plot produced by runQC().
 
-   - Updated error-messages in networkPlot().
+    o Restructered this NEWS file.
 
+BUG FIXES
 
-New in version 1.0.7
-====================
+    o Updated diffExp() to handle changes in lmFit() and topTable() from limma.
 
-   Minor changes:
+    o Removed suppressWarnings(), as temporarily introduced in version 1.0.1, in 
+      polarPlot() around the calls to radial.plot() since warnings are now fixed in 
+      package plotrix.
 
-   - Updated consensusScores() man page.
+CHANGES IN VERSION 1.0.7
+-------------------------
 
+USER-VISIBLE CHANGES
 
-New in version 1.0.6
-====================
+    o Updated consensusScores() man page.
 
-   Minor changes:
+CHANGES IN VERSION 1.0.6
+-------------------------
 
-   - Updated loadMAdata() man page.
+USER-VISIBLE CHANGES
 
+    o Updated loadMAdata() man page.
 
-New in version 1.0.5
-====================
+CHANGES IN VERSION 1.0.5
+-------------------------
 
-   Minor changes:
+BUG FIXES
 
-   - Updated diffExp() to only use vennDiagram() of the limma package for Venn 
-     diagram plotting in order to correct a bug when plotting more than three 
-     circles. Also updated the corresponding man page.
+    o Updated diffExp() to only use vennDiagram() of the limma package for Venn 
+      diagram plotting in order to correct a bug when plotting more than three 
+      circles. Also updated the corresponding man page.
 
-   - Updated the SBML section in the loadGSC() man page.
+USER-VISIBLE CHANGES
 
+    o Updated the SBML section in the loadGSC() man page.
 
-New in version 1.0.4
-====================
+CHANGES IN VERSION 1.0.4
+-------------------------
 
-   Minor changes:
+BUG FIXES
 
-   - Fixed bug in loadMAdata so that also compressed CEL-files (*.CEL.gz) can be 
-     loaded correctly.
+    o Fixed bug in loadMAdata so that also compressed CEL-files (*.CEL.gz) can be 
+      loaded correctly.
 
+CHANGES IN VERSION 1.0.3
+-------------------------
 
-New in version 1.0.3
-====================
+USER-VISIBLE CHANGES
 
-   Minor changes:
+    o Updated references in vignette.
 
-   - Updated references in vignette.
+CHANGES IN VERSION 1.0.2
+-------------------------
 
+USER-VISIBLE CHANGES
 
-New in version 1.0.2
-====================
+    o Updated CITATION information.
 
-   Minor changes:
 
-   - Updated CITATION information.
+CHANGES IN VERSION 1.0.1
+-------------------------
 
+USER-VISIBLE CHANGES
 
-New in version 1.0.1
-====================
+    o Updated CITATION information.
 
-   Minor changes:
+    o Fixed typos in DESCRIPTION and piano-package.Rd.
 
-   - Fixed bug in loadGSC() so that gmt-files are now loaded correctly.
+    o Updated the man file for loadGSC().
 
-   - Temporarily added suppressWarnings() in polarPlot() around the calls to 
-     radial.plot() since warnings appeared for example("radial.plot") in
-     plotrix v3.4-6.
+    o Added URL in DESCRIPTION.
 
-   - Updated CITATION information.
+BUG FIXES
 
-   - Fixed typos in DESCRIPTION and piano-package.Rd.
+    o Fixed bug in loadGSC() so that gmt-files are now loaded correctly.
 
-   - Updated the man file for loadGSC().
+    o Temporarily added suppressWarnings() in polarPlot() around the calls to 
+      radial.plot() since warnings appeared for example("radial.plot") in
+      plotrix v3.4-6.
 
-   - Added URL in DESCRIPTION.
+CHANGES IN VERSION 1.0.0
+-------------------------
 
+NEW FEATURES
 
-New in version 1.0.0
-====================
+    o Now part of Bioconductor.
 
-   Important changes:
+USER-VISIBLE CHANGES
 
-   - Removed the arguments 'venn', 'heatmap' and 'polarPlot' from diffExp and 
-     replaced them with a new argument: 'plot'.
+    o Removed the arguments 'venn', 'heatmap' and 'polarPlot' from diffExp and 
+      replaced them with a new argument: 'plot'.
 
-   - The consensusScores function now does not return its result invisibly.
+    o The consensusScores function now does not return its result invisibly.
 
-   - The argument order in consensusScores has changed: 'plot' has been moved 
-     from last place to after 'method'.
+    o The argument order in consensusScores has changed: 'plot' has been moved 
+      from last place to after 'method'.
 
-   Minor changes:
+    o Added citation DOI to vignette.
 
-   - Added citation DOI to vignette.
+    o Updated the man page for consensusScores, added correct output description.
 
-   - Fixed bug in geneSetSummary when no directions are available.
+    o Updated the Description field text in the DESCRIPTION file.
 
-   - Updated the man page for consensusScores, added correct output description.
+    o Removed contrastName as output from runGSA and geneSetSummary, including 
+      man pages.
 
-   - Fixed a bug in diffExp() regarding the result table, when gene names 
-     (annotation) are not available
+    o Changed the man page for consensusHeatmap clarifying that the cutoff 
+      argument is consensus score (not rank)
 
-   - Fixed a bug in diffExp() so that the heatmap shows gene names if available, 
-     otherwise the probeset IDs
+    o Updated the man page for loadGSC, clarifying the input.
 
-   - Updated the Description field text in the DESCRIPTION file.
+    o Reworked the vignette to fit Bioconductor, removed section on R 
+      introduction.
 
-   - Removed man page for internal functions.
+    o Change name of folder for example data from exampleData to extdata, and 
+      updated man pages and vignette.
 
-   - Removed contrastName as output from runGSA and geneSetSummary, including 
-     man pages.
+    o Changed so that total number of gene-level statistics are printed during 
+      run, instead of total number of unique genes.
 
-   - Changed the man page for consensusHeatmap clarifying that the cutoff 
-     argument is consensus score (not rank)
+    o Removed 'typical usages' section from man page of loadMAdata since this 
+      is covered in the vignette.
 
-   - Updated the man page for loadGSC, clarifying the input.
+    o Updated the examples for diffExp, networkPlot, consensusHeatmap and 
+      consensusScores to show how to handle the returned object.
 
-   - Reworked the vignette to fit Bioconductor, removed section on R 
-     introduction.
+    o Added CITATION file.
 
-   - Change name of folder for example data from exampleData to extdata, and 
-     updated man pages and vignette.
+    o Added NEWS file.
 
-   - Changed so that total number of gene-level statistics are printed during 
-     run, instead of total number of unique genes.
+    o Added more links to similar packages in runGSA help page.
 
-   - Removed 'typical usages' section from man page of loadMAdata since this 
-     is covered in the vignette.
+    o Updated the installation instructions in the Vignette to fit Bioconductor.
 
-   - Updated the examples for diffExp, networkPlot, consensusHeatmap and 
-     consensusScores to show how to handle the returned object.
+BUG FIXES
 
-   - Added CITATION file.
+    o Fixed bug in geneSetSummary when no directions are available.
 
-   - Added NEWS file.
+    o Fixed a bug in diffExp() regarding the result table, when gene names 
+      (annotation) are not available
 
-   - Added more links to similar packages in runGSA help page.
+    o Fixed a bug in diffExp() so that the heatmap shows gene names if available, 
+      otherwise the probeset IDs
 
-   - Updated the installation instructions in the Vignette to fit Bioconductor.
+    o Removed man page for internal functions.
 
-   - Updated the loadMAdata function to use the justPlier function from package 
-     plier, instead of a modified version.
+    o Updated the loadMAdata function to use the justPlier function from package 
+      plier, instead of a modified version.
 
-   - Removed internal function justPlierSpec.
+    o Removed internal function justPlierSpec.
