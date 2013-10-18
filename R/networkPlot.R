@@ -134,11 +134,11 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    
    # Adjecency matrix:
    adjMat <- overlapMat > 0
-   if(all(!adjMat)) stop("no overlap between gene sets found, try to decrease argument overlap")
    
    # Create igraph object:
    tmp <- adjMat
    diag(tmp) <- 0 # For some reason diag=FALSE below stopped working...
+   if(all(!tmp)) stop("no overlap between gene sets found, try to decrease argument overlap or increase argument significance")
    g <- graph.adjacency(tmp, mode="undirected", diag=FALSE)
    
    

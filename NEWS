@@ -1,3 +1,17 @@
+CHANGES IN VERSION 1.4.0
+-------------------------
+
+None yet!
+
+CHANGES IN VERSION 1.2.1
+-------------------------
+
+BUG FIXES
+
+    o Fixed bug in networkPlot() which gave an incorrect error message when gene
+      set nodes were selected but no edges could be drawn. Now a correct error
+      message is given.
+
 CHANGES IN VERSION 1.2.0
 -------------------------
 
