@@ -3,6 +3,15 @@ CHANGES IN VERSION 1.4.0
 
 None yet!
 
+CHANGES IN VERSION 1.2.2
+-------------------------
+
+DOCUMENTATION
+
+    o Updated installation instructions in the vignette.
+
+    o Fixed typo in consensusHeatmap man page.
+
 CHANGES IN VERSION 1.2.1
 -------------------------
 
@@ -36,17 +45,11 @@ NEW FEATURES
 
     o Added support for running networkPlot() on objects returned by runGSAhyper().
 
-USER-VISIBLE CHANGES
+DOCUMENTATION
 
     o Minor updates to the vignette.
 
     o Updated diffExp() man page.
-
-    o Updated the main legend of the plot from consensusScores() to make it clearer.
-
-    o Updated error-messages in networkPlot().
-
-    o Fixed typo in PC variance plot produced by runQC().
 
     o Restructered this NEWS file.
 
@@ -58,17 +61,23 @@ BUG FIXES
       polarPlot() around the calls to radial.plot() since warnings are now fixed in 
       package plotrix.
 
+    o Updated the main legend of the plot from consensusScores() to make it clearer.
+
+    o Updated error-messages in networkPlot().
+
+    o Fixed typo in PC variance plot produced by runQC().
+
 CHANGES IN VERSION 1.0.7
 -------------------------
 
-USER-VISIBLE CHANGES
+DOCUMENTATION
 
     o Updated consensusScores() man page.
 
 CHANGES IN VERSION 1.0.6
 -------------------------
 
-USER-VISIBLE CHANGES
+DOCUMENTATION
 
     o Updated loadMAdata() man page.
 
@@ -81,7 +90,7 @@ BUG FIXES
       diagram plotting in order to correct a bug when plotting more than three 
       circles. Also updated the corresponding man page.
 
-USER-VISIBLE CHANGES
+DOCUMENTATION
 
     o Updated the SBML section in the loadGSC() man page.
 
@@ -96,14 +105,14 @@ BUG FIXES
 CHANGES IN VERSION 1.0.3
 -------------------------
 
-USER-VISIBLE CHANGES
+DOCUMENTATION
 
     o Updated references in vignette.
 
 CHANGES IN VERSION 1.0.2
 -------------------------
 
-USER-VISIBLE CHANGES
+DOCUMENTATION
 
     o Updated CITATION information.
 
@@ -111,7 +120,7 @@ USER-VISIBLE CHANGES
 CHANGES IN VERSION 1.0.1
 -------------------------
 
-USER-VISIBLE CHANGES
+DOCUMENTATION
 
     o Updated CITATION information.
 
@@ -136,8 +145,6 @@ NEW FEATURES
 
     o Now part of Bioconductor.
 
-USER-VISIBLE CHANGES
-
     o Removed the arguments 'venn', 'heatmap' and 'polarPlot' from diffExp and 
       replaced them with a new argument: 'plot'.
 
@@ -146,14 +153,22 @@ USER-VISIBLE CHANGES
     o The argument order in consensusScores has changed: 'plot' has been moved 
       from last place to after 'method'.
 
+    o Removed contrastName as output from runGSA and geneSetSummary, including 
+      man pages.
+
+    o Changed name of folder for example data from exampleData to extdata, and 
+      updated man pages and vignette.
+
+    o Changed so that total number of gene-level statistics are printed during 
+      run, instead of total number of unique genes.
+
+DOCUMENTATION
+
     o Added citation DOI to vignette.
 
     o Updated the man page for consensusScores, added correct output description.
 
     o Updated the Description field text in the DESCRIPTION file.
-
-    o Removed contrastName as output from runGSA and geneSetSummary, including 
-      man pages.
 
     o Changed the man page for consensusHeatmap clarifying that the cutoff 
       argument is consensus score (not rank)
@@ -162,12 +177,6 @@ USER-VISIBLE CHANGES
 
     o Reworked the vignette to fit Bioconductor, removed section on R 
       introduction.
-
-    o Change name of folder for example data from exampleData to extdata, and 
-      updated man pages and vignette.
-
-    o Changed so that total number of gene-level statistics are printed during 
-      run, instead of total number of unique genes.
 
     o Removed 'typical usages' section from man page of loadMAdata since this 
       is covered in the vignette.

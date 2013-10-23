@@ -139,7 +139,18 @@ library(piano)
 
 \subsection{Optional requirements}
 
-\noindent If you plan to use \pkg{piano} for basic microarray analysis (e.g. normalization of raw-data, quality control and differential expression analysis) it is suggested that you also install the following packages for full functionality:
+\noindent To install all optionally required packages, simply run:
+
+\begin{Schunk}
+\begin{Sinput}
+> source("http://www.bioconductor.org/biocLite.R")
+> biocLite("piano", dependencies=TRUE)
+\end{Sinput}
+\end{Schunk}
+
+\noindent This should install everything you need! If you only want to install selected packages, use the following guidelines: 
+
+If you plan to use \pkg{piano} for basic microarray analysis (e.g. normalization of raw-data, quality control and differential expression analysis) it is suggested that you also install the following packages for full functionality:
 \begin{Schunk}
 \begin{Sinput}
 > pkgs <- c("yeast2.db", "limma", "affy", "plier", "affyPLM", "gtools", "plotrix")

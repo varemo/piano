@@ -25,7 +25,7 @@
       a logical, whether to use adjusted p-values or not. Note that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the adjusted p-values will be equal to the original p-values.
    }
    \item{ncharLabel}{
-      the number of characters to include in the node labels.
+      the number of characters to include in the row labels.
    }
 }
 \details{
