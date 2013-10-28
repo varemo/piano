@@ -8,7 +8,7 @@
    Based on multiple result objects from the \code{\link{runGSA}} function, this function computes the consensus scores, based on rank aggregation, for each directionality class and produces a heatmap plot of the results.
 }
 \usage{
-   consensusHeatmap(resList, method = "median", cutoff = 5, adjusted=FALSE, ncharLabel=25)
+   consensusHeatmap(resList, method = "median", cutoff = 5, adjusted=FALSE, ncharLabel=25, plot=TRUE)
 }
 
 \arguments{
@@ -26,6 +26,9 @@
    }
    \item{ncharLabel}{
       the number of characters to include in the row labels.
+   }
+   \item{plot}{
+      whether or not to draw the heatmap. Setting \code{plot=FALSE} allows you to save the heatmap as a matrix without plotting it.
    }
 }
 \details{
