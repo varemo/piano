@@ -25,22 +25,26 @@ polarPlot <- function(pValues, chromosomeMapping,
       stop("could not find the annotation file")
     }
   } else {
-    chromosomeMapping <- as.data.frame(chromosomeMapping,stringsAsFactors=FALSE)
+    chromosomeMapping <- as.data.frame(chromosomeMapping)
   }
+  
   
   nContrasts <- ncol(pValues)
   
   # error check
   if(nContrasts > 10) {
-    stop("can only handle up to 10 samples")
+    stop("can only handle up to 10 comparisons")
   }
    
+  chromosomeMapping[,1] <- as.character(chromosomeMapping[,1])
   # Remove minus sign from location (due to sense vs antisense)
-  chromosomeMapping[,2] <- abs(chromosomeMapping[,2])
+  suppressWarnings(tmp <- as.numeric(as.character(chromosomeMapping[,2])))
+  if(!all(!is.na(tmp))) stop("NAs in chromosomeMapping, chromosome location")
+  chromosomeMapping[,2] <- abs(tmp)
    
    
   # Combine p-values and chr info
-  allData <- merge(x=pValues,y=chromosomeMapping,by.x=0,by.y=0,all.x=TRUE)
+  allData <- merge(x=pValues,y=chromosomeMapping,by.x=0,by.y=0,all.x=TRUE,stringsAsFactors=FALSE)
   rownames(allData) <- allData[,1]
   allData <- allData[,c(2:ncol(allData))]
   colnames(allData)[c(nContrasts+1,ncol(allData))] <- c("chromosome","start")

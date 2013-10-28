@@ -163,8 +163,19 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
         colnames(annot) <- c("geneName","chromosome","start")
         .verb("...done", verbose)
       } else {
-        annot <- as.data.frame(annotation,stringsAsFactors=FALSE)
+        annot <- annotation
+        annot[,1] <- as.character(annotation[,1])
+        annot[,2] <- as.character(annotation[,2])
       }
+      
+      # Check for NAs:
+      suppressWarnings(tmp <- as.numeric(as.character(annot[,3])))
+      if(!all(!is.na(tmp))) stop("the chromosome location in annotation has to be numerical")
+      annot[,3] <- tmp
+      # Remove mappings not in data:
+      annot <- annot[rownames(annot)%in%rownames(dataNorm),]
+      # Remove duplicates:
+      annot <- unique(annot)
     }
   } else {
     warning("no annotation created, may cause limitation in downstream functions")
@@ -177,7 +188,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     	mappedProbes <- rownames(annot)[!is.na(annot[,1])]
     	probes <- rownames(dataNorm)
     	dataNorm <- dataNorm[probes %in% mappedProbes,]
-    	annot <- annot[rownames(annot) %in% mappedProbes,]
+      # Remove mappings not in data:
+    	annot <- annot[rownames(annot) %in% rownames(dataNorm),]
     	.verb("..done", verbose)
 	} else if(filter == TRUE & !exists("annot", inherits=FALSE)) {
 	  warning("annotation required for filtering, filtering step is omitted")

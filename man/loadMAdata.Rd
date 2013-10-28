@@ -100,7 +100,7 @@
   \item{dataRaw}{raw data as an AffyBatch object}
   \item{dataNorm}{\code{data.frame} containing normalized expression values}
   \item{setup}{\code{data.frame} containing experimental setup}
-  \item{annotation}{\code{data.frame} containing experimental setup}
+  \item{annotation}{\code{data.frame} containing annotation}
   
   Depending on input arguments the \code{ArrayData} object may not include
   \code{dataRaw} and/or \code{annotation}.

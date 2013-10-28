@@ -1,4 +1,4 @@
-consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE, ncharLabel=25) {
+consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE, ncharLabel=25, plot=TRUE) {
    
    # error check:
    tmp <- try(method <- match.arg(method, c("mean","median","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
@@ -68,31 +68,37 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
                           "Mixed-directional (up)","Mixed-directional (dn)")
    #rownames(plotmat) <- paste(rownames(plotmat)," (Tot:",nGenes,", Up:",nGenesUp,", Down:",nGenesDn,")",sep="")
    myorder <- c(3,5,1,4,2)
-   set.seed(1) # <---------------------
-   tmp <- round(rnorm(10000,0,1000)) # <------------------------- FIX COLORING BETTER!!!
-   tmp <- rev(unique(sort(tmp[tmp>0])))
-   mycol <- colorRampPalette(rev(c("red3","red","orange","yellow","lightyellow","white")), interpolate = "linear")(max(tmp))[tmp]
-   tmpMat <- plotmat
-   tmp <- rownames(tmpMat)
-   for(i in 1:length(tmp)) {
-      if(nchar(tmp[i])>ncharLabel) tmp[i] <- paste(substr(tmp[i],1,ncharLabel),"...",sep="")
-   }
-   rownames(tmpMat) <- tmp
-   hm2out <- heatmap.2(tmpMat[,myorder], Colv=FALSE, dendrogram="row", margins=c(1,1), density.info="none",
-                       key=TRUE, trace="none", scale="none", cellnote=round(tmpMat[,myorder],3), notecol="black",
-                       col=mycol,notecex=0.2 + 1/log10(nrow(tmpMat)),
-                       # change layout from 2*2 to 3*3:
-                       lmat=matrix(c(3,2,7,4,1,8,5,6,9),nrow=3),
-                       # set plot area heights according to number of rows:
-                       lhei=c(10,   50,   25/nrow(tmpMat) + 10),
-                       # set plot area width according to length of rownames and number of columns:
-                       lwid=c(1,   ncol(tmpMat)/2,   0.8 + max(nchar(rownames(tmpMat)))/20),
-                       # set col label text size to be the same as row text size:
-                       cexCol=0.2 + 1/log10(nrow(tmpMat)))
    
+   if(plot) {
+      set.seed(1) # <---------------------
+      tmp <- round(rnorm(10000,0,1000)) # <------------------------- FIX COLORING BETTER!!!
+      tmp <- rev(unique(sort(tmp[tmp>0])))
+      mycol <- colorRampPalette(rev(c("red3","red","orange","yellow","lightyellow","white")), interpolate = "linear")(max(tmp))[tmp]
+      tmpMat <- plotmat
+      tmp <- rownames(tmpMat)
+      for(i in 1:length(tmp)) {
+         if(nchar(tmp[i])>ncharLabel) tmp[i] <- paste(substr(tmp[i],1,ncharLabel),"...",sep="")
+      }
+      rownames(tmpMat) <- tmp
+      hm2out <- heatmap.2(tmpMat[,myorder], Colv=FALSE, dendrogram="row", margins=c(1,1), density.info="none",
+                          key=TRUE, trace="none", scale="none", cellnote=round(tmpMat[,myorder],3), notecol="black",
+                          col=mycol,notecex=0.2 + 1/log10(nrow(tmpMat)),
+                          # change layout from 2*2 to 3*3:
+                          lmat=matrix(c(3,2,7,4,1,8,5,6,9),nrow=3),
+                          # set plot area heights according to number of rows:
+                          lhei=c(10,   50,   25/nrow(tmpMat) + 10),
+                          # set plot area width according to length of rownames and number of columns:
+                          lwid=c(1,   ncol(tmpMat)/2,   0.8 + max(nchar(rownames(tmpMat)))/20),
+                          # set col label text size to be the same as row text size:
+                          cexCol=0.2 + 1/log10(nrow(tmpMat)))
+      hmRowInd <- rev(hm2out$rowInd)
+   } else {
+      hmRowInd <- 1:nrow(plotmat)
+   }
    
    # median p-value matrix:
-   gs_names <- rownames(plotmat[,myorder])[rev(hm2out$rowInd)]
+   
+   gs_names <- rownames(plotmat[,myorder])[hmRowInd]
    pMat <- matrix(ncol=5,nrow=length(gs_names))
    colnames(pMat) <- c("Distinct-directional (dn)","Mixed-directional (dn)","Non-directional","Mixed-directional (up)",
                        "Distinct-directional (up)")
@@ -111,7 +117,7 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
    
    # Return results:
    res <- list()
-   res$rankMat <- plotmat[rev(hm2out$rowInd),myorder]
+   res$rankMat <- plotmat[hmRowInd,myorder]
    res$pMat <- pMat
    invisible(res)
 }
