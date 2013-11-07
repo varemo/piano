@@ -310,9 +310,12 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
         plot(x=foldChanges[,i],y=-log10(pValues[,i]),pch=16,col="gray",
              main=contrasts[i],xlab="log2 fold change",ylab="-log10 p-value",xlim=c(max(abs(foldChanges[,i])),-max(abs(foldChanges[,i]))))
         tmp <- cbind(foldChanges[,i],pValues[,i])
-        tmp <- tmp[abs(tmp[,1])>=abs(volcanoFC),]
-        tmp <- tmp[tmp[,2]<=significance,]
-        points(x=tmp[,1],y=-log10(tmp[,2]),pch=16,col="black")
+        tmp <- tmp[abs(tmp[,1])>=abs(volcanoFC) & tmp[,2]<=significance,]
+        if(length(tmp) > 2) {
+           points(x=tmp[,1],y=-log10(tmp[,2]),pch=16,col="black")
+        } else if(length(tmp) == 2) {
+           points(x=tmp[1],y=-log10(tmp[2]),pch=16,col="black")
+        }
         abline(h=-log10(significance),col="red",lty=2)
         abline(v=volcanoFC,col="blue",lty=2)
         abline(v=-volcanoFC,col="blue",lty=2)
