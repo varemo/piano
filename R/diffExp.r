@@ -190,10 +190,19 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
     if(!is.null(tmp)) {
        names(tmp) <- rownames(arrayData$annotation)
        tmp <- as.data.frame(tmp,stringsAsFactors=FALSE)
-       topTab <- merge(y=topTab,x=tmp,by.y="ID",by.x="row.names",all.y=TRUE)
+       topTab <- merge(x=topTab,y=tmp,by.x="ID",by.y="row.names",all.y=TRUE,sort=FALSE)
+       topTab <- topTab[,c("ID","tmp","logFC","AveExpr","t","P.Value","adj.P.Val","B")]
        colnames(topTab)[1:2] <- c("ProbesetID","GeneName") 
     } else {
        colnames(topTab)[1] <- c("ProbesetID") 
+    }
+    
+    # Check that topTab rows are consistent with arrayData$dataNorm rows:
+    if(nrow(topTab)!=nrow(arrayData$dataNorm)) {
+       stop("failed to order the genes correctly, possibly an issue with the supplied annotation")
+    }
+    if(!all(topTab[,1]==rownames(arrayData$dataNorm))) {
+      stop("failed to order the genes correctly, possibly an issue with the supplied annotation")  
     }
     
     topTabList[[i]] <- topTab
@@ -206,10 +215,10 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
     .verb("...done", verbose)
   }
   pValues <- as.data.frame(pValues[,2:ncol(pValues)],stringsAsFactors=FALSE)
-  rownames(pValues) <- rownames(fitContrasts)
+  rownames(pValues) <- topTab[,1]
   colnames(pValues) <- colnames(fitContrasts)
   foldChanges <- as.data.frame(foldChanges[,2:ncol(foldChanges)],stringsAsFactors=FALSE)
-  rownames(foldChanges) <- rownames(fitContrasts)
+  rownames(foldChanges) <- topTab[,1]
   colnames(foldChanges) <- colnames(fitContrasts)
   
   

@@ -6,6 +6,16 @@ NEW FEATURES
     o Added argument plot to consensusHeatmap() so that drawing the heatmap can
       be suppressed but the corresponding numerical matrix can be saved.
 
+CHANGES IN VERSION 1.2.5
+-------------------------
+
+BUG FIXES
+
+    o Fixed bug in diffExp() that returned incorrect gene IDs for $pValues and 
+      $foldChanges if and only if annotation was previously supplied to loadMAdata() 
+      AND the probeset IDs in the normalized data ($dataNorm) were unsorted. The 
+      $resTable is unnaffected.
+
 CHANGES IN VERSION 1.2.4
 -------------------------
 
