@@ -128,7 +128,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     if(annotationInfo == "yeast2") {
       if(!try(require(yeast2.db))) stop("package yeast2.db is needed for annotationInfo='yeast2'")
       # Annotate the probes using the yeast2.db package:
-      .verb("Creating anotation...", verbose)
+      .verb("Creating annotation...", verbose)
       # Gene name
       geneName <- yeast2ORF
     	geneName <- toTable(geneName)
@@ -150,7 +150,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     } else if(annotationInfo == "asArgument") {
       # Else annotate from annotation-argument:
       if(class(annotation) == "character") {
-        .verb("Creating anotation...", verbose)
+        .verb("Creating annotation...", verbose)
         annotFilePath <- paste(datadir, "/", annotation, sep="")
         if(!file.exists(annotFilePath)) {
           stop("could not find the annotation file")
@@ -174,8 +174,10 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
       annot[,3] <- tmp
       # Remove mappings not in data:
       annot <- annot[rownames(annot)%in%rownames(dataNorm),]
-      # Remove duplicates:
-      annot <- unique(annot)
+      # Check for duplicates:
+      if(length(rownames(annot))!=length(unique(rownames(annot)))) {
+         stop("the annotation contains Gene name duplicates")
+      }
     }
   } else {
     warning("no annotation created, may cause limitation in downstream functions")
