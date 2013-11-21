@@ -5,7 +5,7 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
    if(class(tmp) == "try-error") {
       stop("argument method is not valid")
    }
-   if(length(cutoff) != 1 | cutoff < 1 | cutoff > length(resList[[1]]$gsc)) stop("argument cutoff should be a positive integer no larger than the number of gene sets")
+   if(length(cutoff) != 1 | cutoff < 1) stop("argument cutoff should be a positive integer")
    if(!is.logical(adjusted)) stop("argument adjusted should be a logical")
    
    # Get consensus ranks for each directionality class:
