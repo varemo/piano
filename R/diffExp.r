@@ -342,6 +342,13 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
   if(venn == TRUE) {
      combMat <- expand.grid(lapply(1:ncol(pValues),function(x) 0:1))
      signGeneList <- apply(pValues,2,function(x) which(x < significance))
+     if(class(signGeneList) != "list") {
+         tmp <- list()
+         for(i in 1:ncol(signGeneList)) {
+            tmp[[i]] <- signGeneList[,i]  
+         }
+         signGeneList <- tmp
+     }
      vennList <- list()
      for(i in 2:nrow(combMat)) { # skip the first row with all zeros
         if(ncol(combMat)==1) {
