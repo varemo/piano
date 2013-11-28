@@ -1,20 +1,30 @@
-consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE, ncharLabel=25, plot=TRUE) {
+consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE, ncharLabel=25, 
+                              plot=TRUE, cellnote="consensusScore") {
    
    # error check:
    tmp <- try(method <- match.arg(method, c("mean","median","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
    if(class(tmp) == "try-error") {
       stop("argument method is not valid")
    }
+   tmp <- try(cellnote <- match.arg(cellnote, c("consensusScore","medianPvalue","nGenes","none"), several.ok=FALSE), silent=TRUE)
+   if(class(tmp) == "try-error") {
+      stop("argument cellnote is not valid")
+   }
    if(length(cutoff) != 1 | cutoff < 1) stop("argument cutoff should be a positive integer")
    if(!is.logical(adjusted)) stop("argument adjusted should be a logical")
    
    # Get consensus ranks for each directionality class:
    reslist <- resList
-   nod <- consensusScores(resList=reslist,class="non",method=method,n=length(reslist[[1]]$gsc),plot=FALSE)
-   ddu <- consensusScores(resList=reslist,class="distinct",direction="up",method=method,n=length(reslist[[1]]$gsc),plot=FALSE)
-   ddd <- consensusScores(resList=reslist,class="distinct",direction="down",method=method,n=length(reslist[[1]]$gsc),plot=FALSE)
-   mdu <- consensusScores(resList=reslist,class="mixed",direction="up",method=method,n=length(reslist[[1]]$gsc),plot=FALSE)
-   mdd <- consensusScores(resList=reslist,class="mixed",direction="down",method=method,n=length(reslist[[1]]$gsc),plot=FALSE)
+   nod <- consensusScores(resList=reslist,class="non",adjusted=adjusted,method=method,
+                          n=length(reslist[[1]]$gsc),plot=FALSE)
+   ddu <- consensusScores(resList=reslist,class="distinct",adjusted=adjusted,direction="up",method=method,
+                          n=length(reslist[[1]]$gsc),plot=FALSE)
+   ddd <- consensusScores(resList=reslist,class="distinct",adjusted=adjusted,direction="down",method=method,
+                          n=length(reslist[[1]]$gsc),plot=FALSE)
+   mdu <- consensusScores(resList=reslist,class="mixed",adjusted=adjusted,direction="up",method=method,
+                          n=length(reslist[[1]]$gsc),plot=FALSE)
+   mdd <- consensusScores(resList=reslist,class="mixed",adjusted=adjusted,direction="down",method=method,
+                          n=length(reslist[[1]]$gsc),plot=FALSE)
    
    nodPval <- nod$pMat
    dduPval <- ddu$pMat
@@ -63,11 +73,29 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
       nGenesDn[i] <- reslist[[1]]$nGenesDn[names(reslist[[1]]$gsc)==met]
       i <- i+1
    }
-   notemat <- cbind(nGenes,nGenes,nGenes,nGenesUp,nGenesDn)
+   ngenesmat <- cbind(nGenes,nGenesDn,nGenes,nGenesUp,nGenes)
+   rownames(ngenesmat) <- rownames(plotmat)
    colnames(plotmat) <- c("Non-directional","Distinct-directional (up)","Distinct-directional (dn)",
                           "Mixed-directional (up)","Mixed-directional (dn)")
    #rownames(plotmat) <- paste(rownames(plotmat)," (Tot:",nGenes,", Up:",nGenesUp,", Down:",nGenesDn,")",sep="")
    myorder <- c(3,5,1,4,2)
+   
+   # median p-value matrix:
+   gs_names <- rownames(plotmat[,myorder])
+   pMat <- matrix(ncol=5,nrow=length(gs_names))
+   colnames(pMat) <- c("Distinct-directional (dn)","Mixed-directional (dn)","Non-directional","Mixed-directional (up)",
+                       "Distinct-directional (up)")
+   rownames(pMat) <- gs_names
+   iGs <- match(gs_names,rownames(dddPval))
+   pMat[,1] <- apply(dddPval[iGs,],1,median,na.rm=TRUE)
+   iGs <- match(gs_names,rownames(mddPval))
+   pMat[,2] <- apply(mddPval[iGs,],1,median,na.rm=TRUE)
+   iGs <- match(gs_names,rownames(nodPval))
+   pMat[,3] <- apply(nodPval[iGs,],1,median,na.rm=TRUE)
+   iGs <- match(gs_names,rownames(mduPval))
+   pMat[,4] <- apply(mduPval[iGs,],1,median,na.rm=TRUE)
+   iGs <- match(gs_names,rownames(dduPval))
+   pMat[,5] <- apply(dduPval[iGs,],1,median,na.rm=TRUE)
    
    if(plot) {
       set.seed(1) # <---------------------
@@ -80,8 +108,19 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
          if(nchar(tmp[i])>ncharLabel) tmp[i] <- paste(substr(tmp[i],1,ncharLabel),"...",sep="")
       }
       rownames(tmpMat) <- tmp
+      
+      if(cellnote=="consensusScore") {
+         notemat <- round(tmpMat[,myorder],3)
+      } else if(cellnote=="medianPvalue") {
+         notemat <- pMat
+      } else if(cellnote=="nGenes") {
+         notemat <- ngenesmat  
+      } else if(cellnote=="none") {
+         notemat <- matrix(rep("",nrow(tmpMat)*ncol(tmpMat)),nrow(tmpMat),ncol(tmpMat))
+      }
+      
       hm2out <- heatmap.2(tmpMat[,myorder], Colv=FALSE, dendrogram="row", margins=c(1,1), density.info="none",
-                          key=TRUE, trace="none", scale="none", cellnote=round(tmpMat[,myorder],3), notecol="black",
+                          key=TRUE, trace="none", scale="none", cellnote=notemat, notecol="black",
                           col=mycol,notecex=0.2 + 1/log10(nrow(tmpMat)),
                           # change layout from 2*2 to 3*3:
                           lmat=matrix(c(3,2,7,4,1,8,5,6,9),nrow=3),
@@ -96,29 +135,15 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
       hmRowInd <- 1:nrow(plotmat)
    }
    
-   # median p-value matrix:
-   
-   gs_names <- rownames(plotmat[,myorder])[hmRowInd]
-   pMat <- matrix(ncol=5,nrow=length(gs_names))
-   colnames(pMat) <- c("Distinct-directional (dn)","Mixed-directional (dn)","Non-directional","Mixed-directional (up)",
-                       "Distinct-directional (up)")
-   rownames(pMat) <- gs_names
-   
-   iGs <- match(gs_names,rownames(dddPval))
-   pMat[,1] <- apply(dddPval[iGs,],1,median,na.rm=TRUE)
-   iGs <- match(gs_names,rownames(mddPval))
-   pMat[,2] <- apply(mddPval[iGs,],1,median,na.rm=TRUE)
-   iGs <- match(gs_names,rownames(nodPval))
-   pMat[,3] <- apply(nodPval[iGs,],1,median,na.rm=TRUE)
-   iGs <- match(gs_names,rownames(mduPval))
-   pMat[,4] <- apply(mduPval[iGs,],1,median,na.rm=TRUE)
-   iGs <- match(gs_names,rownames(dduPval))
-   pMat[,5] <- apply(dduPval[iGs,],1,median,na.rm=TRUE)
+   #Reorder pMat and ngenesmat to match heatmap
+   pMat <- pMat[hmRowInd,]
+   ngenesmat <- ngenesmat[hmRowInd,]
    
    # Return results:
    res <- list()
    res$rankMat <- plotmat[hmRowInd,myorder]
    res$pMat <- pMat
+   res$nGenesMat <- ngenesmat
    invisible(res)
 }
 

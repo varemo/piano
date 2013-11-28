@@ -6,6 +6,21 @@ NEW FEATURES
     o Added argument plot to consensusHeatmap() so that drawing the heatmap can
       be suppressed but the corresponding numerical matrix can be saved.
 
+    o Added argument cellnote to consensusHeatmap() so that the information inside
+      each cell of the heatmap can be chosen to be either the consensus scores (as
+      previously), the median p-values, the number of genes or empty.
+
+    o Added a matrix nGenesMat to the output of consensusHeatmap() containing the
+      same information as printed in the heatmap if argument cellnote="nGenes".
+
+    o Introduced the new function gsaHeatmap(), which is similar to consensusHeatmap()
+      but for only a single gene set result (gsaRes object).
+
+BUG FIXES
+
+    o Fixed a bug in consensusHetmap() so that the adjusted p-values are actually used
+     if adjusted=TRUE.
+
 CHANGES IN VERSION 1.2.8
 -------------------------
 

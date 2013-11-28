@@ -32,7 +32,7 @@
   Intawat Nookaew \email{piano.rpkg@gmail.com}
 }
 \seealso{
-   \pkg{\link{piano}}, \code{\link{runGSA}}
+   \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{networkPlot}}, \code{\link{gsaHeatmap}}
 }
 \examples{
    # Load example input data to GSA:

@@ -78,7 +78,7 @@ In the case of \code{pValue="distinct"} and \code{direction="both"}, the distinc
   Intawat Nookaew \email{piano.rpkg@gmail.com}
 }
 \seealso{
-   \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{layout}}
+   \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{gsaHeatmap}}, \code{\link{layout}}
 }
 \examples{
    # Load example input data to GSA:
