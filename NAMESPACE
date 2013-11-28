@@ -11,7 +11,8 @@ export(
   networkPlot,
   consensusScores,
   consensusHeatmap,
-  runGSAhyper
+  runGSAhyper,
+  gsaHeatmap
 )
 
 S3method(print, ArrayData)

@@ -10,6 +10,7 @@
 \usage{
    consensusHeatmap(resList, method = "median", cutoff = 5, adjusted=FALSE, ncharLabel=25, 
                     plot=TRUE, cellnote="consensusScore")
+                    }
 
 \arguments{
   \item{resList}{

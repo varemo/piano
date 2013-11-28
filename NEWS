@@ -16,6 +16,12 @@ NEW FEATURES
     o Introduced the new function gsaHeatmap(), which is similar to consensusHeatmap()
       but for only a single gene set result (gsaRes object).
 
+DOCUMENTATION
+
+    o Updated consensusHeatmap() man page according to new changes in the function.
+
+    o Added man page for gsaHeatmap().
+
 BUG FIXES
 
     o Fixed a bug in consensusHetmap() so that the adjusted p-values are actually used

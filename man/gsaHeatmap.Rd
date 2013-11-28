@@ -56,6 +56,7 @@
                     gsc=gsc, nPerm=500)
                     
    # Make heatmap:
+   dev.new(width=10,height=10)
    gsaHeatmap(gsares)
 }
 
