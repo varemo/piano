@@ -1,5 +1,6 @@
-consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE, ncharLabel=25, 
-                              plot=TRUE, cellnote="consensusScore") {
+consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE, plot=TRUE,  
+                              ncharLabel=25, cellnote="consensusScore", columnnames="full",
+                              colorkey=TRUE, colorgrad=NULL, cex=NULL) {
    
    # error check:
    tmp <- try(method <- match.arg(method, c("mean","median","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
@@ -9,6 +10,15 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
    tmp <- try(cellnote <- match.arg(cellnote, c("consensusScore","medianPvalue","nGenes","none"), several.ok=FALSE), silent=TRUE)
    if(class(tmp) == "try-error") {
       stop("argument cellnote is not valid")
+   }
+   tmp <- try(columnnames <- match.arg(columnnames, c("full","abbr"), several.ok=FALSE), silent=TRUE)
+   if(class(tmp) == "try-error") {
+      stop("argument columnnames is not valid")
+   }
+   if(!is.null(colorgrad)) {
+      if(!is.character(colorgrad) | length(colorgrad)<2) {
+         stop("argument colorgrad should be a character vector of minimum length 2")
+      }
    }
    if(length(cutoff) != 1 | cutoff < 1) stop("argument cutoff should be a positive integer")
    if(!is.logical(adjusted)) stop("argument adjusted should be a logical")
@@ -101,13 +111,31 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
       set.seed(1) # <---------------------
       tmp <- round(rnorm(10000,0,1000)) # <------------------------- FIX COLORING BETTER!!!
       tmp <- rev(unique(sort(tmp[tmp>0])))
-      mycol <- colorRampPalette(rev(c("red3","red","orange","yellow","lightyellow","white")), interpolate = "linear")(max(tmp))[tmp]
+      if(is.null(colorgrad)) {
+         clrs <- c("red3","red","orange","yellow","lightyellow","white")
+      } else {
+         clrs <- colorgrad  
+      }
+      mycol <- colorRampPalette(rev(clrs), interpolate = "linear")(max(tmp))[tmp]
       tmpMat <- plotmat
       tmp <- rownames(tmpMat)
       for(i in 1:length(tmp)) {
          if(nchar(tmp[i])>ncharLabel) tmp[i] <- paste(substr(tmp[i],1,ncharLabel),"...",sep="")
       }
       rownames(tmpMat) <- tmp
+      labAngle <- 90
+      labAdj <- NULL
+      if(columnnames=="abbr") {
+         colnames(tmpMat) <- c("Nondir","Dist(up)","Dist(dn)","Mix(up)","Mix(dn)")
+         labAngle <- 0
+         labAdj <- c(0.5,0)
+      }
+      
+      if(is.null(cex)) {
+         mycex <- 0.2 + 1/log10(nrow(tmpMat))
+      } else {
+         mycex <- cex  
+      }
       
       if(cellnote=="consensusScore") {
          notemat <- round(tmpMat[,myorder],3)
@@ -118,18 +146,19 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
       } else if(cellnote=="none") {
          notemat <- matrix(rep("",nrow(tmpMat)*ncol(tmpMat)),nrow(tmpMat),ncol(tmpMat))
       }
-      
+      topmar <- ifelse(colorkey,10,1)
+      bottommar<- ifelse(columnnames=="full",10,0)
       hm2out <- heatmap.2(tmpMat[,myorder], Colv=FALSE, dendrogram="row", margins=c(1,1), density.info="none",
-                          key=TRUE, trace="none", scale="none", cellnote=notemat, notecol="black",
-                          col=mycol,notecex=0.2 + 1/log10(nrow(tmpMat)),
+                          key=colorkey, trace="none", scale="none", cellnote=notemat, notecol="black",
+                          col=mycol,notecex=mycex, srtCol=labAngle, adjCol=labAdj,
                           # change layout from 2*2 to 3*3:
                           lmat=matrix(c(3,2,7,4,1,8,5,6,9),nrow=3),
                           # set plot area heights according to number of rows:
-                          lhei=c(10,   50,   25/nrow(tmpMat) + 10),
+                          lhei=c(topmar,   50,   25/nrow(tmpMat) + bottommar),
                           # set plot area width according to length of rownames and number of columns:
                           lwid=c(1,   ncol(tmpMat)/2,   0.8 + max(nchar(rownames(tmpMat)))/20),
                           # set col label text size to be the same as row text size:
-                          cexCol=0.2 + 1/log10(nrow(tmpMat)))
+                          cexCol=mycex, cexRow=mycex)
       hmRowInd <- rev(hm2out$rowInd)
    } else {
       hmRowInd <- 1:nrow(plotmat)

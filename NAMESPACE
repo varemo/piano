@@ -12,7 +12,7 @@ export(
   consensusScores,
   consensusHeatmap,
   runGSAhyper,
-  gsaHeatmap
+  GSAheatmap
 )
 
 S3method(print, ArrayData)

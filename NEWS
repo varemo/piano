@@ -1,4 +1,4 @@
-CHANGES IN VERSION 1.4.0
+CHANGES IN VERSION 1.4.0 (currently devel: 1.3.X)
 -------------------------
 
 NEW FEATURES
@@ -13,14 +13,21 @@ NEW FEATURES
     o Added a matrix nGenesMat to the output of consensusHeatmap() containing the
       same information as printed in the heatmap if argument cellnote="nGenes".
 
-    o Introduced the new function gsaHeatmap(), which is similar to consensusHeatmap()
+    o Added arguments columnnames, colorkey, colorgrad and cex to consensusHeatmap() 
+      for better control of the column labels, toggling of the colorkey, color selection 
+      and text size.
+
+    o Introduced the new function GSAheatmap(), which is similar to consensusHeatmap()
       but for only a single gene set result (gsaRes object).
 
 DOCUMENTATION
 
     o Updated consensusHeatmap() man page according to new changes in the function.
 
-    o Added man page for gsaHeatmap().
+    o Added man page for GSAheatmap().
+
+CHANGES IN VERSION 1.2.9
+-------------------------
 
 BUG FIXES
 

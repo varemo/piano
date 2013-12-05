@@ -8,8 +8,9 @@
    Based on multiple result objects from the \code{\link{runGSA}} function, this function computes the consensus scores, based on rank aggregation, for each directionality class and produces a heatmap plot of the results.
 }
 \usage{
-   consensusHeatmap(resList, method = "median", cutoff = 5, adjusted=FALSE, ncharLabel=25, 
-                    plot=TRUE, cellnote="consensusScore")
+   consensusHeatmap(resList, method="median", cutoff=5, adjusted=FALSE, plot=TRUE, ncharLabel=25, 
+                    cellnote="consensusScore", columnnames="full", colorkey=TRUE, colorgrad=NULL, 
+                    cex=NULL)
                     }
 
 \arguments{
@@ -25,14 +26,26 @@
    \item{adjusted}{
       a logical, whether to use adjusted p-values or not. Note that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the adjusted p-values will be equal to the original p-values.
    }
-   \item{ncharLabel}{
-      the number of characters to include in the row labels.
-   }
    \item{plot}{
       whether or not to draw the heatmap. Setting \code{plot=FALSE} allows you to save the heatmap as a matrix without plotting it.
    }
+   \item{ncharLabel}{
+      the number of characters to include in the row labels.
+   }
    \item{cellnote}{
       a character string selecting the information to be printed inside each cell of the heatmap. Either \code{"consensusScore"}, \code{"medianPvalue"}, \code{"nGenes"} or \code{"none"}. Note that the actual heatmap will always be based on the consensus scores.
+   }
+   \item{columnnames}{
+      either \code{"full"} (default) or \code{"abbr"} to use full or abbreviated column labels. Will save some space for the heatmap if set to \code{"abbr"}
+   }
+   \item{colorkey}{
+      a logical (default \code{TRUE}), whether or not to display the colorkey. Will save some space for the heatmap if turned off.
+   }
+   \item{colorgrad}{
+      a character vector giving the color names to use in the heatmap.
+   }
+   \item{cex}{
+      a numeric, to control the text size.
    }
 }
 \details{
