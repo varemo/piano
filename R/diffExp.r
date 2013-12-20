@@ -352,7 +352,7 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
      vennList <- list()
      for(i in 2:nrow(combMat)) { # skip the first row with all zeros
         if(ncol(combMat)==1) {
-           geneInd <- signGeneList
+           geneInd <- signGeneList[[1]]
         } else {
            geneInd <- Reduce(intersect, signGeneList[combMat[i,]==1])
            geneInd <- geneInd[!geneInd %in% unique(unlist(signGeneList[combMat[i,]==0]))]

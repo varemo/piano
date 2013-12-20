@@ -148,6 +148,20 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
       }
       topmar <- ifelse(colorkey,10,1)
       bottommar<- ifelse(columnnames=="full",10,0)
+      
+      #start new section
+      #clustering by gene members
+      #omat <- matrix(nrow=nrow(tmpMat),ncol=nrow(tmpMat))
+      #for(i in 1:nrow(tmpMat)) {
+      #   for(j in 1:nrow(tmpMat)) {
+      #      tmp1 <- reslist[[1]]$gsc[[i]]
+      #      tmp2 <- reslist[[1]]$gsc[[j]]
+      #      omat[i,j] <- sum(tmp1%in%tmp2) / length(unique(c(tmp1,tmp2)))
+      #   }
+      #}
+      #mydendr <- as.dendrogram(hclust(dist(omat)))
+      #end new section
+      
       hm2out <- heatmap.2(tmpMat[,myorder], Colv=FALSE, dendrogram="row", margins=c(1,1), density.info="none",
                           key=colorkey, trace="none", scale="none", cellnote=notemat, notecol="black",
                           col=mycol,notecex=mycex, srtCol=labAngle, adjCol=labAdj,

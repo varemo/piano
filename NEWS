@@ -26,6 +26,14 @@ DOCUMENTATION
 
     o Added man page for GSAheatmap().
 
+CHANGES IN VERSION 1.2.10
+-------------------------
+
+BUG FIXES
+
+    o Fixed a bug in diffExp() that caused an error due to incorrect collection of the
+      venn diagram gene members when only using one contrast/comparison.
+
 CHANGES IN VERSION 1.2.9
 -------------------------
 
