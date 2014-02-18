@@ -26,6 +26,14 @@ DOCUMENTATION
 
     o Added man page for GSAheatmap().
 
+CHANGES IN VERSION 1.2.11
+-------------------------
+
+BUG FIXES
+
+    o Fixed a typo in the code which made it impossible to execute runGSA successfully with 
+      the option sample permutation.
+
 CHANGES IN VERSION 1.2.10
 -------------------------
 

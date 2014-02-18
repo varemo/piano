@@ -37,7 +37,7 @@ checkLoadArg <- function(statistics,
       stop("argument signifMethod set to unknown method")
    }
    if(signMethod == "geneSampling") signMethod <- "geneperm"
-   if(signMethod == "samplePermutaion") signMethod <- "sampleperm"
+   if(signMethod == "samplePermutation") signMethod <- "sampleperm"
    if(signMethod == "nullDist") signMethod <- "distribution"
    
    if(signMethod == "sampleperm" & is.null(permStatistics)) {
