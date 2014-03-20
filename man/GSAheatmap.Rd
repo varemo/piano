@@ -26,7 +26,7 @@
       the number of characters to include in the row labels.
    }
    \item{cellnote}{
-      a character string selecting the information to be printed inside each cell of the heatmap. Either \code{"pvalue"}, \code{"rank"}, \code{"nGenes"} or \code{"none"}. Note that the actual heatmap will always be based on the consensus scores.
+      a character string selecting the information to be printed inside each cell of the heatmap. Either \code{"pvalue"}, \code{"rank"}, \code{"nGenes"} or \code{"none"}. Note that the actual heatmap will always be based on the gene set ranks.
    }
    \item{columnnames}{
       either \code{"full"} (default) or \code{"abbr"} to use full or abbreviated column labels. Will save some space for the heatmap if set to \code{"abbr"}

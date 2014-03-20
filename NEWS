@@ -14,8 +14,8 @@ NEW FEATURES
       same information as printed in the heatmap if argument cellnote="nGenes".
 
     o Added arguments columnnames, colorkey, colorgrad and cex to consensusHeatmap() 
-      for better control of the column labels, toggling of the colorkey, color selection 
-      and text size.
+      for better control of the column labels, toggling of the colorkey, color 
+	   selection and text size.
 
     o Introduced the new function GSAheatmap(), which is similar to consensusHeatmap()
       but for only a single gene set result (gsaRes object).
@@ -26,13 +26,15 @@ DOCUMENTATION
 
     o Added man page for GSAheatmap().
 
+    o Updated the biocViews field in the DESCRIPTION file.
+
 CHANGES IN VERSION 1.2.11
 -------------------------
 
 BUG FIXES
 
-    o Fixed a typo in the code which made it impossible to execute runGSA successfully with 
-      the option sample permutation.
+    o Fixed a typo in the code which made it impossible to execute runGSA successfully 
+	   with the option sample permutation.
 
 CHANGES IN VERSION 1.2.10
 -------------------------
@@ -48,7 +50,7 @@ CHANGES IN VERSION 1.2.9
 BUG FIXES
 
     o Fixed a bug in consensusHetmap() so that the adjusted p-values are actually used
-     if adjusted=TRUE.
+      if adjusted=TRUE.
 
 CHANGES IN VERSION 1.2.8
 -------------------------
