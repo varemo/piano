@@ -47,6 +47,9 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
       if(statType %in% c("p-signed","F-signed")) {
          signsContrast <- signs[,iContrast]
       }
+      if(statType == "t") {
+         signsContrast <- sign(statsContrast)
+      }
       
       # If possible, calculate "directional p-values":
       if(method %in% c("stouffer","reporter","tailStrength","wilcoxon","wilcoxon_fast","mean","median","sum") & statType == "p-signed") {
@@ -76,6 +79,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             statsGenesInSet <- statsContrast[indGenesInSet]
             nGenes[iGeneSet] <- length(statsGenesInSet)
             if(nGenes[iGeneSet] > 0) {
+               
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
                
                # "Mixed" gene-set statistic:
                gsStatsAbs[iGeneSet] <- calcGeneSetStat(abs(statsGenesInSet), method)
@@ -111,6 +120,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             statsGenesInSet <- statsContrast[indGenesInSet]
             nGenes[iGeneSet] <- length(statsGenesInSet)
             if(nGenes[iGeneSet] > 0) {
+               
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
                
                # "Directional" gene-set statistics:
                if(statType == "p-signed") {
@@ -159,6 +174,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             }
             nGenes[iGeneSet] <- length(statsGenesInSet)
             if(nGenes[iGeneSet] > 0) {
+              
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
                
                # "Directional" gene-set statistics:
                if(statType == "p-signed") {
@@ -264,6 +285,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             nGenes[iGeneSet] <- length(statsGenesInSet)
             if(nGenes[iGeneSet] > 0) {
                
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
+               
                # "Directional" gene-set statistics:
                if(statType == "p-signed") {
                   statsGenesInSetTestUp <- statsContrastTestUp[indGenesInSet]
@@ -342,6 +369,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             nGenes[iGeneSet] <- length(statsGenesInSet)
             if(nGenes[iGeneSet] > 0) {
                
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
+               
                # "Directional" gene-set statistics:
                if(statType == "p-signed") {
                   statsGenesInSetTestUp <- statsContrastTestUp[indGenesInSet]
@@ -393,6 +426,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             nGenes[iGeneSet] <- length(statsGenesInSet)
             if(nGenes[iGeneSet] > 0) {
                
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
+               
                # "Mixed" gene-set statistic:
                gsStatsAbs[iGeneSet] <- calcGeneSetStat(statsGenesInSet, method)
             }
@@ -407,6 +446,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             indGenesInSet <- which(names(statsContrastSorted) %in% gsc[[iGeneSet]])
             nGenes[iGeneSet] <- length(indGenesInSet)
             if(nGenes[iGeneSet] > 0) {
+               
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
                
                # "Directional" gene-set statistic:
                gsStatsAll[iGeneSet] <- calcGeneSetStat(indGenesInSet, method, statsContrastSorted, gseaParam)            
@@ -423,6 +468,12 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
             statsGenesInSet <- statsContrast[indGenesInSet]
             nGenes[iGeneSet] <- length(statsGenesInSet)
             if(nGenes[iGeneSet] > 0) {
+               
+               # Genes up/dn (partly redundant code added later as a fix):
+               if(exists("signsContrast")) {
+                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+               }
                
                # "Directional" gene-set statistics:
                gsStatsAll[iGeneSet] <- calcGeneSetStat(statsGenesInSet, method, statsContrast)

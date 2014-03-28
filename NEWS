@@ -15,10 +15,15 @@ NEW FEATURES
 
     o Added arguments columnnames, colorkey, colorgrad and cex to consensusHeatmap() 
       for better control of the column labels, toggling of the colorkey, color 
-	   selection and text size.
+      selection and text size.
 
     o Introduced the new function GSAheatmap(), which is similar to consensusHeatmap()
       but for only a single gene set result (gsaRes object).
+
+BUG FIXES
+
+    o Fixed a bug which for some settings of runGSA would not output number of up-
+      and downregulated genes in the gene sets.
 
 DOCUMENTATION
 
@@ -34,7 +39,7 @@ CHANGES IN VERSION 1.2.11
 BUG FIXES
 
     o Fixed a typo in the code which made it impossible to execute runGSA successfully 
-	   with the option sample permutation.
+      with the option sample permutation.
 
 CHANGES IN VERSION 1.2.10
 -------------------------
