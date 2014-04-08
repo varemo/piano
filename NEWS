@@ -1,4 +1,4 @@
-CHANGES IN VERSION 1.4.0 (currently devel: 1.3.X)
+CHANGES IN VERSION 1.4.0
 -------------------------
 
 NEW FEATURES
@@ -30,6 +30,11 @@ DOCUMENTATION
     o Updated consensusHeatmap() man page according to new changes in the function.
 
     o Added man page for GSAheatmap().
+
+CHANGES IN VERSION 1.2.12
+-------------------------
+
+DOCUMENTATION
 
     o Updated the biocViews field in the DESCRIPTION file.
 
