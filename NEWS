@@ -1,3 +1,14 @@
+CHANGES IN VERSION 1.6.0 (currently 1.5.x)
+-------------------------
+
+CHANGES IN VERSION 1.4.1
+-------------------------
+
+BUG FIXES
+
+    o Fixed a bug in GSAsummaryTable which returned an error in the case of analyzing
+      only a single gene set.
+
 CHANGES IN VERSION 1.4.0
 -------------------------
 

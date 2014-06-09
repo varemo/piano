@@ -8,16 +8,32 @@ GSAsummaryTable <- function(gsaRes, save=FALSE, file=NULL) {
    }
    if(test > ncol(obj$nGenesTot)) stop("argument test is to large")
    
-   tab <- data.frame(names(obj$gsc), obj$nGenesTot[,test], obj$statDistinctDir[,test], obj$statDistinctDirUp[,test], obj$pDistinctDirUp[,test],
-                     obj$pAdjDistinctDirUp[,test], obj$statDistinctDirDn[,test], obj$pDistinctDirDn[,test], obj$pAdjDistinctDirDn[,test],
-                     obj$statNonDirectional[,test], obj$pNonDirectional[,test], obj$pAdjNonDirectional[,test], obj$nGenesUp[,test],
-                     obj$statMixedDirUp[,test], obj$pMixedDirUp[,test], obj$pAdjMixedDirUp[,test], obj$nGenesDn[,test],
-                     obj$statMixedDirDn[,test], obj$pMixedDirDn[,test], obj$pAdjMixedDirDn[,test], stringsAsFactors=F)
+   tab <- data.frame(names(obj$gsc), 
+                     cbind(obj$nGenesTot)[,test], 
+                     cbind(obj$statDistinctDir)[,test], 
+                     cbind(obj$statDistinctDirUp)[,test], 
+                     cbind(obj$pDistinctDirUp)[,test],
+                     cbind(obj$pAdjDistinctDirUp)[,test], 
+                     cbind(obj$statDistinctDirDn)[,test], 
+                     cbind(obj$pDistinctDirDn)[,test], 
+                     cbind(obj$pAdjDistinctDirDn)[,test],
+                     cbind(obj$statNonDirectional)[,test], 
+                     cbind(obj$pNonDirectional)[,test], 
+                     cbind(obj$pAdjNonDirectional)[,test], 
+                     cbind(obj$nGenesUp)[,test],
+                     cbind(obj$statMixedDirUp)[,test], 
+                     cbind(obj$pMixedDirUp)[,test], 
+                     cbind(obj$pAdjMixedDirUp)[,test], 
+                     cbind(obj$nGenesDn)[,test],
+                     cbind(obj$statMixedDirDn)[,test], 
+                     cbind(obj$pMixedDirDn)[,test], 
+                     cbind(obj$pAdjMixedDirDn)[,test], stringsAsFactors=F)
    
    colnames(tab) <- c("Name", "Genes (tot)", "Stat (dist.dir)", "Stat (dist.dir.up)", "p (dist.dir.up)", "p adj (dist.dir.up)",
                       "Stat (dist.dir.dn)", "p (dist.dir.dn)", "p adj (dist.dir.dn)", "Stat (non-dir.)", "p (non-dir.)", "p adj (non-dir.)",
                       "Genes (up)", "Stat (mix.dir.up)", "p (mix.dir.up)", "p adj (mix.dir.up)", "Genes (down)",
                       "Stat (mix.dir.dn)", "p (mix.dir.dn)", "p adj (mix.dir.dn)")
+   rownames(tab) <- NULL
 
    # Remove unused columns:
    tab <- tab[,apply(tab,2,function(x) sum(is.na(x)) < nrow(tab))]
