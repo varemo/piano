@@ -1,6 +1,19 @@
 CHANGES IN VERSION 1.6.0 (currently 1.5.x)
 -------------------------
 
+NEW FEATURES
+
+    o Added a function writeFilesForKiwi() that enables a seamless integration of the
+      output from a gene set analysis with piano to the network-based visualization
+      offered by the python tool Kiwi.
+
+CHANGES IN VERSION 1.4.2
+-------------------------
+
+BUG FIXES
+
+    o Fixed a bug in loadMAdata so that mas5 can now be used for normalization.
+
 CHANGES IN VERSION 1.4.1
 -------------------------
 

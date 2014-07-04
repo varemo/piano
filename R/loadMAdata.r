@@ -6,7 +6,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
    if(!try(require(plier))) stop("package plier is missing")
   
   # Argument check:
-  if(!normalization %in% c("plier","rma")) {
+  if(!normalization %in% c("plier","rma","mas5")) {
     stop("incorrect value of argument normalization")
   }
   if(!platform %in% c("NULL","yeast2")) {
