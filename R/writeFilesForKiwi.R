@@ -34,12 +34,16 @@ writeFilesForKiwi <- function(gsaRes, label="", overwrite=FALSE) {
    }
    
    # Gene-level statistics file:
-   p <- gsaRes$geneLevelStats
-   fc <- gsaRes$directions
-   glTable <- merge(p,fc,by=0)
    if(gsaRes$geneStatType == "t") {
-      colnames(glTable) <- c("g","t","FC")
+      stop("Gene-level data is not sufficient") # Not supported in Kiwi yet
+      #t <- gsaRes$geneLevelStats
+      #fc <- sign(t)
+      #glTable <- merge(p,fc,by=0)
+      #colnames(glTable) <- c("g","t","FC")
    } else if(gsaRes$geneStatType == "p-signed") {
+      p <- gsaRes$geneLevelStats
+      fc <- gsaRes$directions
+      glTable <- merge(p,fc,by=0)
       colnames(glTable) <- c("g","p","FC")
    } else {
       stop("Gene-level data is not sufficient")  
