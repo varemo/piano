@@ -43,7 +43,7 @@ writeFilesForKiwi <- function(gsaRes, label="", overwrite=FALSE) {
    } else if(gsaRes$geneStatType == "p-signed") {
       p <- gsaRes$geneLevelStats
       fc <- gsaRes$directions
-      glTable <- merge(p,fc,by=0)
+      glTable <- data.frame(g=rownames(p),p=p[,1],FC=fc[,1],stringsAsFactors=F)
       colnames(glTable) <- c("g","p","FC")
    } else {
       stop("Gene-level data is not sufficient")  
