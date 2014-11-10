@@ -99,7 +99,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
 	  } else if(normalization == "mas5") {
 	    .verb("Preprocessing using MAS 5.0 with quantile normalization...", verbose)
       dataNorm <- mas5(dataRaw,verbose=FALSE)
-      dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
+      dataNorm <- as.data.frame(log2(exprs(dataNorm)),stringsAsFactors=FALSE)
 	    colnames(dataNorm) <- gsub("\\.CEL","",colnames(dataNorm), ignore.case=TRUE)
 	    colnames(dataNorm) <- gsub("\\.gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)

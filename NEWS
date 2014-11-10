@@ -1,4 +1,23 @@
-CHANGES IN VERSION 1.6.0 (currently 1.5.x)
+CHANGES IN VERSION 1.8.0 (currently 1.7.x)
+-------------------------
+    o No changes yet
+
+CHANGES IN VERSION 1.6.2
+-------------------------
+
+BUG FIXES
+
+    o Fixed a bug in loadMAdata so that normalizing using MAS5 is now returning 
+      log2-transformed expression values.
+
+CHANGES IN VERSION 1.6.1
+-------------------------
+
+DOCUMENTATION
+
+    o Updated this NEWS file
+
+CHANGES IN VERSION 1.6.0 
 -------------------------
 
 NEW FEATURES
