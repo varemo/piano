@@ -21,6 +21,7 @@ S3method(print, GSC)
 S3method(print, GSAres)
 
 import(
+  BiocGenerics,
   Biobase,
   igraph
 )
