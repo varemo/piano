@@ -61,23 +61,24 @@ loadGSC <- function(file, type="auto", addInfo) {
       
    } else if(type %in% c("sbml","xml")) {
       
-      require(rsbml)
+      #require(rsbml) # old, line below is preferred:
+      if (!requireNamespace("rsbml", quietly = TRUE)) stop("package rsbml is missing")
       # Read sbml file:
-      tmp <- try(sbml <- rsbml_read(file))
+      tmp <- try(sbml <- rsbml::rsbml_read(file))
       if(class(tmp) == "try-error") {
          stop("file could not be read by rsbml_read()")
       }
       
       # Create gsc object:
       gsc <- list()
-      for(iReaction in 1:length(reactions(model(sbml)))) {
+      for(iReaction in 1:length(rsbml::reactions(rsbml::model(sbml)))) {
          
          # Species ID for metabolites in current reaction:
-         metIDs <- names(c(reactants(reactions(model(sbml))[[iReaction]]),
-                                products(reactions(model(sbml))[[iReaction]])))
+         metIDs <- names(c(rsbml::reactants(rsbml::reactions(rsbml::model(sbml))[[iReaction]]),
+                           rsbml::products(rsbml::reactions(rsbml::model(sbml))[[iReaction]])))
          
          # Get gene id:s for genes associated with current reaction:
-         geneIDs <- names(modifiers(reactions(model(sbml))[[iReaction]]))
+         geneIDs <- names(rsbml::modifiers(rsbml::reactions(rsbml::model(sbml))[[iReaction]]))
          
          # If any genes found:
          if(length(geneIDs) > 0) {
@@ -85,7 +86,7 @@ loadGSC <- function(file, type="auto", addInfo) {
             # Get gene names:
             geneNames <- rep(NA,length(geneIDs))
             for(iGene in 1:length(geneIDs)) {
-               geneNames[iGene] <- name(species(model(sbml))[[geneIDs[iGene]]])
+               geneNames[iGene] <- rsbml::name(rsbml::species(rsbml::model(sbml))[[geneIDs[iGene]]])
             }
             
             # Loop over metabolites for current reaction, add gene names:
@@ -100,8 +101,8 @@ loadGSC <- function(file, type="auto", addInfo) {
          stop("no gene association found")
       } else {
          for(iMet in 1:length(gsc)) {         
-            tmp1 <- name(species(model(sbml))[[names(gsc)[iMet]]])
-            tmp2 <- compartment(species(model(sbml))[[names(gsc)[iMet]]])
+            tmp1 <- rsbml::name(rsbml::species(rsbml::model(sbml))[[names(gsc)[iMet]]])
+            tmp2 <- rsbml::compartment(rsbml::species(rsbml::model(sbml))[[names(gsc)[iMet]]])
             names(gsc)[iMet] <- paste(tmp1," (",tmp2,")",sep="")
          }
       }

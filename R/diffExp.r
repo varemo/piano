@@ -5,9 +5,8 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
                                    "purple","tan","cyan","gray60","black"),
                                    save=FALSE, verbose=TRUE) {
 
-  #require(marray)
-  #require(gplots)
-  if(!try(require(limma))) stop("package limma is missing")
+  #if(!try(require(limma))) stop("package limma is missing") # old, below is preferred:
+  if (!requireNamespace("limma", quietly = TRUE)) stop("package limma is missing")
   
   # Argument check:
   if(missing(contrasts)) stop("argument contrasts is not defined")
@@ -57,13 +56,13 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
   designMatrix <- model.matrix(~0+factors)
   colnames(designMatrix) <- levels(factors)
   dataForLimma <- arrayData$dataNorm
-  fitLm <- lmFit(dataForLimma, design=designMatrix, method=fitMethod, maxit=200)
+  fitLm <- limma::lmFit(dataForLimma, design=designMatrix, method=fitMethod, maxit=200)
 
 
   # Run ebayes
-  contrastMatrix <- makeContrasts(contrasts=contrasts, levels=levels(factors))
-  fitContrasts <- contrasts.fit(fitLm,contrasts=contrastMatrix)
-  fitContrasts <- eBayes(fitContrasts)
+  contrastMatrix <- limma::makeContrasts(contrasts=contrasts, levels=levels(factors))
+  fitContrasts <- limma::contrasts.fit(fitLm,contrasts=contrastMatrix)
+  fitContrasts <- limma::eBayes(fitContrasts)
   .verb("...done", verbose)
   
   
@@ -71,12 +70,12 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
   if(venn == TRUE) {
     if(length(contrasts) <= 5) {
       .verb("Generating Venn diagrams...", verbose)
-      vennInfo <- decideTests(fitContrasts,adjust.method=adjustMethod,p.value=significance)
+      vennInfo <- limma::decideTests(fitContrasts,adjust.method=adjustMethod,p.value=significance)
       # Plot
       if(saveFig == FALSE) {
         #if(length(contrasts) <= 3) {
           dev.new()
-          vennDiagram(vennInfo, cex=1, main=paste("Venn diagram (p-value adjustment: ",adjustMethod,", p<",significance,")",sep=""),
+          limma::vennDiagram(vennInfo, cex=1, main=paste("Venn diagram (p-value adjustment: ",adjustMethod,", p<",significance,")",sep=""),
                       circle.col=colors, names=LETTERS[1:length(contrasts)])
           dev.new()
           plot.new()
@@ -116,8 +115,8 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
           .verb(paste("Warning: ",vennFileName," already exists in directory: overwriting old file...",sep=""), verbose)
         }
         #if(length(contrasts) <= 3) {
-          pdf(file=vennFilePath,paper="a4")
-          vennDiagram(vennInfo, cex=1, main=paste("Venn diagram (p-value adjustment: ",adjustMethod,", p<",significance,")",sep=""),
+        pdf(file=vennFilePath,paper="a4")
+        limma::vennDiagram(vennInfo, cex=1, main=paste("Venn diagram (p-value adjustment: ",adjustMethod,", p<",significance,")",sep=""),
                       circle.col=colors, names=LETTERS[1:length(contrasts)])
         #} else {
           #vennInfoTmp <- as.data.frame(vennInfo,stringsAsFactors=FALSE)
@@ -177,7 +176,7 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
     } else {
       .verb(paste("Calculating p-values for contrast ",colnames(fitContrasts)[i],"...",sep=""), verbose)
     }
-    topTab <- topTable(fitContrasts,coef=i,adjust.method=adjustMethod,sort.by="none",number=nrow(dataForLimma))
+    topTab <- limma::topTable(fitContrasts,coef=i,adjust.method=adjustMethod,sort.by="none",number=nrow(dataForLimma))
     
     # For limma version compatability:
     if(!"ID" %in% colnames(topTab)) {

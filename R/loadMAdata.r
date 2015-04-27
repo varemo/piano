@@ -2,8 +2,10 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
                              platform="NULL", annotation, normalization="plier",
                              filter=TRUE, verbose=TRUE, ...) {
 
-   if(!try(require(affy))) stop("package affy is missing")
-   if(!try(require(plier))) stop("package plier is missing")
+   #if(!try(require(affy))) stop("package affy is missing") # old, line below is preferred:
+   if (!requireNamespace("affy", quietly = TRUE)) stop("package affy is missing")
+   #if(!try(require(plier))) stop("package plier is missing") # old, line below is preferred:
+   if (!requireNamespace("plier", quietly = TRUE)) stop("package plier is missing")
   
   # Argument check:
   if(!normalization %in% c("plier","rma","mas5")) {
@@ -28,7 +30,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
   if(nCelFiles > 0 & missing(dataNorm)) {
     # Load CEL-files
     .verb("Loading CEL files...", verbose)
-    dataRaw <- ReadAffy(celfile.path=datadir, ...)
+    dataRaw <- affy::ReadAffy(celfile.path=datadir, ...)
     colnames(exprs(dataRaw)) <- gsub("\\.CEL","",colnames(exprs(dataRaw)), ignore.case=TRUE)
     colnames(exprs(dataRaw)) <- gsub("\\.gz","",colnames(exprs(dataRaw)), ignore.case=TRUE)
     if(sum(duplicated(colnames(exprs(dataRaw)))) > 0) stop("found samples with identical names")
@@ -81,8 +83,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     # iterplier qubic spline
     if(normalization == "plier") {
       .verb("Preprocessing using PLIER with cubic spline normalization...", verbose)
-       dataNorm <- normalize.AffyBatch.qspline(dataRaw, type="pmonly", verbose=FALSE)
-       tmp <- suppressWarnings(tmp <- capture.output(dataNorm <- justPlier(dataNorm,normalize=FALSE, 
+       dataNorm <- affy::normalize.AffyBatch.qspline(dataRaw, type="pmonly", verbose=FALSE)
+       tmp <- suppressWarnings(tmp <- capture.output(dataNorm <- plier::justPlier(dataNorm,normalize=FALSE, 
                                                                            usemm=FALSE, concpenalty=0.08, 
                                                                            plieriteration=30000)))
 	    dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
@@ -91,14 +93,14 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
 	    .verb("...done", verbose)
 	  } else if(normalization == "rma") {
       .verb("Preprocessing using RMA with quantile normalization...", verbose)
-      dataNorm <- rma(dataRaw,verbose=FALSE)
+      dataNorm <- affy::rma(dataRaw,verbose=FALSE)
       dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
 	    colnames(dataNorm) <- gsub("\\.CEL","",colnames(dataNorm), ignore.case=TRUE)
        colnames(dataNorm) <- gsub("\\.gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)
 	  } else if(normalization == "mas5") {
 	    .verb("Preprocessing using MAS 5.0 with quantile normalization...", verbose)
-      dataNorm <- mas5(dataRaw,verbose=FALSE)
+      dataNorm <- affy::mas5(dataRaw,verbose=FALSE)
       dataNorm <- as.data.frame(log2(exprs(dataNorm)),stringsAsFactors=FALSE)
 	    colnames(dataNorm) <- gsub("\\.CEL","",colnames(dataNorm), ignore.case=TRUE)
 	    colnames(dataNorm) <- gsub("\\.gz","",colnames(dataNorm), ignore.case=TRUE)
@@ -111,7 +113,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
 
   # Check annotation
   if(exists("dataRaw", inherits=FALSE)) {
-    if(cdfName(dataRaw) == "Yeast_2") {
+    if(affy::cdfName(dataRaw) == "Yeast_2") {
       platform <- "yeast2"
     }
   }
@@ -126,15 +128,17 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
   
   if(annotationInfo != "none") {
     if(annotationInfo == "yeast2") {
-      if(!try(require(yeast2.db))) stop("package yeast2.db is needed for annotationInfo='yeast2'")
+      #if(!try(require(yeast2.db))) stop("package yeast2.db is needed for annotationInfo='yeast2'") # old, line below is preferred:
+      if (!requireNamespace("yeast2.db", quietly = TRUE)) stop("package yeast2.db is missing")
+      if (!requireNamespace("AnnotationDbi", quietly = TRUE)) stop("package AnnotationDbi is missing")
       # Annotate the probes using the yeast2.db package:
       .verb("Creating annotation...", verbose)
       # Gene name
-      geneName <- yeast2ORF
-    	geneName <- toTable(geneName)
+      geneName <- yeast2.db::yeast2ORF
+    	geneName <- AnnotationDbi::toTable(geneName)
       # Chromosome location
-      chromosome <- yeast2CHRLOC
-      chromosome <- toTable(chromosome)
+      chromosome <- yeast2.db::yeast2CHRLOC
+      chromosome <- AnnotationDbi::toTable(chromosome)
       chromosome <- chromosome[,c(1,3,2)]
       # Probe id:s (corresponding to those in dataNorm)
       probeID <- as.data.frame(rownames(dataNorm),stringsAsFactors=FALSE)

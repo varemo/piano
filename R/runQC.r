@@ -5,8 +5,10 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
                                     "white"),
                            save=FALSE, verbose=TRUE) {
 
-   if(!try(require(affyPLM))) stop("package affyPLM is missing")
-   if(!try(require(affy))) stop("package affy is missing")
+   #if(!try(require(affyPLM))) stop("package affyPLM is missing") # old, line below is preferred:
+   if (!requireNamespace("affyPLM", quietly = TRUE)) stop("package affyPLM is missing")
+   #if(!try(require(affy))) stop("package affy is missing") # old, line below is preferred:
+   if (!requireNamespace("affy", quietly = TRUE)) stop("package affy is missing")
   
 
   savedir <- paste(getwd(),"/Piano_Results/Figures/QualityControl", sep="")
@@ -17,11 +19,11 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
   # Function for rna degradation:
   .runRnaDeg <- function(arrayData, savedir, save) {
     .verb("Generating RNA degradation plot...", verbose)
-    rna.deg.obj <- AffyRNAdeg(arrayData$dataRaw,log.it=TRUE)
+    rna.deg.obj <- affy::AffyRNAdeg(arrayData$dataRaw,log.it=TRUE)
     # Plot file:
     if(save == FALSE) {
       dev.new()
-      plotAffyRNAdeg(rna.deg.obj,transform="shift.scale")
+      affy::plotAffyRNAdeg(rna.deg.obj,transform="shift.scale")
     }
     .verb("...done", verbose)
     # Save file:
@@ -36,7 +38,7 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
         .verb("Warning: rnaDeg.pdf already exists in directory: overwriting old file...", verbose)
       }
       pdf(file=pdfFilePath,paper="a4")
-      plotAffyRNAdeg(rna.deg.obj,transform="shift.scale")
+      affy::plotAffyRNAdeg(rna.deg.obj,transform="shift.scale")
       tmp <- dev.off()
       .verb("...done", verbose)
     }
@@ -46,17 +48,17 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
   # Function for affyPLM:
   .runNuseRle <- function(arrayData, savedir, save) {
     .verb("Generating NUSE and RLE plot...", verbose)
-    Pset <- fitPLM(arrayData$dataRaw)
+    Pset <- affyPLM::fitPLM(arrayData$dataRaw)
     # Plot file:
     if(save == FALSE) {
       dev.new()
       par(mar=c(10, 4, 4, 2))
       #Mbox(Pset, main="RLE (Relative log expression)", las=2)
-      RLE(Pset, main="RLE (Relative log expression)", las=2)
+      affyPLM::RLE(Pset, main="RLE (Relative log expression)", las=2)
       dev.new()
       par(mar=c(10, 4, 4, 2))
       #boxplot(Pset, main="NUSE (Normalized unscaled standard error)", las=2)
-      NUSE(Pset, main="NUSE (Normalized unscaled standard error)", las=2)
+      affyPLM::NUSE(Pset, main="NUSE (Normalized unscaled standard error)", las=2)
     }
     .verb("...done", verbose)
     # Save file:
@@ -74,7 +76,7 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
       pdf(file=pdfFilePath,paper="a4")
       par(mar=c(10, 4, 4, 2))
       #Mbox(Pset, main="RLE (Relative Log Expression)", las=2)
-      RLE(Pset, main="RLE (Relative Log Expression)", las=2)
+      affyPLM::RLE(Pset, main="RLE (Relative Log Expression)", las=2)
       tmp <- dev.off()
       .verb("...done", verbose)
       
@@ -86,7 +88,7 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
       pdf(file=pdfFilePath,paper="a4")
       par(mar=c(10, 4, 4, 2))
       #boxplot(Pset, main="NUSE (Normalized unscaled standard error)", las=2)
-      NUSE(Pset, main="NUSE (Normalized unscaled standard error)", las=2)
+      affyPLM::NUSE(Pset, main="NUSE (Normalized unscaled standard error)", las=2)
       tmp <- dev.off()
       .verb("...done", verbose)
     }

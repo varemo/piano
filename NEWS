@@ -2,9 +2,13 @@ CHANGES IN VERSION 1.10 (currently 1.9.x)
 -------------------------
     o No changes yet
 	
-CHANGES IN VERSION 1.8
+CHANGES IN VERSION 1.8.2
 -------------------------
-    o No changes yet
+
+BUG FIXES
+
+    o Updated loading of suggested packages from using require() to requireNamespace()
+      instead.
 
 CHANGES IN VERSION 1.6.2
 -------------------------
