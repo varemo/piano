@@ -11,7 +11,7 @@ Maintainer: Leif Varemo <piano.rpkg@gmail.com>
 Depends: R (>= 2.14.0)
 Imports: BiocGenerics, Biobase, gplots, igraph, relations, marray
 Suggests: yeast2.db, rsbml, plotrix, limma, affy, plier, affyPLM,
-        gtools, biomaRt, snowfall, AnnotationDb
+        gtools, biomaRt, snowfall, AnnotationDbi
 Description: Piano performs gene set analysis using various statistical methods, from different gene level statistics and a wide range of gene-set collections. Furthermore, the Piano package contains functions for combining the results of multiple runs of gene set analyses.
 License: GPL (>=2)
 biocViews: Microarray, Preprocessing, QualityControl, DifferentialExpression,
