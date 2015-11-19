@@ -449,8 +449,10 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
                
                # Genes up/dn (partly redundant code added later as a fix):
                if(exists("signsContrast")) {
-                  nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
-                  nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+                  #nGenesUp[iGeneSet] <- sum(signsContrast[indGenesInSet]>0)
+                  #nGenesDn[iGeneSet] <- sum(signsContrast[indGenesInSet]<0)
+                  nGenesUp[iGeneSet] <- sum(statsContrastSorted[indGenesInSet]>0)
+                  nGenesDn[iGeneSet] <- sum(statsContrastSorted[indGenesInSet]<0)
                }
                
                # "Directional" gene-set statistic:
