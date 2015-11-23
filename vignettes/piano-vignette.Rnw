@@ -482,7 +482,7 @@ These values are for differentially expressed genes in yeast cultured in aerobic
 <<>>==
 library("biomaRt")
 # Select ensembl database and S. cerevisiae dataset:
-ensembl <- useMart("ensembl", dataset="scerevisiae_gene_ensembl")
+ensembl <- useMart("ENSEMBL_MART_ENSEMBL", dataset="scerevisiae_gene_ensembl",host="www.ensembl.org")
 # Map Yeast 2.0 microarray probeset IDs to GO:
 mapGO <- getBM(attributes=c('affy_yeast_2', 'name_1006'), 
                filters = 'affy_yeast_2', 
