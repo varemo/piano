@@ -32,7 +32,7 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             value <- gsStatsAbs[iGeneSet,iContrast]  
             nIndex <- nGenes[iGeneSet,iContrast]
             background <- gsStatsAbsPerm[[iContrast]][as.character(nIndex),]
-            pValuesAbs[iGeneSet] <- sum(background >= value)/length(background)
+            pValuesAbs[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
             
             # Subset up:
             if(statType == "p-signed") {
@@ -40,7 +40,7 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                if(nIndex != 0) {
                   value <- gsStatsUp[iGeneSet,iContrast]  
                   background <- gsStatsUpPerm[[iContrast]][as.character(nIndex),]
-                  pValuesUp[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesUp[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
                
                # Subset dn:
@@ -48,7 +48,7 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                if(nIndex != 0) {
                   value <- gsStatsDn[iGeneSet,iContrast]  
                   background <- gsStatsDnPerm[[iContrast]][as.character(nIndex),]
-                  pValuesDn[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesDn[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
             }
          }
@@ -68,15 +68,15 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                nIndex <- nGenes[iGeneSet,iContrast]   
                backgroundTestUp <- gsStatsAllTestUpPerm[[iContrast]][as.character(nIndex),]
                backgroundTestDn <- gsStatsAllTestDnPerm[[iContrast]][as.character(nIndex),]
-               pValuesAllUp[iGeneSet] <- sum(backgroundTestUp >= valueTestUp)/length(backgroundTestUp) # all up
-               pValuesAllDn[iGeneSet] <- sum(backgroundTestDn >= valueTestDn)/length(backgroundTestDn) # all dn
+               pValuesAllUp[iGeneSet] <- (sum(backgroundTestUp >= valueTestUp) + 1)/(length(backgroundTestUp) + 1) # all up
+               pValuesAllDn[iGeneSet] <- (sum(backgroundTestDn >= valueTestDn) + 1)/(length(backgroundTestDn) + 1) # all dn
             }
             
             # "Mixed":
             value <- gsStatsAbs[iGeneSet,iContrast]  
             nIndex <- nGenes[iGeneSet,iContrast]
             background <- gsStatsAbsPerm[[iContrast]][as.character(nIndex),]
-            pValuesAbs[iGeneSet] <- sum(background >= value)/length(background)
+            pValuesAbs[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
             
             # Subset up:
             if(statType == "p-signed") {
@@ -84,7 +84,7 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                if(nIndex != 0) {
                   value <- gsStatsUp[iGeneSet,iContrast]  
                   background <- gsStatsUpPerm[[iContrast]][as.character(nIndex),]
-                  pValuesUp[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesUp[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
                
                # Subset dn:
@@ -92,7 +92,7 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                if(nIndex != 0) {
                   value <- gsStatsDn[iGeneSet,iContrast]  
                   background <- gsStatsDnPerm[[iContrast]][as.character(nIndex),]
-                  pValuesDn[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesDn[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
             }
          }
@@ -108,15 +108,15 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             if(statType == "t") {
                value <- gsStatsAll[iGeneSet,iContrast]  
                background <- gsStatsAllPerm[[iContrast]][as.character(nIndex),]
-               pValuesAllUp[iGeneSet] <- sum(background >= value)/length(background) # all up
-               pValuesAllDn[iGeneSet] <- sum(background <= value)/length(background) # all dn
+               pValuesAllUp[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1) # all up
+               pValuesAllDn[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1) # all dn
             } else if(statType == "p-signed") {
                valueTestUp <- gsStatsAllTestUp[iGeneSet,iContrast]
                valueTestDn <- gsStatsAllTestDn[iGeneSet,iContrast]
                backgroundTestUp <- gsStatsAllTestUpPerm[[iContrast]][as.character(nIndex),]
                backgroundTestDn <- gsStatsAllTestDnPerm[[iContrast]][as.character(nIndex),]
-               pValuesAllUp[iGeneSet] <- sum(backgroundTestUp <= valueTestUp)/length(backgroundTestUp) # all up
-               pValuesAllDn[iGeneSet] <- sum(backgroundTestDn <= valueTestDn)/length(backgroundTestDn) # all dn
+               pValuesAllUp[iGeneSet] <- (sum(backgroundTestUp <= valueTestUp) + 1)/(length(backgroundTestUp) + 1) # all up
+               pValuesAllDn[iGeneSet] <- (sum(backgroundTestDn <= valueTestDn) + 1)/(length(backgroundTestDn) + 1) # all dn
             }
             
             # "Mixed":
@@ -124,9 +124,9 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             nIndex <- nGenes[iGeneSet,iContrast]
             background <- gsStatsAbsPerm[[iContrast]][as.character(nIndex),]
             if(statType %in% c("p","p-signed")) {
-               pValuesAbs[iGeneSet] <- sum(background <= value)/length(background)
+               pValuesAbs[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1)
             } else {
-               pValuesAbs[iGeneSet] <- sum(background >= value)/length(background)
+               pValuesAbs[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
             }
             
             # Subset up:
@@ -135,9 +135,9 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                value <- gsStatsUp[iGeneSet,iContrast]  
                background <- gsStatsUpPerm[[iContrast]][as.character(nIndex),]
                if(statType == "p-signed") {
-                  pValuesUp[iGeneSet] <- sum(background <= value)/length(background)
+                  pValuesUp[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1)
                } else if(statType %in% c("t","F-signed")) {
-                  pValuesUp[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesUp[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
             }
             
@@ -147,9 +147,9 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                value <- gsStatsDn[iGeneSet,iContrast]  
                background <- gsStatsDnPerm[[iContrast]][as.character(nIndex),]
                if(statType == "p-signed") {
-                  pValuesDn[iGeneSet] <- sum(background <= value)/length(background)
+                  pValuesDn[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1)
                } else if(statType %in% c("t","F-signed")) {
-                  pValuesDn[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesDn[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
             }  
          }
@@ -166,15 +166,15 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             if(statType == "t") {
                value <- gsStatsAll[iGeneSet,iContrast]
                background <- gsStatsAllPerm[[iContrast]][as.character(nIndex),]
-               pValuesAllUp[iGeneSet] <- sum(background >= value)/length(background) # all up
-               pValuesAllDn[iGeneSet] <- sum(background <= value)/length(background) # all dn
+               pValuesAllUp[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1) # all up
+               pValuesAllDn[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1) # all dn
             } else if(statType == "p-signed") {
                valueTestUp <- gsStatsAllTestUp[iGeneSet,iContrast]
                valueTestDn <- gsStatsAllTestDn[iGeneSet,iContrast]
                backgroundTestUp <- gsStatsAllTestUpPerm[[iContrast]][as.character(nIndex),]
                backgroundTestDn <- gsStatsAllTestDnPerm[[iContrast]][as.character(nIndex),]
-               pValuesAllUp[iGeneSet] <- sum(backgroundTestUp <= valueTestUp)/length(backgroundTestUp) # all up
-               pValuesAllDn[iGeneSet] <- sum(backgroundTestDn <= valueTestDn)/length(backgroundTestDn) # all dn
+               pValuesAllUp[iGeneSet] <- (sum(backgroundTestUp <= valueTestUp) + 1)/(length(backgroundTestUp) + 1) # all up
+               pValuesAllDn[iGeneSet] <- (sum(backgroundTestDn <= valueTestDn) + 1)/(length(backgroundTestDn) + 1) # all dn
             }
             
             # "Mixed":
@@ -182,9 +182,9 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             nIndex <- nGenes[iGeneSet,iContrast]
             background <- gsStatsAbsPerm[[iContrast]][as.character(nIndex),]
             if(statType %in% c("p","p-signed")) {
-               pValuesAbs[iGeneSet] <- sum(background <= value)/length(background)
+               pValuesAbs[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1)
             } else {
-               pValuesAbs[iGeneSet] <- sum(background >= value)/length(background)
+               pValuesAbs[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
             }
             
             # Subset up:
@@ -193,9 +193,9 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                value <- gsStatsUp[iGeneSet,iContrast]  
                background <- gsStatsUpPerm[[iContrast]][as.character(nIndex),]
                if(statType == "p-signed") {
-                  pValuesUp[iGeneSet] <- sum(background <= value)/length(background)
+                  pValuesUp[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1)
                } else if(statType %in% c("t","F-signed")){
-                  pValuesUp[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesUp[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
             }
             
@@ -205,9 +205,9 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
                value <- gsStatsDn[iGeneSet,iContrast]  
                background <- gsStatsDnPerm[[iContrast]][as.character(nIndex),]
                if(statType == "p-signed") {
-                  pValuesDn[iGeneSet] <- sum(background <= value)/length(background)
+                  pValuesDn[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1)
                } else if(statType %in% c("t","F-signed")){
-                  pValuesDn[iGeneSet] <- sum(background >= value)/length(background)
+                  pValuesDn[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
                }
             }
          }
@@ -221,7 +221,7 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             value <- gsStatsAbs[iGeneSet,iContrast]  
             nIndex <- nGenes[iGeneSet,iContrast]
             background <- gsStatsAbsPerm[[iContrast]][as.character(nIndex),]
-            pValuesAbs[iGeneSet] <- sum(background >= value)/length(background)  
+            pValuesAbs[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1)
          }
          
          #************************   
@@ -233,11 +233,11 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             background <- gsStatsAllPerm[[iContrast]][as.character(nIndex),]
             if(value < 0) {
                backgroundNeg <- background[background < 0]
-               pValuesAllDn[iGeneSet] <- sum(backgroundNeg <= value)/length(backgroundNeg) # all
+               pValuesAllDn[iGeneSet] <- (sum(backgroundNeg <= value) + 1)/(length(backgroundNeg) + 1) # all
                pValuesAllUp[iGeneSet] <- NA
             } else {
                backgroundPos <- background[background > 0]
-               pValuesAllUp[iGeneSet] <- sum(backgroundPos >= value)/length(backgroundPos) # all
+               pValuesAllUp[iGeneSet] <- (sum(backgroundPos >= value) + 1)/(length(backgroundPos) + 1) # all
                pValuesAllDn[iGeneSet] <- NA
             }
             
@@ -250,8 +250,8 @@ pvalFromFractionGenePerm <- function(statType,statMethod,nGenes,nGenesUp,nGenesD
             value <- gsStatsAll[iGeneSet,iContrast]  
             nIndex <- nGenes[iGeneSet,iContrast]   
             background <- gsStatsAllPerm[[iContrast]][as.character(nIndex),]
-            pValuesAllUp[iGeneSet] <- sum(background >= value)/length(background) # all up
-            pValuesAllDn[iGeneSet] <- sum(background <= value)/length(background) # all dn
+            pValuesAllUp[iGeneSet] <- (sum(background >= value) + 1)/(length(background) + 1) # all up
+            pValuesAllDn[iGeneSet] <- (sum(background <= value) + 1)/(length(background) + 1) # all dn
          }
          
       }

@@ -5,6 +5,20 @@ NEW FEATURES
 
     o Added max method as an option in consensusScores().
 
+BUG FIXES
+
+    o Updated the p-value calculation (while using gene permutation) from:
+         sum(background >= value) / length(background)
+      to:
+         (sum(background >= value) + 1) / (length(background) + 1)
+      where bakground is a vector of permuted gene-set statistics and value
+      is the actual calculated gene-set statistic. This change avoids returning
+      p-values = 0, instead the theoretically smallest possible p-value will be
+      determined by the number of permutations used. E.g. for nPerm = 10000,
+      the smallest p-value will be 1 / 10001 = 9.999e-05.
+
+    o Improved speed of checkLoadArg().
+
 CHANGES IN VERSION 1.12
 -----------------------
     o No changes
@@ -15,7 +29,7 @@ CHANGES IN VERSION 1.10.2
 DOCUMENTATION
 
     o Updated the vignette R code to avoid an error in the call to biomart
-	  throught the getBM function.
+	    throught the getBM function.
 
 CHANGES IN VERSION 1.10.1
 -------------------------
@@ -23,7 +37,7 @@ CHANGES IN VERSION 1.10.1
 BUG FIXES
 
     o Fixed a bug in runGSA which returned wrong numbers for the up- and down-
-	  regulated genes, for the GSEA method.
+	    regulated genes, for the GSEA method.
 	
 CHANGES IN VERSION 1.8.2
 -------------------------
