@@ -1,6 +1,13 @@
-CHANGES IN VERSION 1.12 (currently 1.11.x)
+CHANGES IN VERSION 1.14 (currently 1.13.x)
 -------------------------
-    o No changes yet
+
+NEW FEATURES
+
+    o Added max method as an option in consensusScores().
+
+CHANGES IN VERSION 1.12
+-----------------------
+    o No changes
 	
 CHANGES IN VERSION 1.10.2
 -------------------------
