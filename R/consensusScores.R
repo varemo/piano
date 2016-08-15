@@ -23,7 +23,7 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
    if(pValue == "mixed" & direction == "up") pValue <-"subup"
    if(pValue == "mixed" & direction == "down") pValue <-"subdn"
    
-   tmp <- try(method <- match.arg(method, c("mean","median","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
+   tmp <- try(method <- match.arg(method, c("mean","median","max","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
    if(class(tmp) == "try-error") {
       stop("argument method is not valid")
    }
@@ -100,6 +100,10 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
    } else if(method == "mean") {
       for(iGS in 1:ncol(rankMat)) {
          rankScore[iGS] <- mean(rankMat[,iGS])
+      }
+   } else if(method == "max") {
+      for(iGS in 1:ncol(rankMat)) {
+         rankScore[iGS] <- max(rankMat[,iGS])
       }
    } else {
       tmp <- as.data.frame(t(rankMat))
