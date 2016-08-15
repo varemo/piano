@@ -21,6 +21,8 @@ IMPROVEMENTS [credits to Alexey Sergushichev]
 
     o Improved speed of gene-set statistic calculation for GSEA in calcGeneSetStat().
 
+    o Improved speed significantly of FDR calculation for GSEA in fdrGSEA().
+
 CHANGES IN VERSION 1.12
 -----------------------
     o No changes
