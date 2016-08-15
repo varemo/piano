@@ -5,7 +5,7 @@ NEW FEATURES
 
     o Added max method as an option in consensusScores().
 
-BUG FIXES
+IMPROVEMENTS [credits to Alexey Sergushichev]
 
     o Updated the p-value calculation (while using gene permutation) from:
          sum(background >= value) / length(background)
@@ -18,6 +18,8 @@ BUG FIXES
       the smallest p-value will be 1 / 10001 = 9.999e-05.
 
     o Improved speed of checkLoadArg().
+
+    o Improved speed of gene-set statistic calculation for GSEA in calcGeneSetStat().
 
 CHANGES IN VERSION 1.12
 -----------------------
