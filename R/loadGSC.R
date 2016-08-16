@@ -85,8 +85,18 @@ loadGSC <- function(file, type="auto", addInfo) {
             
             # Get gene names:
             geneNames <- rep(NA,length(geneIDs))
-            for(iGene in 1:length(geneIDs)) {
-               geneNames[iGene] <- rsbml::name(rsbml::species(rsbml::model(sbml))[[geneIDs[iGene]]])
+            for (iGene in 1:length(geneIDs)) {
+              
+              GG <- rsbml::name(rsbml::species(rsbml::model(sbml))[[geneIDs[iGene]]])
+              if ( length(strsplit(GG,':')[[1]]) > 1) {
+                geneNames = strsplit(GG,':')[[1]]
+              }
+              if ( length(strsplit(GG,';')[[1]]) > 1) {
+                geneNames = strsplit(GG,';')[[1]]
+              }
+              else {
+                geneNames[iGene] <- GG
+              }
             }
             
             # Loop over metabolites for current reaction, add gene names:

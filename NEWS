@@ -21,7 +21,15 @@ IMPROVEMENTS [credits to Alexey Sergushichev]
 
     o Improved speed of gene-set statistic calculation for GSEA in calcGeneSetStat().
 
-    o Improved speed significantly of FDR calculation for GSEA in fdrGSEA().
+    o Improved speed of FDR calculation for GSEA in fdrGSEA().
+    
+BUG FIXES
+
+    o Updated NAMESPACE to load dependencies in a better way.
+    
+    o Updated the parsing of sbml files in loadGSC().
+    
+    o Updated networkPlot() to conform to changes in the igraph package.
 
 CHANGES IN VERSION 1.12
 -----------------------

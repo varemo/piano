@@ -149,7 +149,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    # Edge width, according to shared genes:
    edgeOverlap <- rep(NA,ecount(g))
    for(iEdge in 1:ecount(g)) {
-      tmp <- get.edge(g,iEdge)
+      tmp <- ends(g,iEdge)
       edgeOverlap[iEdge] <- overlapMat[tmp[1],tmp[2]]
    }
    eWidth <- (edgeOverlap-min(edgeOverlap))/(max(edgeOverlap)-min(edgeOverlap))*(edgeWidth[2]-edgeWidth[1])+edgeWidth[1]
@@ -225,7 +225,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
       # used by Fruchterman Reingold algorithm:
       eWeight <- rep(NA,ecount(g))
       for(iEdge in 1:ecount(g)) {
-         tmp <- get.edge(g,iEdge)
+         tmp <- ends(g,iEdge)
          tmp1 <- gsSize[tmp[1]]
          tmp2 <- gsSize[tmp[2]]
          if(tmp1 > tmp2) {
@@ -241,11 +241,11 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
       }
       
       # Predefined layouts:
-      if(lay == 1) lay <- layout.fruchterman.reingold(g,area=vcount(g)^4,repulserad=vcount(g)^5, weights=eWeight)      
-      else if(lay == 2) lay <- layout.fruchterman.reingold(g,weights=eWeight)
-      else if(lay == 3) lay <- layout.spring(g, repulse=TRUE, repeqdis=0.5, mass=2, equil=2)
-      else if(lay == 4) lay <- layout.graphopt(g, charge=vSize)
-      else if(lay == 5) lay <- layout.circle(g)
+      if(lay == 1) lay <- layout_with_fr(g, weights=eWeight)      
+      else if(lay == 2) lay <- layout_with_lgl(g)
+      else if(lay == 3) lay <- layout_with_kk(g, weights=eWeight)
+      else if(lay == 4) lay <- layout_with_graphopt(g, charge=vSize)
+      else if(lay == 5) lay <- layout_in_circle(g)
    
    # User defined layout function:   
    } else if(class(lay) == "function"){
