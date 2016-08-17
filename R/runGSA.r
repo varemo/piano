@@ -101,7 +101,7 @@ runGSA <- function(geneLevelStats,
    if(verbose==TRUE) cat("done!\n")
    
    # Get the p-values:
-   pValuesAll   <- tmp$pValuesAll
+   pValuesAll   <- tmp$pValuesAll # not used...
    pValuesAllUp <- tmp$pValuesAllUp
    pValuesAllDn <- tmp$pValuesAllDn
    pValuesAbs   <- tmp$pValuesAbs
@@ -153,7 +153,7 @@ runGSA <- function(geneLevelStats,
    res$adjMethod     <- adjMethod
    res$info          <- info
    #res$dataSubsets  <- dataSubsets
-   res$gsSizeLim        <- gsSizeLim
+   res$gsSizeLim     <- gsSizeLim
    res$gsStatName    <- gsStatName
    res$nPerm         <- nPerm
    res$gseaParam     <- gseaParam
@@ -164,10 +164,10 @@ runGSA <- function(geneLevelStats,
    res$directions <- signs
    
    # GSC info:
-   res$gsc          <- gsc
-   res$nGenesTot       <- nGenes
-   res$nGenesUp  <- nGenesUp
-   res$nGenesDn  <- nGenesDn
+   res$gsc        <- gsc
+   res$nGenesTot  <- nGenes
+   res$nGenesUp   <- nGenesUp
+   res$nGenesDn   <- nGenesDn
    
    # Gene set statistics:
    colnames(gsStatsAll)       <- colnames(statistics)

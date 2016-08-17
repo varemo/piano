@@ -23,7 +23,7 @@ print.GSAres <- function(x, ...){
    cat(paste("Adjustment: ",x[["adjMethod"]],"\n",sep=""))
    cat(paste("Gene set size limit: (",x[["gsSizeLim"]][1],",",x[["gsSizeLim"]][2],")\n",sep=""))
    if(x[["signifMethod"]] != "nullDist" | x[["geneSetStat"]] == "reporter") cat(paste("Permutations:",x[["nPerm"]],"\n"))
-   if(x[["geneSetStat"]] == "gsea") cat(paste("GSEA parameter:",x[["gseaParam"]],"\n"))
+   if(x[["geneSetStat"]] %in% c("gsea","fgsea")) cat(paste("GSEA parameter:",x[["gseaParam"]],"\n"))
    cat(paste("Total run time:",round(round(x$runtime[3])/60,2),"min\n"))
    
    

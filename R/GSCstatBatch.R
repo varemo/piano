@@ -494,7 +494,10 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
     
     # Extract the results:
     gsStatsAll <- tmp$ES
-    pValuesAll <- tmp$pval
+    pValuesAllUp <- rep(NA, length(tmp$pval)
+    pValuesAllDn <- pValuesAllUp
+    pValuesAllUp[gsStatsAll>=0] <- tmp$pval[gsStatsAll>=0]
+    pValuesAllDn[gsStatsAll<0] <- tmp$pval[gsStatsAll<0]
     
     # Calculate number of genes:
     nGenes <- unlist(lapply(gsc, length))
