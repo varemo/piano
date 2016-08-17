@@ -494,7 +494,7 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
     
     # Extract the results:
     gsStatsAll <- tmp$ES
-    pValuesAllUp <- rep(NA, length(tmp$pval)
+    pValuesAllUp <- rep(NA, length(tmp$pval))
     pValuesAllDn <- pValuesAllUp
     pValuesAllUp[gsStatsAll>=0] <- tmp$pval[gsStatsAll>=0]
     pValuesAllDn[gsStatsAll<0] <- tmp$pval[gsStatsAll<0]
