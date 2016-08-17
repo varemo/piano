@@ -1,15 +1,15 @@
 Package: piano
 Type: Package
 Title: Platform for integrative analysis of omics data
-Version: 1.13.5
-Date: 2016-08-16
+Version: 1.13.6
+Date: 2016-08-17
 Author@R: c(person("Leif", "Varemo", email = "piano.rpkg@gmail.com",
         role = "aut"), person("Intawat", "Nookaew", email =
         "piano.rpkg@gmail.com", role = "aut"))
 Author: Leif Varemo <piano.rpkg@gmail.com> and Intawat Nookaew <piano.rpkg@gmail.com>
 Maintainer: Leif Varemo <piano.rpkg@gmail.com>
 Depends: R (>= 2.14.0)
-Imports: BiocGenerics, Biobase, gplots, igraph, relations, marray
+Imports: BiocGenerics, Biobase, gplots, igraph, relations, marray, fgsea
 Suggests: yeast2.db, rsbml, plotrix, limma, affy, plier, affyPLM,
         gtools, biomaRt, snowfall, AnnotationDbi
 Description: Piano performs gene set analysis using various statistical methods, from different gene level statistics and a wide range of gene-set collections. Furthermore, the Piano package contains functions for combining the results of multiple runs of gene set analyses.

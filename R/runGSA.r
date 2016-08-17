@@ -63,7 +63,7 @@ runGSA <- function(geneLevelStats,
    #*********************************************
    
    if(verbose==TRUE) cat("Calculating gene set statistics...")
-   tmp <- GSCstatBatch(statistics, statType, gsc, statMethod, signMethod, gseaParam, signs)
+   tmp <- GSCstatBatch(statistics, statType, gsc, statMethod, signMethod, gseaParam, signs, nPerm)
    
    # Get number of genes in each gene set:
    nGenes   <- tmp$nGenes
@@ -89,11 +89,13 @@ runGSA <- function(geneLevelStats,
    
    if(verbose==TRUE) cat("Calculating gene set significance...")
    
-   if(!(statMethod == "wilcoxon" & signMethod == "distribution")) {
-   tmp <- GSCsignificanceBatch(statistics, statType, signs, gsc, statMethod, signMethod, permStatistics, permSigns,
-                               nGenes, nGenesUp, nGenesDn, gsStatsAll, gsStatsAllTestUp, gsStatsAllTestDn, gsStatsAbs, 
-                               gsStatsUp, gsStatsDn, nPerm, gseaParam, ncpus)
-   
+   if(!(statMethod == "wilcoxon" & signMethod == "distribution") & statMethod != "fgsea") {
+     # If running Wilcoxon with null distribution or FGSEA, this section is not run! p-values are then calculated already
+     # in the previous section (GSCstatBatch) and stored in the tmp variable, and extracted below (Get the p-values).
+     tmp <- GSCsignificanceBatch(statistics, statType, signs, gsc, statMethod, signMethod, permStatistics, permSigns,
+                                 nGenes, nGenesUp, nGenesDn, gsStatsAll, gsStatsAllTestUp, gsStatsAllTestDn, gsStatsAbs, 
+                                 gsStatsUp, gsStatsDn, nPerm, gseaParam, ncpus)
+     
    }
    
    if(verbose==TRUE) cat("done!\n")

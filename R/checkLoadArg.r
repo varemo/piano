@@ -26,7 +26,7 @@ checkLoadArg <- function(statistics,
    
    # Check statMethod:
    tmp <- try(statMethod <- match.arg(statMethod, c("fisher","stouffer","reporter","tailStrength","wilcoxon",
-                                                    "mean","median","sum","maxmean","gsea","page"), several.ok=FALSE), silent=TRUE)
+                                                    "mean","median","sum","maxmean","gsea","fgsea","page"), several.ok=FALSE), silent=TRUE)
    if(class(tmp) == "try-error") {
       stop("argument geneSetStat set to unknown method")
    }
@@ -48,6 +48,9 @@ checkLoadArg <- function(statistics,
    }
    if(signMethod == "distribution" & !statMethod %in% c("fisher","stouffer","reporter","wilcoxon","page")) {
       stop(paste("signifMethod='nullDist' is not allowed for geneSetStat='",statMethod,"'",sep=""))
+   }
+   if(statMethod=="fgsea" & signMethod != "geneperm") {
+      stop("only signifMethod='geneSampling' is allowed for geneSetStat='fgsea'") 
    }
    
    # Check adjMethod:
@@ -108,7 +111,7 @@ checkLoadArg <- function(statistics,
       stop(paste("geneLevelStats does not lie in [0,1], geneLevelStats can only be p-values for geneSetStat='",statMethod,"'",sep=""))
    }
    
-   if(statMethod %in% c("maxmean","gsea","page") & statType != "t") {
+   if(statMethod %in% c("maxmean","gsea","fgsea","page") & statType != "t") {
       stop(paste("geneLevelStats has to contain both positive and negative scores for geneSetStat='",statMethod,"'",sep=""))
    }
    

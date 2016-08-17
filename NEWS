@@ -1,7 +1,9 @@
-CHANGES IN VERSION 1.14 (currently 1.13.x)
--------------------------
+CHANGES IN VERSION 1.14 (devel 1.13.x)
+-----------------------
 
 NEW FEATURES
+
+    o Added new GSA method fgsea (fast GSEA) from the fgsea package.
 
     o Added max method as an option in consensusScores().
 
