@@ -139,7 +139,7 @@ Efron, B. and Tibshirani, R. On testing the significance of sets of genes. The A
 }
 \seealso{
    \pkg{\link{piano}}, \code{\link{loadGSC}}, \code{\link{GSAsummaryTable}}, \code{\link{geneSetSummary}}, 
-   \code{\link{networkPlot}}, \pkg{\link[HTSanalyzeR]{HTSanalyzeR-package}}, \pkg{\link[PGSEA]{PGSEA}}, \pkg{\link[samr]{samr}}, \pkg{\link[limma]{limma}}, \pkg{\link[GSA]{GSA}}
+   \code{\link{networkPlot}}, \pkg{\link[HTSanalyzeR]{HTSanalyzeR-package}}, \pkg{\link[PGSEA]{PGSEA}}, \pkg{\link[samr]{samr}}, \pkg{\link[limma]{limma}}, \pkg{\link[GSA]{GSA}}, \pkg{\link[fgsea]{fgsea}}
 }
 \examples{
    # Load example input data to GSA:

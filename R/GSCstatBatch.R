@@ -501,8 +501,8 @@ GSCstatBatch <- function(statistics, statType, gsc, method, signMethod, gseaPara
     
     # Calculate number of genes:
     nGenes <- unlist(lapply(gsc, length))
-    nGenesUp <- unlist(lapply(gsc, function(x) sum(signsContrast[names(x)]>0)))
-    nGenesDn <- unlist(lapply(gsc, function(x) sum(signsContrast[names(x)]<0)))
+    nGenesUp <- unlist(lapply(gsc, function(x) sum(signsContrast[x]>0)))
+    nGenesDn <- unlist(lapply(gsc, function(x) sum(signsContrast[x]<0)))
   }  
   
   
