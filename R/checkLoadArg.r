@@ -129,7 +129,7 @@ checkLoadArg <- function(statistics,
    # Check for duplicate names in stats (eg 'artifact' of probes => genes):
    # ...now: if duplicate, take both values for gene set.
    tmp <- rownames(statistics)
-   if(length(tmp) > length(unique(tmp))) warning("found duplicates in rownames(geneLevelStats), all values will be used for calculation of gene set statistics")
+   if(length(tmp) > length(unique(tmp))) warning("Found duplicates in rownames(geneLevelStats), all values will be used for calculation of gene set statistics. It is recommended to avoid this and handle duplicates prior to running runGSA. In particular, the GSEA and FGSEA implementations will give different results!")
    
    # Count number of genes and conditions in statistics:
    info <- list()
