@@ -281,6 +281,9 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
                      "Max edge width:\n",max(edgeOverlap)," genes\n\nMin edge width:\n",min(edgeOverlap),
                      " genes",sep=""), font=1, adj=0.5)
    
+   # Reset layout:
+   par(mfrow=c(1,1))
+   
    
    
    #*********************************************
