@@ -10,8 +10,8 @@ GSCsignificanceBatch <- function(statistics, statType, signs, gsc, statMethod, s
       
       # Calculate gene set statistics distributions for each size:
       if(ncpus>1) { # Run fast, on multiple CPUs:
-         #if(!try(suppressMessages(require(snowfall)))) stop("package snowfall is missing") # old, line below is preferred:
-         if (!requireNamespace("snowfall", quietly = TRUE)) stop("package snowfall is missing")
+         if(!try(suppressMessages(require(snowfall)))) stop("package snowfall is missing") # old, line below is preferred:
+         #if (!requireNamespace("snowfall", quietly = TRUE)) stop("package snowfall is missing")
          # Initialize parallelization:
          tmp<-capture.output(suppressMessages(snowfall::sfInit(parallel=T,cpus=ncpus)))
          # Run in parallel:
