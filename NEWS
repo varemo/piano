@@ -3,6 +3,24 @@ CHANGES IN VERSION 1.16 (devel 1.15.x)
 
 No changes yet!
 
+CHANGES IN VERSION 1.14.5
+-------------------------
+
+BUG FIXES
+
+    o Reset plot layout after networkPlot.
+    
+    o Issue warning instead of error in writeFilesForKiwi when gene-level statistics
+      are not p-values. This means that the GLS file will not be generated, but the 
+      GSS and GSC files are.
+
+CHANGES IN VERSION 1.14.3
+-------------------------
+
+BUG FIXES
+
+    o Required functions from the snow package, used by snowfall, are now properly loaded.
+
 CHANGES IN VERSION 1.14
 -----------------------
 

@@ -35,7 +35,7 @@ writeFilesForKiwi <- function(gsaRes, label="", overwrite=FALSE) {
    
    # Gene-level statistics file:
    if(gsaRes$geneStatType == "t") {
-      stop("Gene-level data is not sufficient") # Not supported in Kiwi yet
+      warning("Only gene-level p-values are currently supported to be exported to Kiwi. Skipping GLS-file.") # Not supported in Kiwi yet
       #t <- gsaRes$geneLevelStats
       #fc <- sign(t)
       #glTable <- merge(p,fc,by=0)
@@ -46,7 +46,7 @@ writeFilesForKiwi <- function(gsaRes, label="", overwrite=FALSE) {
       glTable <- data.frame(g=rownames(p),p=p[,1],FC=fc[,1],stringsAsFactors=F)
       colnames(glTable) <- c("g","p","FC")
    } else {
-      stop("Gene-level data is not sufficient")  
+     warning("Only gene-level p-values are currently supported to be exported to Kiwi. Skipping GLS-file.") # Not supported in Kiwi yet
    }
    filename <- paste("GLS",label,".txt",sep="")
    if(!file.exists(filename)) {
