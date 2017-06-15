@@ -67,7 +67,7 @@ library(piano)
 \huge \textbf{Vignette}
 
 \vspace{11cm}
-\normalsize\noindent \textbf{Leif Väremo, Intawat Nookaew}
+\normalsize\noindent \textbf{Leif V?remo, Intawat Nookaew}
 
 \vspace{0.3cm}
 \small\noindent \today
@@ -96,13 +96,13 @@ Section \ref{sec:start} covers installation, Section \ref{sec:ma} covers microar
 
 
 \subsection{Contact}
-For questions regarding \pkg{piano}, contact the authors, Leif Väremo and Intawat Nookaew at \mbox{\texttt{piano.rpkg@gmail.com}}.
+For questions regarding \pkg{piano}, contact the authors, Leif V?remo and Intawat Nookaew at \mbox{\texttt{piano.rpkg@gmail.com}}.
 
 \subsection{Citation}
 If you use \pkg{piano} in your research please cite:
 
 \begin{quote}
-Väremo, L.,~Nielsen, J.,~Nookaew, I. (2013) Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. \textit{Nucleic Acids Research}. 41 (8), 4378-4391. doi:10.1093/nar/gkt111
+V?remo, L.,~Nielsen, J.,~Nookaew, I. (2013) Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. \textit{Nucleic Acids Research}. 41 (8), 4378-4391. doi:10.1093/nar/gkt111
 \end{quote}
 
 \newpage
@@ -479,14 +479,14 @@ myFC <- pfc$foldChanges["aerobic_Clim - anaerobic_Clim"]
 head(myFC)
 @
 These values are for differentially expressed genes in yeast cultured in aerobic carbon-limited media compared to anaerobic carbon-limited media. As we see for the five first genes, the IDs used are the microarray probeset IDs. This is important to keep in mind when we select or gene set collection. In this example we will use GO terms as gene sets. The \pkg{biomaRt} package is useful to access available databases:
-<<>>==
+<<eval=FALSE>>==
 library("biomaRt")
 # Select ensembl database and S. cerevisiae dataset:
-ensembl <- useMart("ENSEMBL_MART_ENSEMBL", dataset="scerevisiae_gene_ensembl",host="www.ensembl.org")
+ensembl <- useMart("ENSEMBL_MART_ENSEMBL", dataset="scerevisiae_gene_ensembl" ,host="www.ensembl.org")
 # Map Yeast 2.0 microarray probeset IDs to GO:
 mapGO <- getBM(attributes=c('affy_yeast_2', 'name_1006'), 
-               filters = 'affy_yeast_2', 
-               values = rownames(myPval), 
+               #filters = 'affy_yeast_2', 
+               #values = rownames(myPval), 
                mart = ensembl)
 # Remove blanks ("")
 mapGO <- mapGO[mapGO[,2]!="",]
@@ -494,7 +494,7 @@ mapGO <- mapGO[mapGO[,2]!="",]
 mapGO[1:10,]
 @
 Now that we have a mapping between our probeset IDs and GO terms we can load it into the correct format using \fun{loadGSC}:
-<<>>==
+<<eval=FALSE>>==
 myGsc <- loadGSC(mapGO)
 @
 We have all our input data and can move on with the \fun{runGSA} function:
