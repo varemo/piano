@@ -3,6 +3,16 @@ CHANGES IN VERSION 1.18 (devel 1.17.x)
 
 No changes yet!
 
+CHANGES IN VERSION 1.16.2
+-------------------------
+
+BUG FIXES
+
+    o Fix error: "Error in if (maxP > -minP) { : missing value where TRUE/FALSE needed"
+      that appeared occasionally during runGSA for method gsea. This happened when the
+      running sum was only positive or only negative, leading to that the if-statement
+      broke due to missing values.
+
 CHANGES IN VERSION 1.16
 -----------------------
 

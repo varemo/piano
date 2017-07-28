@@ -46,11 +46,10 @@ calcGeneSetStat <- function(selectedStats, method, statistics=NULL, gseaParam) {
       
    # GSEA:
    } else if(method == "gsea") {
-      S <- selectedStats
-      r <- statistics
+      S <- selectedStats # index of genes in gene set
+      r <- statistics # sorted gene-level statistics
       p <- gseaParam
       
-      # :ToDo: do we need this sort?
       S <- sort(S)
       
       m <- length(S)
@@ -59,10 +58,11 @@ calcGeneSetStat <- function(selectedStats, method, statistics=NULL, gseaParam) {
       rAdj <- abs(r[S])^p
       rCumSum <- cumsum(rAdj) / NR
       
-      tops <- rCumSum - (S - seq_along(S)) / (N - m)
-      bottoms <- tops - rAdj / NR
-      maxP <- max(tops)
-      minP <- min(bottoms)
+      tops <- rCumSum - (S - seq_along(S)) / (N - m) # tops/local maxima in the running sum plot
+      bottoms <- tops - rAdj / NR # bottoms/local minima in the running sum plot
+      maxP <- max(c(tops,0), na.rm=TRUE)
+      minP <- min(c(bottoms,0), na.rm=TRUE)
+      
 
       if(maxP > -minP) {
          geneSetStatistic <- maxP
