@@ -67,7 +67,7 @@ library(piano)
 \huge \textbf{Vignette}
 
 \vspace{11cm}
-\normalsize\noindent \textbf{Leif V?remo, Intawat Nookaew}
+\normalsize\noindent \textbf{Leif Varemo, Intawat Nookaew}
 
 \vspace{0.3cm}
 \small\noindent \today
@@ -96,13 +96,13 @@ Section \ref{sec:start} covers installation, Section \ref{sec:ma} covers microar
 
 
 \subsection{Contact}
-For questions regarding \pkg{piano}, contact the authors, Leif V?remo and Intawat Nookaew at \mbox{\texttt{piano.rpkg@gmail.com}}.
+For questions regarding \pkg{piano}, contact the authors, Leif Varemo and Intawat Nookaew at \mbox{\texttt{piano.rpkg@gmail.com}}.
 
 \subsection{Citation}
 If you use \pkg{piano} in your research please cite:
 
 \begin{quote}
-V?remo, L.,~Nielsen, J.,~Nookaew, I. (2013) Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. \textit{Nucleic Acids Research}. 41 (8), 4378-4391. doi:10.1093/nar/gkt111
+Varemo, L.,~Nielsen, J.,~Nookaew, I. (2013) Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods. \textit{Nucleic Acids Research}. 41 (8), 4378-4391. doi:10.1093/nar/gkt111
 \end{quote}
 
 \newpage
