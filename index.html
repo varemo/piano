@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>piano</title>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35952298-1']);
+  _gaq.push(['_setDomainName', 'sysbio.se']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<style type="text/css">
+   html {
+      overflow: -moz-scrollbars-vertical; 
+      overflow-y: scroll;
+      height: 100%;
+      margin: 0 0 0 0;
+      padding: 0;
+      min-height: 100%;
+   }
+   body {
+      margin: 0 0 0 0;
+      height: 100%;
+      padding: 0;
+      min-height: 100%;
+      background-color:#eeeeee;
+   }
+    body, td {
+    font-size:0.96em;
+}
+
+tt { 
+   font-family: monospace; 
+   font-size: 14px;
+}
+
+   a.menu:link {
+      color:#FFFFFF;
+      text-decoration:none;
+      font-size:16px;
+      font-family:verdana;
+   }
+   a.menu:visited {
+      color:#FFFFFF;
+      text-decoration:none;
+   }
+   a.menu:active {
+      color:#FFFFFF;
+      text-decoration:none;
+   }
+   a.menu:hover {
+      color:#99CCFF;
+      text-decoration:none;
+   }
+   a.quick:link {
+      color:#000000;
+      font-weight:bold;
+      line-height:300%; 
+      text-decoration:none;
+   }
+   a.quick:visited {
+      color:#000000;
+      font-weight:bold;
+      text-decoration:none;
+   }
+   a.quick:active {
+      color:#000000;
+      font-weight:bold;
+      text-decoration:none;
+   }
+   a.quick:hover {
+      color:#000000;
+      font-weight:bold;
+      text-decoration:underline;
+   }
+   a img {
+    border: 0;
+   }
+ div.ql
+{
+box-shadow: 8px 8px 7px #999999;
+display: inline-block;
+border: 1px solid #000000;
+}
+table.main,th.main, td.main
+{
+   border-collapse:separate;
+border: 1px solid #000000;
+box-shadow: 8px 8px 8px #999;
+background-color:#ffffff;
+}
+
+   
+   .hidden { display: none; }
+   .unhidden { display: block; }
+
+</style>
+
+<script type="text/javascript">
+  function unhide(activeDivID) {
+    var divID = ["menu1","menu2","menu3","menu4","menu5","menu6"];
+    for (var i = 0; i < divID.length; i++) {
+       var item = document.getElementById(divID[i]);
+       if (item) {
+         item.className='hidden';
+       }
+    }
+    var item = document.getElementById(activeDivID);
+    if (item) {
+      item.className='unhidden';
+    }
+  }
+  
+</script>
+
+
+</head>
+
+<body>
+
+<font face="arial">
+<center>
+
+      <br>
+      <table class="main" width="900" cellpadding="0" cellspacing="0"><tr><td>
+         <table border="0" cellpadding="0" cellspacing="0">
+<tr><td valign="top" colspan="3">
+
+         <table border="0" width="100%" cellspacing="0" cellpadding="0"><tr>
+         <td rowspan="3" width="10"></td>
+         <td rowspan="3">
+                <a href="javascript:unhide('menu1');"><img src="loggo.png" width="350"></a>
+                </td><td align="right" valign="center" colspan="2" height="90">
+                <a href="http://biomet-toolbox.org/"><img src="biomet.png" width="200"></a>
+               </td>
+                  <td rowspan="3" width="20">
+                  </td>
+               </tr>
+                  <tr>
+                  <td align="right" valign="bottom">
+                  <a href="http://www.sysbio.se"><img src="sysbio.png" width="135"></a>
+                  </td>
+                  <td align="center" valign="center">
+                     <a href="http://www.chalmers.se/en/Pages/default.aspx"><img src="chalmers.png" width="60"></a>
+                  </td>
+                  </tr>
+                  <tr><td colspan="2" height="1"></td></tr>
+         </table>
+         
+</td></tr>
+<tr><td background="menubg.png" colspan="3" height="40">
+<table width="100%">
+   <tr>
+      <td width="50"></td>
+      <td align="center"><a class="menu" href="javascript:unhide('menu1');">Home</a></td>
+      <td align="center"><a class="menu" href="javascript:unhide('menu2');">About</a></td>
+      <td align="center"><a class="menu" href="javascript:unhide('menu3');">Install</a></td>
+      <td align="center"><a class="menu" href="javascript:unhide('menu4');">Change log</a></td>
+      <td align="center"><a class="menu" href="javascript:unhide('menu5');">Help</a></td>
+      <td align="center"><a class="menu" href="javascript:unhide('menu6');">Publications</a></td>
+      <td width="50"></td>
+   </tr>
+</table>
+</td></tr>
+<tr>
+<td width="70"></td>
+   <td align="left">
+   <br><br>
+   <div id="menu1" class="unhidden">
+   <center><font size="5" color="#3366CC">An R/Bioconductor package for <b>gene set analysis</b></font><br><br></center><br>
+   <b>Quick links</b>
+   <hr noshade size=1>
+   
+   <table border="0" width="100%">
+      <tr>
+      <td align="center" valign="bottom"><a class="quick" href="javascript:unhide('menu3');"><img src="download.png" height="120" border="0"></a><br>
+      <a class="quick" href="javascript:unhide('menu3');">Download / Install</a>
+            
+         </td>
+         <td align="center" valign="bottom">
+         <div class="ql"><a href="http://www.bioconductor.org/packages/release/bioc/html/piano.html"><img src="bioc_quicklink.png" height="100"></a></div><br>
+         <a class="quick" href="http://www.bioconductor.org/packages/release/bioc/html/piano.html">Piano at Bioconductor</a>
+            
+         </td>
+         <td align="center" valign="bottom">
+<div class="ql"><a href="http://nar.oxfordjournals.org/cgi/content/full/gkt111?
+ijkey=SWxd0y0NFDSFILz&keytype=ref"><img src="nar_quicklink.png" height="100"></a></div><br>
+<a class="quick" href="http://nar.oxfordjournals.org/cgi/content/full/gkt111?
+ijkey=SWxd0y0NFDSFILz&keytype=ref">Piano publication in NAR</a>
+         </td>
+         <td align="center" valign="bottom"><div class="ql"><a href="http://biomet-toolbox.org"><img src="bmt_quicklink.png" height="100"></a></div><br>
+            <a class="quick" href="http://biomet-toolbox.org/">BioMet Toolbox</a>
+         </td>
+      </tr>
+   </table>
+<br>
+   
+   <b>News</b>
+   <hr noshade size=1>
+<table>
+<tr><td width="100" valign="top">
+2016-11-17:
+</td><td valign="top">
+Development of piano now lives on <a href="https://github.com/varemo/piano">GitHub</a>.<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2016-11-15:
+</td><td valign="top">Piano 1.14 is now available!<br><br>
+New features include speed improvements to <tt>runGSA()</tt> and a new GSA method option: <tt>fgsea</tt>.<br>
+Now, <tt>gsea</tt> is ~100x faster than before. The <tt>fgsea</tt> method is ~30x faster than the default <tt>mean</tt> method, and completes within seconds.
+<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2015-11-19:
+</td><td valign="top">Piano 1.10 is now available!<br><br>
+There is a bug fix regarding the reported number of up and down regulated genes for the GSEA method of <tt>runGSA</tt>.<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2015-05-13:
+</td><td valign="top">Piano 1.8.0 is now available!<br><br>
+This is a minor update conforming to updated R requirements.<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2014-10-16:
+</td><td valign="top">Check out our new tool <a href="http://sysbio.se/kiwi">Kiwi</a> for GSA result visualization and interpretation!<br><br>
+<img src="kiwi.png" width="100px"><br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2014-10-15:
+</td><td valign="top">Piano 1.6.0 is now available!<br><br>
+New features include:<br> 
+- A function <tt>writeFilesForKiwi</tt> enabling visualization of GSA results with our new software tool <a href="http://sysbio.se/kiwi">Kiwi</a><br>
+- Minor bug fixes
+(see <a href="javascript:unhide('menu4');">Change log</a> for details)<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2014-04-15:
+</td><td valign="top">Piano 1.4.0 is now available!<br><br>
+New features include:<br> 
+- Improved control and customization of the <tt>consensusHeatmap</tt><br>
+- New function <tt>GSAheatmap</tt> for single GSA runs<br>
+- Several minor improvements, bugfixes and documentation updates<br>
+(see <a href="javascript:unhide('menu4');">Change log</a> for details)<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2014-02-24:
+</td><td valign="top">Uncomfortable with the R command line? Check out <a href="http://biomet-toolbox.org/">BioMet-Toolbox.org</a> where you can run some of the most important functions of piano in a point-and-click based browser interface!
+<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2013-11-19:
+</td><td valign="top">Important microarray analysis bug-fix in piano 1.2.5. Please update!<br><br>
+The bug was in <tt>diffExp()</tt> and in some rare cases returned incorrect gene IDs for <tt>$pValues</tt> and 
+      <tt>$foldChanges</tt> in the returned result object. This happened if and only if annotation was previously supplied to <tt>loadMAdata()</tt> 
+      AND the probeset IDs in the normalized data (<tt>$dataNorm</tt>) were unsorted. The information in
+      <tt>$resTable</tt> as well as in the saved tables (if using <tt>save=TRUE</tt>) was always correct and unnaffected.
+<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2013-10-16:
+</td><td valign="top">Piano 1.2.0 is now available!<br><br>
+New features include:<br> 
+- <tt>runGSA</tt> runs up to 90% faster<br>
+- the new <tt>runGSAhyper</tt> function for hypergeometric test<br>
+- new plots and more control over existing plots<br>
+- several minor improvements, bugfixes and documentation updates<br>
+(see <a href="javascript:unhide('menu4');">Change log</a> for details)<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2013-08-28:
+</td><td valign="top">The devel version of piano (version 1.1.15) includes some new features: volcano plots are now part of the output of <tt>diffExp</tt>, the gene names in the Venn diagram can now be accessed, a new function <tt>runGSAhyper</tt> has been added for peforming a hypergeometric test. See below how to use the latest devel version of piano.<br><br>
+</td></tr>
+<tr><td width="100" valign="top">
+2013-07-16:
+</td><td valign="top">The devel version of piano (version 1.1.13) includes a major improvement in runtime of <tt>runGSA</tt>, which now can run up to 90% faster using multiple CPUs, controlled through the new argument <tt>ncpus</tt>. See below how to use the latest devel version of piano.<br><br>
+</td></tr>
+   <tr><td width="100" valign="top">
+2013-04-15:
+</td><td valign="top">Piano is now released and hosted on Bioconductor.
+</td></tr>
+</table>
+<br><br>
+
+   </div>
+   <div id="menu2" class="hidden">
+   <b>Description</b>
+   <hr noshade size=1>
+   Piano is an R-package (<a href="http://www.r-project.org/">www.r-project.org</a>) and part of Bioconductor (<a href="http://www.bioconductor.org/">www.bioconductor.org</a>). Piano is used for running gene set analysis with various statistical methods, from different gene level statistics and a wide range of gene-set collections. Furthermore, the piano package contains functions for combining the results of multiple runs of gene set analyses.<br><br>
+   
+   <center><img src="figures.png" width="600"></center>
+   
+   <b>Details</b>
+   <hr noshade size=1>
+   The piano package consists of two parts:<br><br>
+   
+   1. The major part revolves around gene set analysis (GSA), and the central function for this is <tt>runGSA</tt>. There are some downstream functions (e.g. <tt>GSAsummaryTable</tt> and <tt>geneSetSummary</tt> that handle the results from the GSA. By running <tt>runGSA</tt> multiple times with different settings it is possible to compute consensus gene set scores. Another set of functions (e.g. <tt>consensusScores</tt> and <tt>consensusHeatmap</tt> take a list of result objects given by <tt>runGSA</tt> for this step.<br><br>
+   2. The second part of the piano package contains a set of functions devoted for an easy-to-use approach on microarray analysis (wrapped around the <tt>affy</tt> and <tt>limma</tt> packages), which are constructed to integrate nicely with the downstream GSA part. The starting function in this case is <tt>loadMAdata</tt>.
+   <br><br>
+   
+   <br><b>Contact</b>
+   <hr noshade size=1>
+ Email the developer Leif V&auml;remo at piano.rpkg[.at.]gmail.com<br>
+If you encountered any problems please check if your questions are already answered on the help page, in the vignette or in the function documentation before you email for support. Thank you!
+<br><br>
+   
+   <br><b>Acknowledgments</b>
+   <hr noshade size=1>
+This work was carried out at Systems and Synthetic Biology at Chalmers University of Technology, Gothenburg, Sweden. <br><br>Funding was provided from <a href="http://www.wallenberg.com/kaw/en">Knut and Alice Wallenberg foundation</a>, <a href="http://www.chalmers.se/en/Pages/default.aspx">Chalmers foundation</a> and <a href="http://www.bils.se">Bioinformatics Infrastructure for Life Sciences (BILS)</a>. 
+<br><br>The computations were performed on resources provided by the Swedish National Infrastructure for Computing (SNIC) at C3SE.<br><br>
+
+
+   </div>
+   <div id="menu3" class="hidden">
+   <b>Install piano on your computer</b>
+   <hr noshade size=1>
+   <table border="0"><tr>
+   
+      <td>
+         <b>1.</b> Install the latest version of R (<a href="http://www.r-project.org/">www.r-project.org</a>) in order to get the latest piano version during installation.<br><br>
+<b>2.</b> Piano is hosted on Bioconductor, follow <a href="http://www.bioconductor.org/packages/release/bioc/html/piano.html">this link</a> for more information and installation instructions. In summary however, simply run these commands in R for installation and updating:<br><br>
+<tt>source("http://bioconductor.org/biocLite.R")<br>
+biocLite("piano")</tt><br><br>
+...or if you wish to install <i>all</i> the other packages that piano uses:<br><br>
+<tt>biocLite("piano", dependencies=TRUE)</tt><br><br>
+<b>3.</b> If you get stuck, see the <a href="javascript:unhide('menu5');">Help</a> section.
+         
+      </td>
+      <td valign="top"><img src="download.png" height="120" border="0"></td>
+   </tr></table>
+
+
+<br><br>
+
+<b>Online web interface</b>
+<hr noshade size=1>
+<table border="0"><tr>
+   
+      <td>
+Some of the functionalities of piano are available through the browser-based GUI <a href="http://biomet-toolbox.org/">BioMet Toolbox</a>. Here, you can upload your data and apply a selection of the most important functions and options that you want to run, using a point-and-click based system.
+</td>
+      <td valign="top" align="right"><a href="http://biomet-toolbox.org/"><img src="biomet.png" height="70" border="0"></a></td>
+   </tr></table>
+
+<br><br>
+
+<b>Advanced: Using devel version</b>
+<hr noshade size=1>
+For advanced users who want to access the latest development updates of piano it is possible to install the devel version. There are at least three alternatives:<br><br>
+<i>Alt 1.</i> Simply run: <tt>> install.packages("piano",repos="http://bioconductor.org/packages/devel/bioc/", type="source")</tt><br><br>
+<i>Alt 2.</i> You can also download the appropriate file (piano_x.y.z.tar.gz, piano_x.y.z.zip or piano_x.y.z.tgz) from <a href="http://bioconductor.org/packages/devel/bioc/html/piano.html">here</a>, and install manually, e.g. <tt>install.packages('piano_x.y.z.tar.gz', repos=NULL, type="source")</tt>. 
+<br><br><i>Alt 3.</i> It is possible to run the whole Bioconductor as devel version, in which case packages can be installed as usual, see <a href="http://bioconductor.org/developers/how-to/useDevel/">this page</a> for more info.
+<br><br>
+
+
+<br><br>
+
+<b>GitHub</b>
+<hr noshade size=1>
+Code development is available through <a href="https://github.com/varemo/piano">GitHub</a>.
+Bioconductor also hosts <a href="https://github.com/Bioconductor-mirror/piano">GitHub mirrors</a> of the release and devel versions of all its packages.
+
+   </div>
+   <div id="menu4" class="hidden">
+   
+   <b>Change log</b>
+<hr noshade size=1>
+   View the change log <a href="http://www.bioconductor.org/packages/release/bioc/news/piano/NEWS">here</a>.<br><br>
+
+   To view the latest changes in the development version, please see the NEWS file at <a href="http://bioconductor.org/packages/devel/bioc/html/piano.html">Bioconductor</a> (development version of piano).<br><br>
+   
+
+   </div>
+   <div id="menu5" class="hidden">
+   
+   <b>Documentation</b>
+<hr noshade size=1>
+<a href="http://www.bioconductor.org/packages/release/bioc/vignettes/piano/inst/doc/piano-vignette.pdf">Manual/Vignette</a> (at Bioconductor)<br>
+<a href="http://www.bioconductor.org/packages/release/bioc/manuals/piano/man/piano.pdf">Function reference</a> (at Bioconductor)<br>
+Quick tutorial (<a href="quick_tutorial.pdf">pdf</a>, <a href="quick_tutorial.html">online</a>)
+<br><br><br>
+
+   <b>Frequently asked questions (FAQ)</b>
+<hr noshade size=1>
+
+<a href="#q1">I have a question about piano, how do I get support?</a><br>
+<a href="#q2">How can I get in contact with the developers?</a><br>
+<a href="#q3">I have problems installing piano, what is wrong?</a><br>
+<a href="#q4">I'm a Mac user and I get an error message about package relations. What to do?</a><br>
+<a href="#q5">What does the error message "Error in plot.new() : figure margins too large" mean?</a><br>
+<a href="#q6">The function runGSA() is taking a long time, can I speed it up?</a><br>
+<br>
+
+<a name="q1"><b>Q: I have a question about piano, how do I get support?</b></a><br>
+<b>A:</b> First, check if your question in answered on this help page. If not, read the documentation
+for the specific function you are using (e.g. run in R: <tt>> ?runGSA</tt> to read about runGSA).
+A lot of the functionality of piano is described with examples in the vignette (see Documentation above). If none of the above helped you, feel free to contact the developers for assistance (see next question).
+<br><br>
+
+<a name="q2"><b>Q: How can I get in contact with the developers?</b></a><br>
+<b>A:</b> Email the developer Leif V&auml;remo at piano.rpkg[.at.]gmail.com<br>
+If you encountered any problems please check if your questions are already answered on this page, in the vignette or in the function documentation before you email for support. Thank you!<br><br>
+
+<a name="q3"><b>Q: I have problems installing piano, what is wrong?</b></a><br>
+<b>A:</b> First be sure to update to the latest version of <a href="http://www.r-project.org/">R</a>. In general it is difficult to say what the problem is. Read the error and warning messages carefully. Is there any mentions of other packages that failed to install. In that case, try to install them separately first.
+<br><br>
+
+<a name="q4"><b>Q: I'm a Mac user and I get an error message about package relations. What to do?</b></a><br>
+<b>A:</b> The package relations (which is required for piano) is (when this was written) not available as a Mac binary. Mac users usually have to install this package separately from source (<tt>install.packages("relations",type="source")</tt>) before attempting to install piano.
+<br><br>
+
+<a name="q5"><b>Q: What does the error message "Error in plot.new() : figure margins too large" mean?</b></a><br>
+<b>A:</b> This error message means that the default plotting device is to small for the desired plot. To solve the issue, first run the command <tt>dev.new(height=20,width=10)</tt> (you can try to vary the exact numbers) followed by the command that will produce the plot.
+<br><br>
+
+<a name="q6"><b>Q: The function runGSA() is taking a long time, can I speed it up?</b></a><br>
+<b>A:</b> Yes! You can run this function on multiple CPUs using the argument <tt>ncpus</tt>. Be sure to install the package snowfall first. Reducing the number of permutations using the argument <tt>nPerm</tt> will also make it faster, but also decrease the resolution (unique number) of the gene set p-values. The number of gene sets can be limited by only considering ones within a given size range (number of genes) using the argument <tt>gsSizeLim</tt>, resulting in a faster run.
+<br><br>
+
+
+
+
+   </div>
+   <div id="menu6" class="hidden">
+   <table border="0"><tr>
+   <td valign="top" width="120"><a href="http://nar.oxfordjournals.org/cgi/content/full/gkt111?
+ijkey=SWxd0y0NFDSFILz&keytype=ref"><img src="nar.gif" border="1" height="120"></a></td>
+   <td>
+   <b>Please cite this publication when you use piano:</b>
+   <hr noshade size=1>
+V&auml;remo, L., Nielsen, J. and Nookaew, I. (2013)<br> Enriching the gene set analysis of genome-wide data by incorporating directionality of gene expression and combining statistical hypotheses and methods.<br> <i>Nucleic Acids Research.</i> 41 (8), 4378-4391. DOI:10.1093/nar/gkt111 [<a href="http://nar.oxfordjournals.org/cgi/content/full/gkt111?
+ijkey=SWxd0y0NFDSFILz&keytype=ref">link</a>]<br><br><br>
+</td>
+</tr>
+<tr>
+   <td></td>
+   <td>
+   <b>Please cite this publication if you use the BioMet Toolbox 2.0:</b>
+   <hr noshade size=1>
+Garcia-Albornoz, M., Thankaswamy-Kosalai, S., Nilsson, A., V&auml;remo, L., Nookaew, I. and Nielsen, J. (2014)<br> BioMet Toolbox 2.0: genome-wide analysis of metabolism and omics data.<br> <i>Nucleic Acids Research.</i> 42 (W1), W175-W181. DOI:10.1093/nar/gku371 [<a href="http://nar.oxfordjournals.org/content/42/W1/W175">link</a>]<br><br><br>
+</td>
+</tr>
+<tr>
+<tr>
+   <td></td>
+   <td>
+   <b>Please cite this publication if you use Kiwi:</b>
+   <hr noshade size=1>
+V&auml;remo, L., Gatto, F. and Nielsen, J. (2014)<br>Kiwi: a tool for integration and visualization of network topology and gene-set analysis.<br> <i>BMC Bioinformatics.</i> 15 (408). DOI:10.1186/s12859-014-0408-9 [<a href="http://www.biomedcentral.com/1471-2105/15/408/abstract">link</a>]<br><br><br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>
+<b>A selection of publications using piano:</b>
+<hr noshade size=1>
+A full list of citations is available e.g. in <a href="https://scholar.google.se/scholar?cites=8175173688440366320">Google Scholar</a><br><br>
+
+M&uuml;lleder, M., Calvani, E., Alam, M.T., Wang, R.K., Eckerstorfer, F., Zelezniak, A. and Ralser, M. (2016)<br>
+Functional Metabolomics Describes the Yeast Biosynthetic Regulome. <br><i>Cell</i> DOI:10.1016/j.cell.2016.09.007 [<a href="http://www.cell.com/cell/abstract/S0092-8674(16)31237-5">link</a>]<br><br>
+
+Monk, J.M., Koza, A., Campodonico, M.A., Machado, D., Seoane, J.M., Palsson, B.O., et al. (2016)<br>
+Multi-omics Quantification of Species Variation of Escherichia coli Links Molecular Features with Strain Phenotypes.<br><i>Cell Systems</i> DOI:10.1016/j.cels.2016.08.013 [<a href="http://www.cell.com/cell-systems/abstract/S2405-4712(16)30290-3">link</a>]<br><br>
+
+Caspeta, L., Chen, Y., Ghiaci, P. et al. (2014)<br> Altered sterol composition renders yeast thermotolerant.<br> <i>Science</i> 346:75. DOI:10.1126/science.1258137 [<a href="http://www.sciencemag.org/content/346/6205/75.full.html">link</a>]<br><br>
+
+Gatto, F., Nookaew, I. and Nielsen, J. (2014)<br> Chromosome 3p loss of heterozygosity is associated with a unique metabolic network in clear cell renal carcinoma.<br> <i>PNAS</i> DOI:10.1073/pnas.1319196111 [<a href="http://www.pnas.org/content/early/2014/02/14/1319196111.full.pdf+html">link</a>]<br><br>
+
+Gatto, F., Schulze, A. and Nielsen, J. (2016)<br>
+Systematic Analysis Reveals that Cancer Mutations Converge on Deregulated Metabolism of Arachidonate and Xenobiotics.<br> <i>Cell Reports</i> 16:3. DOI:10.1016/j.celrep.2016.06.038 [<a href="http://www.cell.com/cell-reports/fulltext/S2211-1247(16)30792-6">link</a>]<br><br>
+
+V&auml;remo, L., Scheele, C., Broholm, C., Mardinoglu, A., et al. (2015)<br> Proteome- and transcriptome-driven reconstruction of the human myocyte metabolic network and its use for identification of markers for diabetes.<br> <i>Cell Reports.</i> 11:6. DOI:10.1016/j.celrep.2015.04.010 [<a href="http://www.cell.com/cell-reports/abstract/S2211-1247(15)00385-X">link</a>]<br><br>
+
+
+Rudolph, K.L.M., Schmitt, B.M., Villar, D., White, R.J., Marioni, J.C., Kutter, C. and Odom, D.T. (2016)<br>Codon-Driven Translational Efficiency Is Stable across Diverse Mammalian Cell States.<br> <i>PLOS Genetics.</i> DOI:10.1371/journal.pgen.1006024 [<a href="http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006024">link</a>]<br><br>
+
+Tyakht, A.V., Kostryukova, E.S., Popenko, A.S., et al. (2013)<br> Human gut microbiota community structures in urban and rural populations in Russia.<br> <i>Nature Communications.</i> 4:2469. DOI:10.1038/ncomms3469 [<a href="http://www.nature.com/ncomms/2013/130916/ncomms3469/full/ncomms3469.html">link</a>]<br><br>
+
+Mardinoglu, A., Agren, R., Kampf, C. et al. (2014)<br> Genome-scale metabolic modelling of hepatocytes reveals serine deficiency in patients with non-alcoholic fatty liver disease.<br> <i>Nature Communications.</i> 5:3083 DOI:10.1038/ncomms4083 [<a href="http://www.nature.com/ncomms/2014/140114/ncomms4083/full/ncomms4083.html">link</a>]<br><br>
+
+Shoaie, S., Karlsson, F., Mardinoglu, A., et al. (2013)<br> Understanding the interactions between bacteria in the human gut through metabolic modeling.<br> <i>Scientific Reports.</i> 3:2532. DOI:10.1038/srep02532 [<a href="http://www.nature.com/srep/2013/130828/srep02532/full/srep02532.html?WT.ec_id=SREP-631-20130902">link</a>]<br><br>
+
+Kildegaard, K.R, Hallstr&ouml;m, B.M, Blicher, T.H. et al. (2014)<br> Evolution reveals a glutathione-dependent mechanism of 3-hydroxypropionic acid tolerance.<br> <i>Metabolic Engineering</i> 26 DOI:10.1016/j.ymben.2014.09.004 [<a href="http://www.sciencedirect.com/science/article/pii/S1096717614001189">link</a>]<br><br>
+
+Nam, D. (2015)<br> Effect of the absolute statistic on gene-sampling gene-set analysis methods.<br> <i>Statistical Methods in Medical Research.</i> DOI:10.1177/0962280215574014 [<a href="http://smm.sagepub.com/content/early/2015/02/27/0962280215574014.abstract">link</a>]<br><br>
+
+</td>
+</tr></table>
+   </div>
+   
+   <br><br><center>
+<hr noshade size=1>
+<font size="2">This work was carried out at  <a href="http://www.sysbio.se">Systems and Synthetic Biology</a> at  <a href="http://www.chalmers.se/en/Pages/default.aspx">Chalmers University of Technology</a>, Gothenburg, Sweden.</font>
+</center><br><br><br>
+   
+   
+   </td>
+   <td width="70"></td>
+</tr>
+</table>
+</td></tr></table>
+<br><br>
+
+
+
+</body>
+</html>
