@@ -63,6 +63,10 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                      ))
             ),
             tabPanel(title="Gene-set table", value="tab_gsares",
+                     div(id="loading_tab_gsares",
+                         HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
+                     ),
+                     hidden(div(id="tab_gsares",
                      HTML("<table style='border-collapse:separate; border-spacing:10px;'><tr><td>"),
                      h4(textOutput("gsaresTableText")),
                      HTML("</td><td>"),
@@ -79,8 +83,13 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                                    HTML('p-value<label class="switch"><input type="checkbox" onclick="Shiny.onInputChange(\'toggle_p\', Math.random())"><span class="slider round"></span></label>'),
                                    HTML('Gene-set statistic<label class="switch"><input type="checkbox" onclick="Shiny.onInputChange(\'toggle_stats\', Math.random())"><span class="slider round"></span></label>')
                      )
+                     ))
             ),
             tabPanel(title="Gene-set summary", value="tab_gssum",
+                     div(id="loading_tab_gssum",
+                         HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
+                     ),
+                     hidden(div(id="tab_gssum",
                      fluidRow(column(12,
                                      HTML("<table style='border-collapse:separate; border-spacing:10px;'><tr><td>"),
                                      h4(textOutput("text_selected_gs")),
@@ -118,8 +127,13 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                                       #plotOutput("gsRunningSum")
                             )
                      ))
+                     ))
             ),
             tabPanel(title="Gene table", value="tab_genetable",
+                     div(id="loading_tab_genetable",
+                         HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
+                     ),
+                     hidden(div(id="tab_genetable",
                      HTML("<table style='border-collapse:separate; border-spacing:10px;'><tr><td>"),
                      h4(textOutput("geneTableText")),
                      HTML("</td><td>"),
@@ -135,8 +149,13 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                                    uiOutput("ncharSlider"),
                                    HTML("</td><td width='10px'></td><td>(Hold pointer over a cell to see full content)</td></tr></table>")
                      )
+                     ))
             ),
             tabPanel(title="Gene summary", value="tab_geneinfo",
+                     div(id="loading_tab_geneinfo",
+                         HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
+                     ),
+                     hidden(div(id="tab_geneinfo",
                      fluidRow(column(12,
                                      HTML("<table style='border-collapse:separate; border-spacing:10px;'><tr><td>"),
                                      h4(textOutput("text_selected_gene")),
@@ -152,6 +171,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                      actionLink("filter_gs", "View gene-sets in table"),
                      htmlOutput("text_gene_gene_sets2")
                      )
+                     ))
             ),
             tabPanel(title="Network plot", value="tab_nwplot",
                      HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>networkPlot</tt> funtion in R.")
@@ -588,16 +608,21 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
         tmp <- length(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats)
         sliderInput("maxNcharGenetable", NULL, 10, 1000, 50, round=T, step=1, ticks=F, width="300px")
       })
-      outputOptions(output, "ncharSlider", suspendWhenHidden=FALSE)
+      outputOptions(output, "ncharSlider", suspendWhenHidden=FALSE, priority=10)
       
       output$geneTable <- DT::renderDataTable({apply(rval$gene_table,2,function(x) {
-                                                                          paste("<div title='",ifelse(is.na(x),"",x),
-                                                                                "' class='DT_genetable_cell'><p>",
-                                                                                ifelse(is.na(x),"",substr(x,1,input$maxNcharGenetable)),
-                                                                                ifelse(is.na(x),"",ifelse(nchar(x)>input$maxNcharGenetable,"...","")),
-                                                                                "</div>",sep="")
-                                                                        }
-                                                     )
+                                                  if(is.null(input$maxNcharGenetable)) {
+                                                    tmp <- 50
+                                                  } else {
+                                                    tmp <- input$maxNcharGenetable
+                                                  }
+                                                  paste("<div title='",ifelse(is.na(x),"",x),
+                                                        "' class='DT_genetable_cell'><p>",
+                                                        ifelse(is.na(x),"",substr(x,1,tmp)),
+                                                        ifelse(is.na(x),"",ifelse(nchar(x)>tmp,"...","")),
+                                                        "</div>",sep="")
+                                                }
+                                                )
                                                }, 
         server=T, escape=F, 
         selection=list(mode='single', target='row'),
@@ -672,6 +697,15 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       
       hide("loading_tab_gsainfo")
       show("tab_gsainfo")
+      hide("loading_tab_gsares")
+      show("tab_gsares")
+      hide("loading_tab_gssum")
+      show("tab_gssum")
+      hide("loading_tab_genetable")
+      show("tab_genetable")
+      hide("loading_tab_geneinfo")
+      show("tab_geneinfo")
+      
       
     }
   )
