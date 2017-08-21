@@ -13,7 +13,8 @@ export(
   consensusHeatmap,
   runGSAhyper,
   GSAheatmap,
-  writeFilesForKiwi
+  writeFilesForKiwi,
+  exploreGSAres
 )
 
 S3method(print, ArrayData)
