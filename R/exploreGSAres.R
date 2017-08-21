@@ -6,6 +6,8 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
 # ===================================================================================    
     # ui
     ui <- fluidPage(
+      useShinyjs(),
+      
       includeCSS(system.file("shiny", "css", "cosmo.css", package="piano")),
       includeCSS(system.file("shiny", "css", "toggle_switch.css", package="piano")),
       includeCSS(system.file("shiny", "css", "style.css", package="piano")),
@@ -24,6 +26,10 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
           tabsetPanel(id="tabset1",
             type = "tabs", 
             tabPanel(title="Run info", value="tab_gsainfo",
+                     div(id="loading_tab_gsainfo",
+                         HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
+                         ),
+                     hidden(div(id="tab_gsainfo",
                      HTML("<br>"),
                      column(5,
                             wellPanel(style="background-color: #ffffff;",
@@ -54,6 +60,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                           or a few gene-sets?</div>")
                             )
                      )
+                     ))
             ),
             tabPanel(title="Gene-set table", value="tab_gsares",
                      HTML("<table style='border-collapse:separate; border-spacing:10px;'><tr><td>"),
@@ -147,12 +154,10 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                      )
             ),
             tabPanel(title="Network plot", value="tab_nwplot",
-                     #plotOutput("nwPlot", width="100%", height="800px")
-                     HTML("<br><br>This feautere is currently unavailable but will be added soon! For now, use the <tt>networkPlot</tt> funtion in R.")
+                     HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>networkPlot</tt> funtion in R.")
             ),
             tabPanel(title="Heatmap", value="tab_heatmap",
-                     #plotOutput("heatmap", width="100%", height="800px")
-                     HTML("<br><br>This feautere is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
+                     HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
             )
           )
         )
@@ -583,6 +588,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
         tmp <- length(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats)
         sliderInput("maxNcharGenetable", NULL, 10, 1000, 50, round=T, step=1, ticks=F, width="300px")
       })
+      outputOptions(output, "ncharSlider", suspendWhenHidden=FALSE)
       
       output$geneTable <- DT::renderDataTable({apply(rval$gene_table,2,function(x) {
                                                                           paste("<div title='",ifelse(is.na(x),"",x),
@@ -663,6 +669,10 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       #output$heatmap <- renderPlot({    
       #  GSAheatmap(gsares, ncharLabel=400, cex=2)
       #})
+      
+      hide("loading_tab_gsainfo")
+      show("tab_gsainfo")
+      
     }
   )
   
