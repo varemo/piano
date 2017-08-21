@@ -38,4 +38,4 @@ importFrom(igraph, graph.adjacency, ecount, vcount, ends, layout_with_fr, layout
 importFrom(fgsea, fgsea)
 importFrom(DT, dataTableOutput, renderDataTable, selectRows, dataTableProxy)
 importFrom(htmlwidgets, JS)
-importFrom(shinyjs, useShinyjs)
+importFrom(shinyjs, useShinyjs, hidden, show, hide)
