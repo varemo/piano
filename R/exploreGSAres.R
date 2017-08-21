@@ -630,7 +630,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       output$info_selected_gene <- renderUI({
         HTML(paste("<b>Gene-level statistic:</b>",gsares$geneLevelStats[rval$sel_gene,],"<br>",
                    "<b>Direction:</b>",ifelse(is.na(gsares_directions[rval$sel_gene,]),"NA",ifelse(gsares_directions[rval$sel_gene,]>0,"Up","Down")),"<br>",
-                   paste("<b>",colnames(genetable_all)[-c(1,2,3,4)], ":</b>",t(genetable_all[rval$sel_gene,-c(1,2,3,4)]), collapse="<br>"))
+                   ifelse(ncol(genetable_all)>4,paste("<b>",colnames(genetable_all)[-c(1,2,3,4)], ":</b>",t(genetable_all[rval$sel_gene,-c(1,2,3,4)]), collapse="<br>"),""))
         )
       })
       
