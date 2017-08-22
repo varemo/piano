@@ -73,7 +73,7 @@ calcGeneSetStat <- function(selectedStats, method, statistics=NULL, gseaParam) {
    # PAGE:
    } else if(method == "page") {
       mu <- mean(statistics)
-      delta <- sd(statistics)
+      delta <- stats::sd(statistics)
       Sm <- mean(selectedStats)
       m <- length(selectedStats)
       geneSetStatistic <- (Sm - mu)*sqrt(m)/delta

@@ -117,7 +117,7 @@ checkLoadArg <- function(statistics,
    
    if(statMethod == "page") {
       for(i in 1:ncol(statistics)) {
-         if(sd(statistics[,i]) > 1e300) {
+         if(stats::sd(statistics[,i]) > 1e300) {
             stop("standard deviation of geneLevelStats is close to infinity, for geneSetStat 'page' all gene-set statistics will be zero, change geneLevelStats or geneSetStat")  
          }
       }
