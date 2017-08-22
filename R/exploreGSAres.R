@@ -1,5 +1,21 @@
 exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
   
+  # Argument checking:
+  if(class(gsares) != "GSAres") stop("argument gsares is not of class GSAres")
+  if(!is.logical(browser)) stop("argument browser is not a logical")
+  if(!is.null(geneAnnot)) {
+    if(sum(duplicated(geneAnnot[,1]))>0) stop("geneAnnot may not contain duplicated gene IDs")
+    if(sum(geneAnnot[,1]%in%rownames(gsares$geneLevelStats)) == 0) stop("no overlap between genes in geneAnnot and gsares")
+  }
+  
+  # Check packages now, otherwise delayed error during app browsing, if missing:
+  suppressMessages(suppressWarnings(tmp <- tryCatch(require("shiny"))))
+  if(!tmp) stop("missing package shiny")
+  suppressMessages(suppressWarnings(tmp <- tryCatch(require("shinyjs"))))
+  if(!tmp) stop("missing package shinyjs")
+  suppressMessages(suppressWarnings(tmp <- tryCatch(require("DT")))) 
+  if(!tmp) stop("missing package DT")
+  
   # App object with ui and server
   app <- shinyApp(
     
