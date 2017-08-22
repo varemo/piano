@@ -712,15 +712,15 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       #})
       
       hide("loading_tab_gsainfo")
-      show("tab_gsainfo")
+      showElement("tab_gsainfo")
       hide("loading_tab_gsares")
-      show("tab_gsares")
+      showElement("tab_gsares")
       hide("loading_tab_gssum")
-      show("tab_gssum")
+      showElement("tab_gssum")
       hide("loading_tab_genetable")
-      show("tab_genetable")
+      showElement("tab_genetable")
       hide("loading_tab_geneinfo")
-      show("tab_geneinfo")
+      showElement("tab_geneinfo")
       
       
     }
