@@ -36,6 +36,6 @@ importFrom(stats, fisher.test, median, model.matrix, p.adjust, pchisq, pnorm, pr
 importFrom(utils, capture.output, read.delim, write.table)
 importFrom(igraph, graph.adjacency, ecount, vcount, ends, layout_with_fr, layout_with_lgl, layout_with_kk, layout_with_graphopt, layout_in_circle)
 importFrom(fgsea, fgsea)
-importFrom(DT, dataTableOutput, renderDataTable, selectRows, dataTableProxy)
+importFrom(DT, selectRows, dataTableProxy)
 importFrom(htmlwidgets, JS)
 importFrom(shinyjs, useShinyjs, hidden, show, hide)
