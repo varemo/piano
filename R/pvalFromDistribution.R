@@ -85,31 +85,31 @@ pvalFromDistribution <- function(statType,statMethod,nGenes,nGenesUp,nGenesDn,gs
                nIndex <- nGenes[iGeneSet,iContrast]
                
                backgroundTestUp <- gsStatsAllTestUpPerm[[iContrast]][as.character(nIndex),]
-               zNormTestUp <- (gsStatsAllTestUp[iGeneSet,iContrast] - mean(backgroundTestUp))/sd(backgroundTestUp)
+               zNormTestUp <- (gsStatsAllTestUp[iGeneSet,iContrast] - mean(backgroundTestUp))/stats::sd(backgroundTestUp)
                pValuesAllUp[iGeneSet] <- 1 - pnorm(zNormTestUp)
                
                backgroundTestDn <- gsStatsAllTestDnPerm[[iContrast]][as.character(nIndex),]
-               zNormTestDn <- (gsStatsAllTestDn[iGeneSet,iContrast] - mean(backgroundTestDn))/sd(backgroundTestDn)
+               zNormTestDn <- (gsStatsAllTestDn[iGeneSet,iContrast] - mean(backgroundTestDn))/stats::sd(backgroundTestDn)
                pValuesAllDn[iGeneSet] <- 1 - pnorm(zNormTestDn)
             }
             
             # Mixed:
             nIndex <- nGenes[iGeneSet,iContrast]
             background <- gsStatsAbsPerm[[iContrast]][as.character(nIndex),]
-            zNorm <- (gsStatsAbs[iGeneSet,iContrast] - mean(background))/sd(background)
+            zNorm <- (gsStatsAbs[iGeneSet,iContrast] - mean(background))/stats::sd(background)
             pValuesAbs[iGeneSet] <- 1 - pnorm(zNorm)
             
             # Subset up:
             if(statType == "p-signed") {
                nIndex <- nGenesUp[iGeneSet,iContrast]
                background <- gsStatsUpPerm[[iContrast]][as.character(nIndex),]
-               zNorm <- (gsStatsUp[iGeneSet,iContrast] - mean(background))/sd(background)
+               zNorm <- (gsStatsUp[iGeneSet,iContrast] - mean(background))/stats::sd(background)
                pValuesUp[iGeneSet] <- 1 - pnorm(zNorm)
                
                # Subset dn:
                nIndex <- nGenesDn[iGeneSet,iContrast]
                background <- gsStatsDnPerm[[iContrast]][as.character(nIndex),]
-               zNorm <- (gsStatsDn[iGeneSet,iContrast] - mean(background))/sd(background)
+               zNorm <- (gsStatsDn[iGeneSet,iContrast] - mean(background))/stats::sd(background)
                pValuesDn[iGeneSet] <- 1 - pnorm(zNorm)
             }
          }

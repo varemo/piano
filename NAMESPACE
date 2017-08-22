@@ -21,16 +21,16 @@ S3method(print, GSC)
 S3method(print, GSAres)
 
 import(
-  BiocGenerics,
-  Biobase
+  BiocGenerics
 )
 
+importFrom(Biobase, exprs, featureNames, sampleNames)
 importFrom(gplots, heatmap.2, venn)
 importFrom(marray, maColorBar)
 importFrom(relations, relation_class_ids, relation_consensus)
 importFrom(grDevices, colorRampPalette, dev.new, dev.off, pdf, rainbow)
 importFrom(graphics, abline, barplot, layout, legend, lines, mtext, par, plot, plot.new, points, text, title)
-importFrom(stats, fisher.test, median, model.matrix, p.adjust, pchisq, pnorm, prcomp, qnorm, rnorm, sd, wilcox.test)
+importFrom(stats, fisher.test, median, model.matrix, p.adjust, pchisq, pnorm, prcomp, qnorm, rnorm, wilcox.test)
 importFrom(utils, capture.output, read.delim, write.table)
 importFrom(igraph, graph.adjacency, ecount, vcount, ends, layout_with_fr, layout_with_lgl, layout_with_kk, layout_with_graphopt, layout_in_circle)
 importFrom(fgsea, fgsea)
