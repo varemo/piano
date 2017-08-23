@@ -1,3 +1,87 @@
+#' Gene set analysis with Fisher's exact test
+#' 
+#' Performs gene set analysis (GSA) based on a list of significant genes and a
+#' gene set collection, using Fisher's exact test, returning the gene set
+#' p-values.
+#' 
+#' The statistical test performed is a one-tailed Fisher's exact test on the
+#' contingency table with columns "In gene set" and "Not in gene set" and rows
+#' "Significant" and "Non-significant" (this is equivalent to a hypergeometric
+#' test).
+#' 
+#' Command run for gene set i:
+#' 
+#' \code{fisher.test(res$contingencyTable[[i]], alternative="greater")},
+#' 
+#' the \code{res$contingencyTable} object is available from the object returned
+#' from \code{runGSAhyper}.
+#' 
+#' The main difference between \code{\link{runGSA}} and \code{runGSAhyper} is
+#' that \code{runGSA} uses the gene-level statistics (numerical values for each
+#' gene) to calculate the gene set p-values, whereas \code{runGSAhyper} only
+#' uses the group membership of each gene (in/not in gene set,
+#' significant/non-significant). This means that for \code{runGSAhyper} a
+#' p-value cut-off for determining significant genes has to be chosen by the
+#' user and after this, all significant genes will be seen as equally
+#' significant (i.e. the actual p-values are not used). The advantage with
+#' \code{runGSAhyper} is that you can use it to find enriched gene sets when
+#' you only have a list of interesting genes, without any statistics.
+#' 
+#' @param genes a vector of all genes in your experiment, or a small list of
+#' significant genes.
+#' @param pvalues a vector (or object to be coerced into one) of pvalues for
+#' genes or a binary vector with 0 for significant genes. Defaults to
+#' rep(0,length(genes)), i.e. genes is a vector of genes of interest.
+#' @param pcutoff p-value cutoff for significant genes. Defaults to 0 if
+#' pvalues are binary. If p-values are spread in [0,1] defaults to 0.05.
+#' @param universe a vector of genes that represent the universe. Defaults to
+#' genes if pvalues are not all 0. If pvalues are all 0, defaults to all unique
+#' genes in gsc.
+#' @param gsc a gene set collection given as an object of class \code{GSC} as
+#' returned by the \code{\link{loadGSC}} function.
+#' @param gsSizeLim a vector of length two, giving the minimum and maximum gene
+#' set size (number of member genes) to be kept for the analysis. Defaults to
+#' \code{c(1,Inf)}.
+#' @param adjMethod the method for adjusting for multiple testing. Can be any
+#' of the methods supported by \code{p.adjust}, i.e. \code{"holm"},
+#' \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+#' \code{"BY"}, \code{"fdr"} or \code{"none"}.
+#' @return A list-like object containing the following elements:
+#' 
+#' \item{pvalues}{a vector of gene set p-values} \item{p.adj}{a vector of gene
+#' set p-values, adjusted for multiple testing} \item{resTab}{a full result
+#' table} \item{contingencyTable}{a list of the contingency tables used for
+#' each gene set} \item{gsc}{the input gene set collection}
+#' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
+#' \email{piano.rpkg@@gmail.com}
+#' @seealso \pkg{\link{piano}}, \code{\link{loadGSC}}, \code{\link{runGSA}},
+#' \code{\link{fisher.test}}, \code{\link{phyper}}, \code{\link{networkPlot}}
+#' @examples
+#' 
+#'    # Load example input data (dummy p-values and gene set collection):
+#'    data("gsa_input")
+#'    
+#'    # Load gene set collection:
+#'    gsc <- loadGSC(gsa_input$gsc)
+#'    
+#'    # Randomly select 100 genes of interest (as an example):
+#'    genes <- sample(unique(gsa_input$gsc[,1]),100)
+#'       
+#'    # Run gene set analysis using Fisher's exact test:
+#'    res <- runGSAhyper(genes, gsc=gsc)
+#'    
+#'    # If you have p-values for the genes and want to make a cutoff for significance:
+#'    genes <- names(gsa_input$pvals) # All gene names
+#'    p <- gsa_input$pvals # p-values for all genes
+#'    res <- runGSAhyper(genes, p, pcutoff=0.001, gsc=gsc)
+#'    
+#'    # If the 20 first genes are the interesting/significant ones they can be selected
+#'    # with a binary vector:
+#'    significant <- c(rep(0,20),rep(1,length(genes)-20))
+#'    res <- runGSAhyper(genes, significant, gsc=gsc)
+#'    
+#'    
+#' 
 runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,Inf), adjMethod="fdr") {
    
    ## Argument checking:
