@@ -1,7 +1,9 @@
 CHANGES IN VERSION 1.18 (devel 1.17.x)
 -----------------------
 
-No changes yet!
+DOCUMENTATION
+
+    o Switched to accommodate documentation in r-files using roxygen
 
 CHANGES IN VERSION 1.16.2
 -------------------------
