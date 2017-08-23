@@ -1,3 +1,35 @@
+#' Explore GSA results
+#' 
+#' Explore GSA results interactively in a web browser using \code{shiny}.
+#' 
+#' Additional gene-level information, e.g. alternative names or description,
+#' can be supplied via the \code{geneAnnot} argument. This information will
+#' show up in the gene table and the gene summary tabs.
+#' 
+#' @param gsaRes an object of class \code{GSAres}, as returned from
+#' \code{runGSA()} or an object returned from \code{runGSAhyper()}.
+#' @param browser a logical, whether or not to open the Shiny app in a brwoser
+#' window. Set to \code{FALSE} to open an interactive window directly in
+#' RStudio.
+#' @param geneAnnot a \code{data.frame}, containing gene annotation. The first
+#' column should be gene IDs matching those in \code{gsares}.
+#' @author Leif Varemo \email{piano.rpkg@@gmail.com}
+#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}}
+#' @examples
+#' 
+#'    # Load example input data to GSA:
+#'    data("gsa_input")
+#'    
+#'    # Load gene set collection:
+#'    gsc <- loadGSC(gsa_input$gsc)
+#'       
+#'    # Run gene set analysis:
+#'    gsares <- runGSA(geneLevelStats=gsa_input$pvals , directions=gsa_input$directions, 
+#'                     gsc=gsc, nPerm=500)
+#'       
+#'    # Explore results:
+#'    exploreGSAres(gsares)
+#' 
 exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
   
   # Argument checking:
