@@ -17,4 +17,5 @@ License: GPL (>=2)
 biocViews: Microarray, Preprocessing, QualityControl, DifferentialExpression,
            Visualization, GeneExpression, GeneSetEnrichment, Pathways
 URL: http://www.sysbio.se/piano
+BugReports: https://github.com/varemo/piano/issues
 RoxygenNote: 6.0.1
