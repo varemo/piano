@@ -5,6 +5,20 @@ DOCUMENTATION
 
     o Switched to accommodate documentation in r-files using roxygen
 
+CHANGES IN VERSION 1.16.4
+-------------------------
+
+BUG FIXES
+
+    o  Fix R CMD check NOTE on calling require(snowfall)
+
+CHANGES IN VERSION 1.16.3
+-------------------------
+
+BUG FIXES
+
+    o Fix BiocGenerics::sd and stats::sd collision when loading
+    
 CHANGES IN VERSION 1.16.2
 -------------------------
 
@@ -15,8 +29,8 @@ BUG FIXES
       running sum was only positive or only negative, leading to that the if-statement
       broke due to missing values.
 
-CHANGES IN VERSION 1.16
------------------------
+CHANGES IN VERSION 1.16.1
+-------------------------
 
 BUG FIXES
 
