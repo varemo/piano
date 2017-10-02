@@ -1,9 +1,13 @@
-CHANGES IN VERSION 1.18 (devel 1.17.x)
------------------------
+CHANGES IN VERSION 1.18.0
+-------------------------
 
 DOCUMENTATION
 
     o Switched to accommodate documentation in r-files using roxygen
+    
+BUG FIXES
+
+    o Fix print addInfo for GSC bug
 
 CHANGES IN VERSION 1.16.4
 -------------------------
