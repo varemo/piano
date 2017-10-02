@@ -1,10 +1,28 @@
-CHANGES IN VERSION 1.18 (devel 1.17.x)
------------------------
+CHANGES IN VERSION 1.18.0
+-------------------------
 
 DOCUMENTATION
 
     o Switched to accommodate documentation in r-files using roxygen
+    
+BUG FIXES
 
+    o Fix print addInfo for GSC bug
+
+CHANGES IN VERSION 1.16.4
+-------------------------
+
+BUG FIXES
+
+    o  Fix R CMD check NOTE on calling require(snowfall)
+
+CHANGES IN VERSION 1.16.3
+-------------------------
+
+BUG FIXES
+
+    o Fix BiocGenerics::sd and stats::sd collision when loading
+    
 CHANGES IN VERSION 1.16.2
 -------------------------
 
@@ -15,8 +33,8 @@ BUG FIXES
       running sum was only positive or only negative, leading to that the if-statement
       broke due to missing values.
 
-CHANGES IN VERSION 1.16
------------------------
+CHANGES IN VERSION 1.16.1
+-------------------------
 
 BUG FIXES
 
