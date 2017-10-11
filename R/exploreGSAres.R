@@ -63,11 +63,10 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       fluidRow(
         column(8,
                h2(HTML("Explore gene-set analysis results"))
-               ),
-        column(4,
-               div(imageOutput(system.file("shiny", "loggo.png", package="piano"), height="70px"), style="text-align: right;")
-               #
-        )
+               )#,
+        #column(4,
+        #       div(imageOutput(system.file("shiny", "loggo.png", package="piano"), height="70px"), style="text-align: right;")
+        #)
       ),
       fluidRow(
         column(12,
@@ -277,11 +276,11 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                              visible_columns=gsatab_colnames[!gsatab_colnames%in%c(grep("p \\(",gsatab_colnames, value=T),grep("Stat",gsatab_colnames, value=T))])
       
       # -----------------------------------------------------------------------------
-      output$loggo <- renderImage({
-        filename <- "loggo.png"
-        list(src = filename,
-             alt = "PIANO")
-      }, deleteFile = FALSE)
+      #output$loggo <- renderImage({
+      #  filename <- "loggo.png"
+      #  list(src = filename,
+      #       alt = "PIANO")
+      #}, deleteFile = FALSE)
       
       
       # Run info --------------------------------------------------------------------
