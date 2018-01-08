@@ -1,3 +1,15 @@
+CHANGES IN VERSION 1.20.0
+-------------------------
+
+none yet
+
+CHANGES IN VERSION 1.18.1
+-------------------------
+
+BUG FIXES
+
+    o Fix parsing of gmt files when gene-set name contains spaces
+
 CHANGES IN VERSION 1.18.0
 -------------------------
 
