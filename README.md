@@ -1,7 +1,5 @@
 [![Downloads](http://bioconductor.org/shields/downloads/piano.svg)]()
-
 [![Years in BioC](http://bioconductor.org/shields/years-in-bioc/piano.svg)]()
-
 [![Build status release](http://bioconductor.org/shields/build/release/bioc/piano.svg)]()
 
 
