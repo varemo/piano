@@ -117,8 +117,8 @@ Install \pkg{piano} by typing in R:
 
 \begin{Schunk}
 \begin{Sinput}
-> source("http://www.bioconductor.org/biocLite.R")
-> biocLite("piano")
+> install.packages("BiocManager")
+> BiocManager::install("piano")
 \end{Sinput}
 \end{Schunk}
 
@@ -143,8 +143,7 @@ library(piano)
 
 \begin{Schunk}
 \begin{Sinput}
-> source("http://www.bioconductor.org/biocLite.R")
-> biocLite("piano", dependencies=TRUE)
+> BiocManager::install("piano", dependencies=TRUE)
 \end{Sinput}
 \end{Schunk}
 
@@ -154,8 +153,7 @@ If you plan to use \pkg{piano} for basic microarray analysis (e.g. normalization
 \begin{Schunk}
 \begin{Sinput}
 > pkgs <- c("yeast2.db", "limma", "affy", "plier", "affyPLM", "gtools", "plotrix")
-> source("http://www.bioconductor.org/biocLite.R")
-> biocLite(pkgs)
+> BiocManager::install(pkgs)
 \end{Sinput}
 \end{Schunk}
 
