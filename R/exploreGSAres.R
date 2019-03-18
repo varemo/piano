@@ -30,7 +30,7 @@
 #'    # Explore results:
 #'    exploreGSAres(gsares)
 #' 
-exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
+exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
   
   # Argument checking:
   if(class(gsares) != "GSAres") stop("argument gsares is not of class GSAres")
@@ -39,6 +39,15 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
     if(sum(duplicated(geneAnnot[,1]))>0) stop("geneAnnot may not contain duplicated gene IDs")
     if(sum(geneAnnot[,1]%in%rownames(gsares$geneLevelStats)) == 0) stop("no overlap between genes in geneAnnot and gsares")
   }
+  if(missing(genesets)) genesets <- list("No available gene-sets" = "No available gene-sets")
+  if(class(genesets)=="list") {
+    if(unique(unlist(lapply(genesets, class)))[1] != "character" | length(unique(unlist(lapply(genesets, class))))>1) stop("genesets has to be a character vector or a list of character vectors")
+  } else {
+    if(class(genesets) != "character") stop("genesets has to be a character vector or a list of character vectors")
+    genesets <- list(genesets)
+  }
+  if(is.null(names(genesets))) names(genesets) <- paste("Gene-set list", seq(from=1, to=length(genesets)))
+  if(any(names(genesets) == "")) names(genesets)[names(genesets)==""] <- paste("Gene-set list", seq(from=1, to=sum(names(genesets)=="")))
   
   # Check packages now, otherwise delayed error during app browsing, if missing:
   suppressMessages(suppressWarnings(tmp <- tryCatch(require("shiny"))))
@@ -47,6 +56,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
   if(!tmp) stop("missing package shinyjs")
   suppressMessages(suppressWarnings(tmp <- tryCatch(require("DT")))) 
   if(!tmp) stop("missing package DT")
+  
   
   # App object with ui and server
   app <- shinyApp(
@@ -221,15 +231,137 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                      ))
             ),
             tabPanel(title="Network plot", value="tab_nwplot",
-                     HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>networkPlot</tt> funtion in R.")
+                     HTML("<br>"),
+                     fluidRow(column(8,
+                                     wellPanel(style="background-color: #ffffff; height: 85vh",
+                                               visNetworkOutput("network", width = "100%", height = "100%")
+                                     )
+                              ),
+                              column(4,
+                                     wellPanel(style="background-color: #ffffff",
+                                               fluidRow(column(12,
+                                                        HTML("<h4>Gene-set p-value to display</h4>")
+                                                        )
+                                               ),
+                                               fluidRow(column(6, 
+                                                        selectInput("network_class", HTML("<b>P-value class</b>"),
+                                                                     choices = list("Distinct directional" = "distinct_both", 
+                                                                                     "Mixed directional up" = "mixed_up",
+                                                                                     "Mixed directional down" = "mixed_down",
+                                                                                     "Non directional" = "non_NULL"), 
+                                                                     selected = "non_NULL")
+                                                        ),
+                                                        column(6, 
+                                                        selectInput("network_adjusted", HTML("<b>P-value adjustment</b>"),
+                                                                     choices = list("Adjusted p-value" = TRUE, 
+                                                                                    "Non-adjusted p-value" = FALSE), 
+                                                                     selected = TRUE)
+                                                        )
+                                               )
+                                     ),
+                                     wellPanel(style="background-color: #ffffff",
+                                               fluidRow(column(12,HTML("<h4>Gene-set selection</h4>"))),
+                                               fluidRow(column(6,
+                                                        selectInput("geneset_selection","Choose an option",
+                                                                    choices=list("Select by significance cutoff"="significance",
+                                                                                 "Select from predefined list"="list"),
+                                                                    selected="significance")       
+                                               ),
+                                               column(6,
+                                                      conditionalPanel('input.geneset_selection=="significance"',
+                                                      numericInput("network_significance", "Significance cutoff", 0.001, 
+                                                                   min=0, max=1, step=0.001)),
+                                                      conditionalPanel('input.geneset_selection=="list"',
+                                                                       selectInput("network_genesetlist", label="Select gene-sets from list",
+                                                                  choices=setNames(as.list(names(genesets)),names(genesets))))
+                                               )
+                                               ),
+                                               fluidRow(column(12,HTML("<b>Maximum allowed nodes</b>"),
+                                                        numericInput("maxAllowedNodes", NULL, 50, 
+                                                                     min=0, max=Inf, step=1, width="100px")
+                                                        )
+                                               )
+                                     ),
+                                     wellPanel(style="background-color: #ffffff",
+                                               fluidRow(column(12,HTML("<h4>Network layout</h4>"))),
+                                               fluidRow(column(8,
+                                                        selectInput("layout", label=NULL,
+                                                                    choices=list("Default (visNetwork)"="visNetwork",
+                                                                                 "Nicely (igraph)"="layout_nicely",
+                                                                                 "Fruchterman-Reingold (igraph)"="layout_with_fr",
+                                                                                 "Kamada-Kawai (igraph)"="layout_with_kk",
+                                                                                 "Sugiyama (igraph)"="layout_with_sugiyama",
+                                                                                 "Star (igraph)"="layout_as_star",
+                                                                                 "Circle (igraph)"="layout_in_circle",
+                                                                                 "Grid (igraph)"="layout_on_grid"
+                                                                                 ),
+                                                                    selected="visNetwork")
+                                                        ),
+                                                        column(4,
+                                                        conditionalPanel("input.layout == 'visNetwork' | input.layout == 'layout_nicely' | input.layout == 'layout_with_fr'",       
+                                                                                actionButton("layout_seed",label="Generate new layout", class="btn btn-primary btn-xs")
+                                                        )       
+                                                        )
+                                               ),
+                                               fluidRow(column(12,
+                                                        HTML('<b>Physics simulation: </b><label class="switch"><input type="checkbox" onclick="Shiny.onInputChange(\'physics\', Math.random())" checked><span class="slider round"></span></label>')
+                                               )
+                                               )
+                                     ),
+                                     wellPanel(style="background-color: #ffffff",
+                                               fluidRow(column(12,HTML("<h4>Node properties</h4>"))),
+                                               fluidRow(column(12,
+                                                        sliderInput("nodeSize", label="Size range", min=1, max=100, value=c(10,40), ticks=F)
+                                                        )
+                                               ),
+                                               fluidRow(column(3,
+                                                        selectInput("labelSize", label="Label size",
+                                                                    choices=list("Off"=0,
+                                                                                 "8"=8,
+                                                                                 "10"=10,
+                                                                                 "14"=14,
+                                                                                 "18"=18,
+                                                                                 "22"=22,
+                                                                                 "30"=30,
+                                                                                 "40"=40),
+                                                                    selected=22)
+                                                        ),
+                                                        column(9,HTML("<br>"),
+                                                        checkboxInput("truncate_labels", label="Truncate long labels", FALSE)
+                                                        )
+                                               )
+                                     ),
+                                     wellPanel(style="background-color: #ffffff",
+                                               fluidRow(column(12,HTML("<h4>Edge properties</h4>"))),
+                                               fluidRow(column(12,
+                                                        sliderInput("edgeWidth", label="Width range", min=1, max=50, value=c(1,15), ticks=F)
+                                                        )
+                                               ),
+                                               fluidRow(column(12,HTML("<b>Required node overlap to draw edge</b>"))),
+                                               fluidRow(column(3,
+                                                        numericInput("edge_overlap", label=NULL, value=30, min=0, max=Inf)
+                                                        ),
+                                                        column(9,
+                                                        selectInput("genes_or_percent", label=NULL,
+                                                                    choices=list("genes"="genes",
+                                                                                 "% of smallest gene-set in pair"="percent"),
+                                                                    selected="percent")
+                                                        )
+                                               )
+                                     )
+                              )
+                     )
             ),
             tabPanel(title="Heatmap", value="tab_heatmap",
+                     HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
+            ),
+            tabPanel(title="Help", value="tab_help",
                      HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
             )
           )
         )
       )
-    ), 
+    ),
 
 # ===================================================================================    
     # server
@@ -273,7 +405,8 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
                              red_gene="",
                              gene_table=genetable_all,
                              log_gs_plots=FALSE,
-                             visible_columns=gsatab_colnames[!gsatab_colnames%in%c(grep("p \\(",gsatab_colnames, value=T),grep("Stat",gsatab_colnames, value=T))])
+                             visible_columns=gsatab_colnames[!gsatab_colnames%in%c(grep("p \\(",gsatab_colnames, value=T),grep("Stat",gsatab_colnames, value=T))],
+                             physics=TRUE)
       
       # -----------------------------------------------------------------------------
       #output$loggo <- renderImage({
@@ -287,7 +420,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       output$text_runinfo1 <- renderUI({ 
         tmp <- gsares$info
         info <- c(
-          "<h4>Gene/gene-set info:</h4>",
+          "<h4>Gene/gene-set info</h4>",
           paste("<b>Input:</b>",tmp$removedGSnoGenes + tmp$removedGSsizeLimit + tmp$nGeneSets,"gene-sets,",tmp$nGenesStatistics,"genes<br>"),
           paste("- Removed",tmp$removedGSsizeLimit,"gene-sets not matching the size limits<br>"),
           paste("- Removed",tmp$removedGenesGSC,"genes from GSC due to lack of matching gene-level statistics<br>"),
@@ -300,7 +433,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       output$text_runinfo2 <- renderUI({ 
         tmp <- gsares$info
         info <- c(
-          "<h4>Analysis details:</h4>",
+          "<h4>Analysis details</h4>",
           paste("<b>Total run time:</b>",round(gsares$runtime[3]/60,2),"min<br>"),
           paste("<b>GSA method:</b>",gsares$geneSetStat,"<br>"),
           paste("<b>Gene-set statistic name:</b>",gsares$gsStatName,"<br>"),
@@ -430,8 +563,8 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
         rownames(tmp) <- tmp[,1]
         tmp <- rbind(
         rev(c(tmp["Stat (dist.dir.dn)",2],tmp["Stat (mix.dir.dn)",2],tmp["Stat (non-dir)",2],tmp["Stat (mix.dir.up)",2],tmp["Stat (dist.dir.up)",2])),
-        rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])),
-        rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2]))
+        format(rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])), digits=3, scientific=T),
+        format(rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2])), digits=3, scientific=T)
         )
         rownames(tmp) <- c("Gene-set statistic","p-value","Adjusted p-value")
         colnames(tmp) <- rev(c("Distinct directional (down)","Mixed directional (down)","Non-directional","Mixed directional (up)", "Distinct directional (up)"))
@@ -733,9 +866,38 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL) {
       })
       
       # Network plot --------------------------------------------------------------------
-      #output$nwPlot <- renderPlot({    
-      #  networkPlot(gsares, class="non")
-      #})
+      
+      output$network <- renderVisNetwork({
+        
+        if(input$geneset_selection=="significance") {
+          network_significance <- input$network_significance
+          network_genesetlist <- NULL
+        } else if(input$geneset_selection=="list") {
+          network_significance <- 1
+          network_genesetlist <- genesets[[input$network_genesetlist]]
+        }
+       
+        networkPlot2(gsares, 
+                     class=unlist(strsplit(input$network_class,"_"))[1], 
+                     direction=unlist(strsplit(input$network_class,"_"))[2], 
+                     adjusted=as.logical(input$network_adjusted),
+                     significance=network_significance,
+                     geneSets=network_genesetlist,
+                     nodeSize=input$nodeSize,
+                     labelSize=input$labelSize,
+                     ncharLabel=ifelse(input$truncate_labels,10,Inf),
+                     lay=input$layout,
+                     physics=rval$physics,
+                     seed=input$layout_seed,
+                     edgeWidth=input$edgeWidth,
+                     overlap=switch(input$genes_or_percent, genes=input$edge_overlap, percent=input$edge_overlap/100),
+                     maxAllowedNodes=input$maxAllowedNodes
+                     )
+      })
+      
+      observeEvent(input$physics, {
+        rval$physics <- ifelse(rval$physics,FALSE,TRUE)
+      })
       
       # Heatmap -------------------------------------------------------------------------
       #output$heatmap <- renderPlot({    
