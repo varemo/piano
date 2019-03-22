@@ -1,7 +1,7 @@
 networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0.001, geneSets=NULL, overlap=0.1, 
                          lay="visNetwork", physics=T, label="names", labelSize=22, ncharLabel=25, nodeSize=c(10,40), 
-                         edgeWidth=c(1,15), edgeColor=NULL, scoreColors=NULL, naColor="#CCCCCC", main, submain, seed=1,
-                         maxAllowedNodes=Inf) {
+                         edgeWidth=c(1,15), edgeColor=NULL, scoreColors=NULL, naColor="yellow", main, submain, seed=1,
+                         maxAllowedNodes=Inf, shiny=FALSE) {
   
   test <- 1 # Which contrast? Currently only one allowed!
   
@@ -53,6 +53,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
                "layout_with_graphopt","layout_with_lgl","layout_with_mds",
                "1","2","3","4","5","6","7","8")) stop("layout not recognized")
   
+  
   #########################################################
   # Adds possibility to use output object from runGSAhyper:
   if(length(gsaRes) == 5) {
@@ -84,6 +85,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
       pValues <- apply(abs(cbind(gsaRes$pAdjDistinctDirUp[,test],gsaRes$pAdjDistinctDirDn[,test])),1,min,na.rm=TRUE)
       tmp     <- apply(abs(cbind(gsaRes$pAdjDistinctDirUp[,test],gsaRes$pAdjDistinctDirDn[,test])),1,which.min)==2
       pValues[pValues == 0] <- min(c(min(pValues[pValues>0])/10,1e-10))
+      pValues[pValues == 1] <- 1/(1+1e-10)
       pValues[tmp] <- -pValues[tmp]
     }
     if(pValue == "mix") pValues <- gsaRes$pAdjNonDirectional[,test]
@@ -97,6 +99,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
       pValues <- apply(abs(cbind(gsaRes$pDistinctDirUp[,test],gsaRes$pDistinctDirDn[,test])),1,min,na.rm=TRUE)
       tmp     <- apply(abs(cbind(gsaRes$pDistinctDirUp[,test],gsaRes$pDistinctDirDn[,test])),1,which.min)==2
       pValues[pValues == 0] <- min(c(min(pValues[pValues>0])/10,1e-10))
+      pValues[pValues == 1] <- 1/(1+1e-10)
       pValues[tmp] <- -pValues[tmp]
     }
     if(pValue == "mix") pValues <- gsaRes$pNonDirectional[,test]
@@ -112,6 +115,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   
   # Alt. 1. Select user defined gene sets:
   if(!is.null(geneSets)) {
+    if(!all(geneSets %in% geneSetNames)) stop("argument geneSets not matching gene-set names in argument gsaRes")
     indSelected <- which(geneSetNames %in% geneSets)
     if(!missing(significance)) warning("argument significance will not be used when argument geneSets is supplied")
     
@@ -182,7 +186,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   eWidth <- (edgeOverlap-min(edgeOverlap))/(max(edgeOverlap)-min(edgeOverlap))*(edgeWidth[2]-edgeWidth[1])+edgeWidth[1]
 
   # Edge color:
-  if(is.null(edgeColor)) edgeColor = c("gray90","gray65","gray40")
+  if(is.null(edgeColor)) edgeColor = c("gray90","gray80","gray70","gray60","gray50","gray40")
   tmp <- seq(min(edgeOverlap), max(edgeOverlap), length.out=length(edgeColor)+1)
   eColor <- rep(edgeColor[1],ecount(g))
   for(i in 2:length(edgeColor)) {
@@ -193,10 +197,11 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   vSize <- (gsSize-min(gsSize))/(max(gsSize)-min(gsSize))*(nodeSize[2]-nodeSize[1])+nodeSize[1]
   
   # Node color:
+  colorLegendInfo <- list()
   if(pValue == "dirupdn") {
     if(is.null(scoreColors)) {
-      tmp1 <- c('mistyrose','tomato','red')
-      tmp2 <- c('azure','cornflowerblue','blue')
+      tmp1 <- c('white','mistyrose','tomato','red')
+      tmp2 <- c('white','azure','cornflowerblue','blue')
       gradColorsUp <- colorRampPalette(tmp1,interpolate="linear")(100)
       gradColorsDn <- colorRampPalette(tmp2,interpolate="linear")(100)
     } else {
@@ -208,15 +213,19 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     }
     vColor <- rep(NA,length(pSelectedLog10))
     tmp <- pSelectedLog10[pSelectedLog10 > 0 & !is.na(pSelectedLog10)]
-    vColor[pSelectedLog10 > 0 & !is.na(pSelectedLog10)] <- gradColorsUp[round(rescale(tmp,c(1,100),c(-1e-8,max(tmp))))]
+    vColor[pSelectedLog10 > 0 & !is.na(pSelectedLog10)] <- gradColorsUp[round(rescale(tmp,c(1,100),c(-1e-8,max(abs(pSelectedLog10),3,na.rm=T))))]
     tmp <- abs(pSelectedLog10[pSelectedLog10 < 0 & !is.na(pSelectedLog10)])
-    vColor[pSelectedLog10 < 0 & !is.na(pSelectedLog10)] <- gradColorsDn[round(rescale(tmp,c(1,100),c(-1e-8,max(tmp))))]
+    vColor[pSelectedLog10 < 0 & !is.na(pSelectedLog10)] <- gradColorsDn[round(rescale(tmp,c(1,100),c(-1e-8,max(abs(pSelectedLog10),3,na.rm=T))))]
+    
+    colorLegendInfo$colors <- c(rev(gradColorsDn),gradColorsUp)
+    colorLegendInfo$range <- max(abs(pSelectedLog10),3,na.rm=T)*c(-1,1)
+    
   } else {
     if(is.null(scoreColors)) {
       if(direction=="up") {
-        tmp <- c('mistyrose','tomato','red')
+        tmp <- c('white','mistyrose','tomato','red')
       } else if(direction=="down") {
-        tmp <- c('azure','cornflowerblue','blue')
+        tmp <- c('white','azure','cornflowerblue','blue')
       } else {
         tmp <- c('#DDFABA','#55D800')
       }
@@ -226,7 +235,10 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     }
     gradColors <- colorRampPalette(tmp,interpolate="linear")(100)
     vColor <- rep(NA, length(pSelectedLog10))
-    vColor[!is.na(pSelectedLog10)] <- gradColors[round(rescale(pSelectedLog10[!is.na(pSelectedLog10)],c(1,100),c(-1e-8,max(pSelectedLog10,na.rm=T))))]
+    vColor[!is.na(pSelectedLog10)] <- gradColors[round(rescale(pSelectedLog10[!is.na(pSelectedLog10)],c(1,100),c(-1e-8,max(pSelectedLog10,3,na.rm=T))))]
+    
+    colorLegendInfo$colors <- gradColors
+    colorLegendInfo$range <- c(0,max(pSelectedLog10,3,na.rm=T))
   }
   vColor[is.na(vColor)] <- naColor
 
@@ -243,7 +255,19 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   else if(label == "numbers") vLabels <- 1:length(indSelected)
   else if(label == "numbersAndSizes") vLabels <- paste(1:length(indSelected)," (",gsSize,")",sep="")
   else if(label == "namesAndSizes") vLabels <- paste(tmp," (",gsSize,")",sep="")
-
+  
+  # Node hover text:
+  if(shiny) {
+    tmp <- paste("<a href='#'"," onclick='Shiny.onInputChange(",'"links_genesets_click", "',names(gsc)[indSelected],'"',");'",">",names(gsc)[indSelected],"</a>",sep="")
+  } else {
+    tmp <- names(gsc)[indSelected]
+  }
+  if(pValue=="dirupdn") {
+    tmp2 <- paste("<br>Direction:",ifelse(sign(pSelected)<0,"Down","Up"))
+  } else {
+    tmp2 <- "" 
+  }
+  vHoverText <- paste(tmp, "<br>p-value: ", format(abs(pSelected),scientific=T,digits=3),tmp2,"<br>Genes: ", gsSize, sep="")
   
   #*********************************************
   # Predefined layouts:
@@ -295,7 +319,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   vn$nodes$size <- vSize
   vn$nodes$label <- vLabels
   vn$nodes$color <- vColor
-  vn$nodes$title <- paste(vn$nodes$geneSetNames,"<br>p-value: ", format(abs(pSelected),scientific=T,digits=3),"<br>Genes: ", gsSize, sep="")
+  vn$nodes$title <- vHoverText
   
   # Edge attributes:
   if(nrow(vn$edges)>0) {
@@ -307,25 +331,30 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   # Plot:
   if(lay=="visNetwork" | lay==1) {
     res <- visNetwork(nodes=vn$nodes, edges=vn$edges, main=main, submain=submain) %>%
-      visNodes(font=list(size=as.character(labelSize),face="arial")) %>%
+      visNodes(font=list(size=as.character(labelSize),face="arial"), shadow=T) %>%
       visLayout(randomSeed=seed) %>%
       visPhysics(enabled=physics)
   } else {
     res <- visNetwork(nodes=vn$nodes, edges=vn$edges, main=main, submain=submain) %>%
-      visNodes(font=list(size=as.character(labelSize),face="arial")) %>%
+      visNodes(font=list(size=as.character(labelSize),face="arial"), shadow=T) %>%
       visIgraphLayout(layout=lay, physics=physics, randomSeed=seed)
   }
   
   # Draw / optionally return object for later drawing:
+  res$colorLegendInfo <- colorLegendInfo
   res
   
   # Examples of reusing res later:
   # Draw same again:
   # visNetwork(res$x$nodes,res$x$edges)
+  # os simly just:
+  # res
   # Draw only essential, rest is default:
   # visNetwork(res$x$nodes[,c("id","label")],res$x$edges[,c("from","to")])
   # Add custom options:
   # visNetwork(res$x$nodes[,c("id","label")],res$x$edges[,c("from","to")]) %>% visIgraphLayout("layout_in_circle")
+  # Other example:
+  # res %>% visNodes(shadow=F)
   # Display number to gene-set name mapping:
   # res$x$nodes[,c("id","geneSetNames")]
 }
