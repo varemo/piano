@@ -57,31 +57,74 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
   suppressMessages(suppressWarnings(tmp <- tryCatch(require("DT")))) 
   if(!tmp) stop("missing package DT")
   
+  # Set needed variables for network plot:
+  selectable_classes_network <- list()
+  if(!all(is.na(gsares$pDistinctDirUp)) | !all(is.na(gsares$pDistinctDirDn))) {
+     selectable_classes_network$"Distinct directional" <- "distinct_both"
+  }
+  if(!all(is.na(gsares$pNonDirectional))) {
+    selectable_classes_network$"Non directional" <- "non_NULL"
+  }
+  if(!all(is.na(gsares$pMixedDirUp)) | !all(is.na(gsares$pMixedDirDn))) {
+    selectable_classes_network$"Mixed directional up" <- "mixed_up"
+    selectable_classes_network$"Mixed directional down" <- "mixed_down"
+  }
+  
+  selected_class_network <- selectable_classes_network[[1]]
+  
+  if(selected_class_network == "distinct_both") {
+    cutoff_network <- signif(sort(c(gsares$pAdjDistinctDirUp,gsares$pAdjDistinctDirDn), decreasing=F)[20],2)
+  } else if(selected_class_network == "non_NULL") {
+    cutoff_network <- signif(sort(gsares$pAdjNonDirectional, decreasing=F)[20],2)
+  } else if(selected_class_network == "mixed_up") {
+    cutoff_network <- signif(sort(c(gsares$pAdjMixedDirUp), decreasing=F)[20],2)
+  }
+  if(cutoff_network==0) cutoff_network <- 1e-6
+  
   
   # App object with ui and server
   app <- shinyApp(
     
 # ===================================================================================    
     # ui
-    ui <- fluidPage(
+
+#     ui <- fluidPage(
+ui <- dashboardPage(
+      dashboardHeader(disable=T),
+      dashboardSidebar(disable=T),
+      dashboardBody(navbarPage("Explore your GSA results",selected="tab_gsainfo",
+
       useShinyjs(),
       
       includeCSS(system.file("shiny", "css", "cosmo.css", package="piano")),
       includeCSS(system.file("shiny", "css", "toggle_switch.css", package="piano")),
       includeCSS(system.file("shiny", "css", "style.css", package="piano")),
       
-      fluidRow(
-        column(8,
-               h2(HTML("Explore gene-set analysis results"))
-               )#,
-        #column(4,
-        #       div(imageOutput(system.file("shiny", "loggo.png", package="piano"), height="70px"), style="text-align: right;")
-        #)
-      ),
-      fluidRow(
-        column(12,
-          tabsetPanel(id="tabset1",
-            type = "tabs", 
+      tags$head(
+        tags$style(
+          HTML(".shiny-notification {
+                    position:fixed;
+                    top: calc(25%);
+                    left: calc(25%);
+                    width: 300px;
+               }"
+          )
+          )
+          ),
+      
+      # fluidRow(
+      #   column(8,
+      #          h2(HTML("Explore gene-set analysis results"))
+      #          )#,
+      #   #column(4,
+      #   #       div(imageOutput(system.file("shiny", "loggo.png", package="piano"), height="70px"), style="text-align: right;")
+      #   #)
+      # ),
+      #HTML("<br>"),
+      #fluidRow(
+        #column(12,
+          #tabsetPanel(id="tabset1",
+            #type = "tabs", 
             tabPanel(title="Run info", value="tab_gsainfo",
                      div(id="loading_tab_gsainfo",
                          HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
@@ -100,7 +143,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                             )
                      ),
                      column(7,
-                            wellPanel(style="background-color: #ffffff; max-width: 1200px; overflow-y:scroll; max-height: calc(100vh - 200px)",
+                            wellPanel(style="background-color: #ffffff; max-width: 1200px; overflow-y:scroll; max-height: 85vh",
                                       HTML("<h4>Summary plots</h4>"),
                                       plotOutput("gsc_boxplot1", height="340px", width="100%"),
                                       HTML("<div style='max-width: 600px'><b>Fig 1. Number of <font color='#009900'>genes</font> per <font color='#9966ff'>gene-set</font>.</b>
@@ -131,7 +174,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                      HTML("</td></tr></table>"),
                      DT::dataTableOutput('gsaresTable',height="100%"),
                      absolutePanel(id="controls", class="panel panel-default", fixed=TRUE,
-                                   draggable=F, top=150, left=20, right="auto", bottom="auto",
+                                   draggable=F, top=120, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
                                    actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
                                    HTML("<span style='display:inline-block; width: 100px;'></span><b>Toggle columns:</b><span style='display:inline-block; width: 30px;'></span>"),
@@ -155,33 +198,51 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                                      HTML("</td></tr></table>")
                      )),
                      fluidRow(column(5,
-                                     wellPanel(style="background-color: #ffffff;",
-                                               tableOutput('gsTable2')
+                                     fluidRow(column(6,
+                                                     wellPanel(style="background-color: #ffffff;",
+                                                               HTML("<b>Gene-set stats</b><br><br>"),
+                                                               tableOutput('gsTable2')
+                                                     )
+                                                     ),
+                                              column(6,
+                                                     wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 660px",
+                                                               HTML("<b>Gene-set neighbors</b><br><br>"),
+                                                               HTML("Number of overlapping genes:"),
+                                                               uiOutput('gsNeighborsSlider'),
+                                                               actionLink("filter_gs2", "View gene-sets in table"),
+                                                               uiOutput('gsNeighbors')
+                                                     )
+                                                     )
                                      ),
-                                     wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 400px",
-                                       htmlOutput('gsNgenes'),
-                                       htmlOutput('link_view_gene'),
-                                       uiOutput("links_gsGenes")
-                                     ),
-                                     wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 400px",
-                                               HTML("<b>Gene-set neighbors</b>"),
-                                               HTML("<table width='100%'><tr><td>Number of overlapping genes:</td><td align='left'>"),
-                                               uiOutput('gsNeighborsSlider'),
-                                               HTML("</td></tr></table>"),
-                                               actionLink("filter_gs2", "View gene-sets in table"),
-                                               uiOutput('gsNeighbors')
+                                     fluidRow(column(12,
+                                                     wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 400px",
+                                                               htmlOutput('gsNgenes'),
+                                                               htmlOutput('link_view_gene'),
+                                                               uiOutput("links_gsGenes")
+                                                     )
+                                                     )
                                      )
+                                     
+                                     
+                                     
                      ),
                      column(7,
-                            wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 1200px",
+                            tabBox(width="100%",
+                            #wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 1200px",
+                                #      tabsetPanel(id="tabset_2", type="tabs",
+                                                  tabPanel(title="Histogram", value="tab_histogram",
                                       HTML("<center><b>Histogram of all gene-level statistics,<br>"),
                                       HTML("and indiviual values for genes in selected gene-set.</b></center>"),
                                       plotOutput("gsHist", click=clickOpts(id="gsHist_click")),
                                       htmlOutput("geneStatType"), # just needed so that output.geneStatType is set... hacky
-                                      conditionalPanel(condition="output.geneStatType == '<em></em>'", plotOutput("gsHist2", click=clickOpts(id="gsHist_click2"))),
+                                      conditionalPanel(condition="output.geneStatType == '<em></em>'", plotOutput("gsHist2", click=clickOpts(id="gsHist_click2")))
+                                                  ),
+                                      tabPanel(title="Boxplots", value="tab_boxplots",
                                       HTML("<center><b>Boxplots of gene-level statistics</b></center>"),
                                       plotOutput("gsBoxplots", click=clickOpts(id="gsBoxplots_click"))
                                       #plotOutput("gsRunningSum")
+                                 #     )
+                                      )
                             )
                      ))
                      ))
@@ -198,7 +259,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                      HTML("</td></tr></table>"),
                      DT::dataTableOutput('geneTable', height="100%"),
                      absolutePanel(id="controls", class="panel panel-default", fixed=TRUE,
-                                   draggable=F, top=160, left=20, right="auto", bottom="auto",
+                                   draggable=F, top=100, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
                                    HTML("<table><tr><td>"),
                                    actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
@@ -231,25 +292,24 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                      ))
             ),
             tabPanel(title="Network plot", value="tab_nwplot",
+                     div(id="loading_tab_nwplot",
+                         HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
+                     ),
+                     hidden(div(id="tab_nwplot",
                      HTML("<br>"),
                      fluidRow(column(8,
                                      wellPanel(style="background-color: #ffffff; height: 85vh",
-                                               visNetworkOutput("network", width = "100%", height = "100%")
+                                                visNetworkOutput("network", width = "100%", height = "80vh")
                                      )
                               ),
                               column(4,
-                                     wellPanel(style="background-color: #ffffff",
-                                               fluidRow(column(12,
-                                                        HTML("<h4>Gene-set p-value to display</h4>")
-                                                        )
-                                               ),
+                                     #wellPanel(style="background-color: #ffffff",
+                                     box(title="Gene-set p-value to display", status="primary", collapsible=T, width="100%",
+                                               #fluidRow(column(12,HTML("<h4>Gene-set p-value to display</h4>"))),
                                                fluidRow(column(6, 
                                                         selectInput("network_class", HTML("<b>P-value class</b>"),
-                                                                     choices = list("Distinct directional" = "distinct_both", 
-                                                                                     "Mixed directional up" = "mixed_up",
-                                                                                     "Mixed directional down" = "mixed_down",
-                                                                                     "Non directional" = "non_NULL"), 
-                                                                     selected = "non_NULL")
+                                                                     choices = selectable_classes_network, 
+                                                                     selected = selected_class_network)
                                                         ),
                                                         column(6, 
                                                         selectInput("network_adjusted", HTML("<b>P-value adjustment</b>"),
@@ -259,17 +319,18 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                                                         )
                                                )
                                      ),
-                                     wellPanel(style="background-color: #ffffff",
-                                               fluidRow(column(12,HTML("<h4>Gene-set selection</h4>"))),
+                                     #wellPanel(style="background-color: #ffffff",
+                                     box(title="Gene-set selection", status="primary", collapsible=T, width="100%",
+                                               #fluidRow(column(12,HTML("<h4>Gene-set selection</h4>"))),
                                                fluidRow(column(6,
-                                                        selectInput("geneset_selection","Choose an option",
-                                                                    choices=list("Select by significance cutoff"="significance",
-                                                                                 "Select from predefined list"="list"),
+                                                        selectInput("geneset_selection","Select gene-set by",
+                                                                    choices=list("Significance cutoff"="significance",
+                                                                                 "Predefined list"="list"),
                                                                     selected="significance")       
                                                ),
                                                column(6,
                                                       conditionalPanel('input.geneset_selection=="significance"',
-                                                      numericInput("network_significance", "Significance cutoff", 0.001, 
+                                                      numericInput("network_significance", "Significance cutoff", cutoff_network, 
                                                                    min=0, max=1, step=0.001)),
                                                       conditionalPanel('input.geneset_selection=="list"',
                                                                        selectInput("network_genesetlist", label="Select gene-sets from list",
@@ -282,8 +343,9 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                                                         )
                                                )
                                      ),
-                                     wellPanel(style="background-color: #ffffff",
-                                               fluidRow(column(12,HTML("<h4>Network layout</h4>"))),
+                                     #wellPanel(style="background-color: #ffffff",
+                                     box(title="Network layout", status="primary", collapsible=T, width="100%",
+                                               #fluidRow(column(12,HTML("<h4>Network layout</h4>"))),
                                                fluidRow(column(8,
                                                         selectInput("layout", label=NULL,
                                                                     choices=list("Default (visNetwork)"="visNetwork",
@@ -308,8 +370,9 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                                                )
                                                )
                                      ),
-                                     wellPanel(style="background-color: #ffffff",
-                                               fluidRow(column(12,HTML("<h4>Node properties</h4>"))),
+                                     #wellPanel(style="background-color: #ffffff",
+                                     box(title="Node properties", status="primary", collapsible=T, width="100%", collapsed=T,          
+                                               #fluidRow(column(12,HTML("<h4>Node properties</h4>"))),
                                                fluidRow(column(12,
                                                         sliderInput("nodeSize", label="Size range", min=1, max=100, value=c(10,40), ticks=F)
                                                         )
@@ -331,8 +394,9 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                                                         )
                                                )
                                      ),
-                                     wellPanel(style="background-color: #ffffff",
-                                               fluidRow(column(12,HTML("<h4>Edge properties</h4>"))),
+                                     #wellPanel(style="background-color: #ffffff",
+                                     box(title="Edge properties", status="primary", collapsible=T, width="100%", collapsed=T,
+                                               #fluidRow(column(12,HTML("<h4>Edge properties</h4>"))),
                                                fluidRow(column(12,
                                                         sliderInput("edgeWidth", label="Width range", min=1, max=50, value=c(1,15), ticks=F)
                                                         )
@@ -350,18 +414,27 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                                                )
                                      )
                               )
+                     ),
+                     absolutePanel(id="nw_color_legend", class="panel panel-default", fixed=TRUE,
+                                   draggable=F, top=100, left=20, right="auto", bottom="auto",
+                                   width = 400, height=50, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
+                                   plotOutput("network_color_legend", width="400px", height="50px")
                      )
+                     ))
             ),
             tabPanel(title="Heatmap", value="tab_heatmap",
                      HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
             ),
             tabPanel(title="Help", value="tab_help",
                      HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
-            )
-          )
-        )
+            ),
+          #)
+        #)
+      #),
+      absolutePanel(bottom="10px", right="10px", fixed=T,
+                    HTML(paste("<center><font color='#888888'>This page was generated by the exploreGSAres function in piano v",packageVersion("piano"),"</center>",sep=""))
       )
-    ),
+    ))),
 
 # ===================================================================================    
     # server
@@ -387,6 +460,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
         colnames(genetable_all) <- c("Gene ID","Gene-level statistic","Sign (FC direction)","In gene-sets", colnames(geneAnnot)[-1])
         rownames(genetable_all) <- genetable_all[,1]
       }
+      if(all(is.na(genetable_all[,"Sign (FC direction)"]))) genetable_all <- genetable_all[,!colnames(genetable_all)%in%"Sign (FC direction)"]
       
       gsatab_colnames <- c("Name", "Genes (tot)", "Stat (dist.dir)", "Stat (dist.dir.up)", "p (dist.dir.up)", "p adj (dist.dir.up)",
                            "Stat (dist.dir.dn)", "p (dist.dir.dn)", "p adj (dist.dir.dn)", "Stat (non-dir.)", "p (non-dir.)", "p adj (non-dir.)",
@@ -406,7 +480,8 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                              gene_table=genetable_all,
                              log_gs_plots=FALSE,
                              visible_columns=gsatab_colnames[!gsatab_colnames%in%c(grep("p \\(",gsatab_colnames, value=T),grep("Stat",gsatab_colnames, value=T))],
-                             physics=TRUE)
+                             physics=TRUE,
+                             colorLegendInfo=NULL)
       
       # -----------------------------------------------------------------------------
       #output$loggo <- renderImage({
@@ -535,7 +610,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
                                                     "}"),
                                                     dom = 'frtip',
                                                     deferRender=TRUE,
-                                                    scrollY="calc(100vh - 330px)",
+                                                    scrollY="calc(100vh - 250px)",
                                                     scrollX=T,
                                                     scroller=TRUE
                                                 ))
@@ -558,27 +633,26 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
       
       # Tables with info:
       output$gsTable2 <- renderTable({
-        tmp <- geneSetSummary(gsares,rval$sel_gs)
-        tmp <- tmp$stats
-        rownames(tmp) <- tmp[,1]
-        tmp <- rbind(
-        rev(c(tmp["Stat (dist.dir.dn)",2],tmp["Stat (mix.dir.dn)",2],tmp["Stat (non-dir)",2],tmp["Stat (mix.dir.up)",2],tmp["Stat (dist.dir.up)",2])),
-        format(rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])), digits=3, scientific=T),
-        format(rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2])), digits=3, scientific=T)
-        )
-        rownames(tmp) <- c("Gene-set statistic","p-value","Adjusted p-value")
-        colnames(tmp) <- rev(c("Distinct directional (down)","Mixed directional (down)","Non-directional","Mixed directional (up)", "Distinct directional (up)"))
+        tmp <- GSAsummaryTable(gsares)[,-1]
+        tmp <- tmp[names(gsares$gsc)==rval$sel_gs,gsatab_colnames[gsatab_colnames%in%colnames(tmp)]]
         t(tmp)
-      }, rownames=T)
+        # tmp <- geneSetSummary(gsares,rval$sel_gs)
+        # tmp <- tmp$stats
+        # rownames(tmp) <- tmp[,1]
+        # tmp <- rbind(
+        # rev(c(tmp["Stat (dist.dir.dn)",2],tmp["Stat (mix.dir.dn)",2],tmp["Stat (non-dir)",2],tmp["Stat (mix.dir.up)",2],tmp["Stat (dist.dir.up)",2])),
+        # format(rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])), digits=3, scientific=T),
+        # format(rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2])), digits=3, scientific=T)
+        # )
+        # rownames(tmp) <- c("Gene-set statistic","p-value","Adjusted p-value")
+        # colnames(tmp) <- rev(c("Distinct directional (down)","Mixed directional (down)","Non-directional","Mixed directional (up)", "Distinct directional (up)"))
+        # t(tmp)
+      }, rownames=T,colnames=F)
       
       output$gsNgenes <- renderUI({
         tmp <- geneSetSummary(gsares,rval$sel_gs)
         tmp <- paste("<b>The gene-set contains ",tmp$stats[tmp$stats$Name=="Genes (tot)",2],
-                     " genes </b>(",
-                     tmp$stats[tmp$stats$Name=="Genes (up)",2],
-                     " up, ",
-                     tmp$stats[tmp$stats$Name=="Genes (dn)",2],
-                     " down) <br>",
+                     " genes </b><br>",
                      sep=""
         )
         HTML(tmp)
@@ -588,17 +662,15 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
       output$link_view_gene <- renderUI({
         if(rval$red_gene!="") {
           list(
-            actionLink("view_genes_table",paste("View genes in table")),
-            HTML("<br>"),
             HTML(paste("Selected:",rval$red_gene)),
             actionLink("view_gene","(view details)"),
-            HTML("<br><br>")
+            HTML("<br><br>"),
+            actionLink("view_genes_table",paste("View genes in table"))
           )
         } else if(rval$red_gene=="") {
           list(
-            actionLink("view_genes_table",paste("View genes in table")),
-            HTML("<br>"),
-            HTML("<em><font color='#ff0000'>You can click genes below, or in the plots to the right...</font></em><br><br>")
+            HTML("<em><font color='#ff0000'>You can click genes below, or in the plots to the right...</font></em><br><br>"),
+            actionLink("view_genes_table",paste("View genes in table"))
           )
         }
       })
@@ -817,7 +889,7 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
         "}"),
         dom = 'frtip',
         deferRender=TRUE,
-        scrollY="calc(100vh - 330px)",
+        scrollY="calc(100vh - 240px)",
         scrollX=T,
         scroller=TRUE)
       )
@@ -876,29 +948,67 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
           network_significance <- 1
           network_genesetlist <- genesets[[input$network_genesetlist]]
         }
-       
-        networkPlot2(gsares, 
-                     class=unlist(strsplit(input$network_class,"_"))[1], 
-                     direction=unlist(strsplit(input$network_class,"_"))[2], 
-                     adjusted=as.logical(input$network_adjusted),
-                     significance=network_significance,
-                     geneSets=network_genesetlist,
-                     nodeSize=input$nodeSize,
-                     labelSize=input$labelSize,
-                     ncharLabel=ifelse(input$truncate_labels,10,Inf),
-                     lay=input$layout,
-                     physics=rval$physics,
-                     seed=input$layout_seed,
-                     edgeWidth=input$edgeWidth,
-                     overlap=switch(input$genes_or_percent, genes=input$edge_overlap, percent=input$edge_overlap/100),
-                     maxAllowedNodes=input$maxAllowedNodes
-                     )
+        print(network_genesetlist)
+        nwPlot <- try(suppressWarnings(networkPlot2(gsares, 
+                               class=unlist(strsplit(input$network_class,"_"))[1], 
+                               direction=unlist(strsplit(input$network_class,"_"))[2], 
+                               adjusted=as.logical(input$network_adjusted),
+                               significance=network_significance,
+                               geneSets=network_genesetlist,
+                               nodeSize=input$nodeSize,
+                               labelSize=input$labelSize,
+                               ncharLabel=ifelse(input$truncate_labels,10,Inf),
+                               lay=input$layout,
+                               physics=rval$physics,
+                               seed=input$layout_seed,
+                               edgeWidth=input$edgeWidth,
+                               overlap=switch(input$genes_or_percent, genes=input$edge_overlap, percent=input$edge_overlap/100),
+                               maxAllowedNodes=input$maxAllowedNodes,
+                               shiny=T,
+                               main=NULL,
+                               submain=NULL)), silent=T)
+        if(class(nwPlot)[1]=="try-error") {
+          nw_notification_text <- gsub(".*: (.*)","\\1",nwPlot[1])
+          if(grepl("less than two gene sets were selected, can not plot",nwPlot[1])) {
+            nw_notification_text <- "For the given parameters, less than two gene sets were selected. Try adjusting the significance cutoff."  
+          } else if(grepl("the selected parameters results in a network with more than",nwPlot[1])) {
+            nw_notification_text <- paste("The selected parameters results in a network with more than",input$maxAllowedNodes,
+                                          "nodes (gene-sets). Drawing large networks requires more memory, if you want to continue, increase the value of 'Maximum allowed nodes'",
+                                          "or adjust the parameters to generate a smaller network, e.g. by decreasing the 'Significance cutoff'.",
+                                          "Tip: Turn off the 'Physics simulation' for faster drawing of large networks.")
+          }
+          
+          showNotification(nw_notification_text,
+                           id="nw_notification",
+                           duration=NULL,
+                           closeButton=T,
+                           type="error")
+          rval$colorLegendInfo <- NULL # to fail (= hide) the colorlegend plot
+          cat() # needed to avoid visNetwork error print in console
+        } else {
+          removeNotification("nw_notification")
+          rval$colorLegendInfo <- nwPlot$colorLegendInfo
+          suppressWarnings(nwPlot)
+        }
       })
       
       observeEvent(input$physics, {
         rval$physics <- ifelse(rval$physics,FALSE,TRUE)
       })
       
+      output$network_color_legend <- renderPlot({
+        plotColorLegend <- function() {
+        par(mar=c(2,0,0,0), oma=c(0,0,0,0))
+        plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", yaxt="n", ylim=c(0,1), xlim=rval$colorLegendInfo$range)
+        xleft <- seq(from=rval$colorLegendInfo$range[1], to=rval$colorLegendInfo$range[2], length.out=length(rval$colorLegendInfo$colors))
+        xright <- xleft + abs(xleft[1]-xleft[2])
+        rect(xleft,0,xright,1, col=rval$colorLegendInfo$colors, border=NA)
+        }
+        tmp <- try(plotColorLegend(), silent=T)
+        if(class(tmp)[1]=="try-error") plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", axes=F)
+      })
+      
+    
       # Heatmap -------------------------------------------------------------------------
       #output$heatmap <- renderPlot({    
       #  GSAheatmap(gsares, ncharLabel=400, cex=2)
@@ -914,6 +1024,8 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
       showElement("tab_genetable")
       hide("loading_tab_geneinfo")
       showElement("tab_geneinfo")
+      hide("loading_tab_nwplot")
+      showElement("tab_nwplot")
       
       
     }
