@@ -55,7 +55,7 @@ geneSetSummary <- function(gsaRes, geneSet) {
                           obj$nGenesDn[gsInd,test], obj$statMixedDirDn[gsInd,test], obj$pMixedDirDn[gsInd,test],
                           obj$pAdjMixedDirDn[gsInd,test]), stringsAsFactors=FALSE)
    
-   names <- c("Genes (tot)", "Stat (dist.dir.)", "Stat (dist.dir.up)", "p (dist.dir.up)", "p adj (dist.dir.up)", "Stat (dist.dir.dn)",
+   names <- c("Genes (tot)", "Stat (dist.dir)", "Stat (dist.dir.up)", "p (dist.dir.up)", "p adj (dist.dir.up)", "Stat (dist.dir.dn)",
               "p (dist.dir.dn)", "p adj (dist.dir.dn)","Stat (non-dir)", "p (non-dir)", "p adj (non-dir)", "Genes (up)",
               "Stat (mix.dir.up)", "p (mix.dir.up)", "p adj (mix.dir.up)", "Genes (dn)", "Stat (mix.dir.dn)",
               "p (mix.dir.dn)", "p adj (mix.dir.dn)")
