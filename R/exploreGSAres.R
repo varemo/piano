@@ -92,26 +92,8 @@ exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
 ui <- dashboardPage(
       dashboardHeader(disable=T),
       dashboardSidebar(disable=T),
-      dashboardBody(navbarPage("Explore your GSA results",selected="tab_gsainfo",
+      dashboardBody(navbarPage("Explore your GSA results",id="navbarpage",selected="tab_gsainfo", collapsible=T,
 
-      useShinyjs(),
-      
-      includeCSS(system.file("shiny", "css", "cosmo.css", package="piano")),
-      includeCSS(system.file("shiny", "css", "toggle_switch.css", package="piano")),
-      includeCSS(system.file("shiny", "css", "style.css", package="piano")),
-      
-      tags$head(
-        tags$style(
-          HTML(".shiny-notification {
-                    position:fixed;
-                    top: calc(25%);
-                    left: calc(25%);
-                    width: 300px;
-               }"
-          )
-          )
-          ),
-      
       # fluidRow(
       #   column(8,
       #          h2(HTML("Explore gene-set analysis results"))
@@ -126,16 +108,34 @@ ui <- dashboardPage(
           #tabsetPanel(id="tabset1",
             #type = "tabs", 
             tabPanel(title="Run info", value="tab_gsainfo",
+                     useShinyjs(),
+                     includeCSS("css/cosmo.css"),
+                     includeCSS("css/toggle_switch.css"),
+                     includeCSS("css/style.css"),
+                     #includeCSS(system.file("shiny", "css", "cosmo.css", package="piano")),
+                     #includeCSS(system.file("shiny", "css", "toggle_switch.css", package="piano")),
+                     #includeCSS(system.file("shiny", "css", "style.css", package="piano")),
+                     tags$head(
+                       tags$style(
+                         HTML(".shiny-notification {
+                    position:fixed;
+                    top: calc(25%);
+                    left: calc(25%);
+                    width: 300px;
+                    }"
+                         )
+                       )
+                     ),
                      div(id="loading_tab_gsainfo",
                          HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
                          ),
                      hidden(div(id="tab_gsainfo",
                      HTML("<br>"),
                      column(5,
-                            wellPanel(style="background-color: #ffffff;",
+                            box(title="Gene/gene-set info", status="primary", width="100%",
                                       htmlOutput("text_runinfo1")
                             ),
-                            wellPanel(style="background-color: #ffffff;",
+                            box(title="Analysis details", status="primary", width="100%",
                                       htmlOutput("text_runinfo2")
                             ),
                             wellPanel(style="background-color: #E2F3FF;",
@@ -143,25 +143,27 @@ ui <- dashboardPage(
                             )
                      ),
                      column(7,
-                            wellPanel(style="background-color: #ffffff; max-width: 1200px; overflow-y:scroll; max-height: 85vh",
-                                      HTML("<h4>Summary plots</h4>"),
-                                      plotOutput("gsc_boxplot1", height="340px", width="100%"),
-                                      HTML("<div style='max-width: 600px'><b>Fig 1. Number of <font color='#009900'>genes</font> per <font color='#9966ff'>gene-set</font>.</b>
+                            tabBox(width="100%",
+                                   tabPanel("Gene-set size", value="gene_set_size_hist",
+                                            plotOutput("gsc_boxplot1", height="340px", width="100%"),
+                                            HTML("<div style='max-width: 600px'><b>Number of <font color='#009900'>genes</font> per <font color='#9966ff'>gene-set</font>.</b>
                           Gives you an idea about sizes of the gene-sets used in the analysis.
                           Are you looking at small specific gene-sets with few genes, or large
                           general gene-sets? Note that these stats are <em>after</em> filtering the
                           input GSC according to available gene-level statistics and the gsSizeLim parameter.
-                          <br><br></div>"),
-                                      plotOutput("gsc_boxplot2", height="340px", width="100%"),
-                                      HTML("<div style='max-width: 600px'><b>Fig 2. Number of <font color='#9966ff'>gene-sets</font> per <font color='#009900'>gene</font>.</b> 
+                          <br><br></div>")
+                                   ),
+                                   tabPanel("Gene-set redundency", value="gene_set_redundency_hist",
+                                            plotOutput("gsc_boxplot2", height="340px", width="100%"),
+                                            HTML("<div style='max-width: 600px'><b>Number of <font color='#9966ff'>gene-sets</font> per <font color='#009900'>gene</font>.</b> 
                           Gives you a general overview of how many gene-sets each gene belongs to.
                           Do you have many genes contributing to a lot of overlap between gene-sets, 
                           or do you have very uniquely defined gene-sets where genes only appear in one
                           or a few gene-sets?</div>")
+                                   )
                             )
                      )
-                     ))
-            ),
+            ))),
             tabPanel(title="Gene-set table", value="tab_gsares",
                      div(id="loading_tab_gsares",
                          HTML("<br><br><center><h3>",c("Just hold on a sec","Please wait","Just a moment")[sample(1:3,1)],"</h3><h4>Loading your results...</h4></center>")
@@ -173,8 +175,8 @@ ui <- dashboardPage(
                      uiOutput("gsaresTableText2"),
                      HTML("</td></tr></table>"),
                      DT::dataTableOutput('gsaresTable',height="100%"),
-                     absolutePanel(id="controls", class="panel panel-default", fixed=TRUE,
-                                   draggable=F, top=120, left=20, right="auto", bottom="auto",
+                     absolutePanel(id="controls", class="panel panel-default", fixed=FALSE,
+                                   draggable=F, top=110, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
                                    actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
                                    HTML("<span style='display:inline-block; width: 100px;'></span><b>Toggle columns:</b><span style='display:inline-block; width: 30px;'></span>"),
@@ -198,34 +200,25 @@ ui <- dashboardPage(
                                      HTML("</td></tr></table>")
                      )),
                      fluidRow(column(5,
-                                     fluidRow(column(6,
-                                                     wellPanel(style="background-color: #ffffff;",
-                                                               HTML("<b>Gene-set stats</b><br><br>"),
+                                     fluidRow(column(12,
+                                                     box(title="Gene-set stats", status="primary", width="100%",
                                                                tableOutput('gsTable2')
-                                                     )
                                                      ),
-                                              column(6,
-                                                     wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 660px",
-                                                               HTML("<b>Gene-set neighbors</b><br><br>"),
+                                                     box(title="Genes", status="primary", width="100%",
+                                                         htmlOutput('gsNgenes'),
+                                                         htmlOutput('link_view_gene'),
+                                                         uiOutput("links_gsGenes")
+                                                     ),
+                                                     box(title="Gene-set neighbors", status="primary", width="100%",
                                                                HTML("Number of overlapping genes:"),
                                                                uiOutput('gsNeighborsSlider'),
                                                                actionLink("filter_gs2", "View gene-sets in table"),
+                                                               HTML("(also makes gene-sets available in network plot)"),
                                                                uiOutput('gsNeighbors')
                                                      )
-                                                     )
-                                     ),
-                                     fluidRow(column(12,
-                                                     wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 400px",
-                                                               htmlOutput('gsNgenes'),
-                                                               htmlOutput('link_view_gene'),
-                                                               uiOutput("links_gsGenes")
-                                                     )
-                                                     )
+                                            )
                                      )
-                                     
-                                     
-                                     
-                     ),
+                            ),
                      column(7,
                             tabBox(width="100%",
                             #wellPanel(style="background-color: #ffffff; overflow-y:scroll; max-height: 1200px",
@@ -237,7 +230,7 @@ ui <- dashboardPage(
                                       htmlOutput("geneStatType"), # just needed so that output.geneStatType is set... hacky
                                       conditionalPanel(condition="output.geneStatType == '<em></em>'", plotOutput("gsHist2", click=clickOpts(id="gsHist_click2")))
                                                   ),
-                                      tabPanel(title="Boxplots", value="tab_boxplots",
+                                      tabPanel(title="Boxplot", value="tab_boxplots",
                                       HTML("<center><b>Boxplots of gene-level statistics</b></center>"),
                                       plotOutput("gsBoxplots", click=clickOpts(id="gsBoxplots_click"))
                                       #plotOutput("gsRunningSum")
@@ -258,14 +251,14 @@ ui <- dashboardPage(
                      uiOutput("geneTableText2"),
                      HTML("</td></tr></table>"),
                      DT::dataTableOutput('geneTable', height="100%"),
-                     absolutePanel(id="controls", class="panel panel-default", fixed=TRUE,
-                                   draggable=F, top=100, left=20, right="auto", bottom="auto",
+                     absolutePanel(id="controls", class="panel panel-default", fixed=FALSE,
+                                   draggable=F, top=110, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
-                                   HTML("<table><tr><td>"),
                                    actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
-                                   HTML("<span style='display:inline-block; width: 100px;'></td><td><b>Max characters per column:</b><span style='display:inline-block; width: 10px;'></td><td>"),
-                                   uiOutput("ncharSlider"),
-                                   HTML("</td><td width='10px'></td><td>(Hold pointer over a cell to see full content)</td></tr></table>")
+                                   HTML("<span style='display:inline-block; width: 100px;'></span>"),
+                                   HTML('<b>Truncate long: </b><label class="switch"><input type="checkbox" onclick="Shiny.onInputChange(\'truncate_gene_table\', Math.random())" checked><span class="slider round"></span></label>'),
+                                   HTML("<span style='display:inline-block; width: 5px;'></span>"),
+                                   HTML("(Hold pointer over a cell to see full content)")
                      )
                      ))
             ),
@@ -281,14 +274,23 @@ ui <- dashboardPage(
                                      actionLink("link_tab_genetable", "Select another gene"),
                                      HTML("</td></tr></table>")                
                      )),
-                     wellPanel(style="background-color: #ffffff; max-width: 700px",
-                     htmlOutput("info_selected_gene")
+                     fluidRow(column(6,
+                                     box(title="Gene stats", status="primary", width="100%",
+                                               htmlOutput("info_selected_gene")
+                                               
+                                     ),
+                                     box(title="Gene-set info", status="primary", width="100%",
+                                               htmlOutput("text_gene_gene_sets1"),
+                                               actionLink("filter_gs", "View gene-sets in table"),
+                                               HTML("(also makes gene-sets available in network plot)"),
+                                               htmlOutput("text_gene_gene_sets2")
+                                     )
                      ),
-                     wellPanel(style="background-color: #ffffff; max-width: 700px",
-                     htmlOutput("text_gene_gene_sets1"),
-                     actionLink("filter_gs", "View gene-sets in table"),
-                     htmlOutput("text_gene_gene_sets2")
-                     )
+                     column(6,
+                            box(title="Additional annotation", status="primary", width="100%",
+                                      htmlOutput("anno_selected_gene")
+                            )
+                     ))
                      ))
             ),
             tabPanel(title="Network plot", value="tab_nwplot",
@@ -298,8 +300,18 @@ ui <- dashboardPage(
                      hidden(div(id="tab_nwplot",
                      HTML("<br>"),
                      fluidRow(column(8,
-                                     wellPanel(style="background-color: #ffffff; height: 85vh",
+                                     box(title=NULL, status="primary", height="85vh", width="100%", solidHeader = T,
                                                 visNetworkOutput("network", width = "100%", height = "80vh")
+                                     ),
+                                     absolutePanel(id="nw_geneset_table", class="panel panel-default", fixed=F,
+                                                   draggable=F, top=10, left=30, right="auto", bottom="auto",
+                                                   width=200, height=80, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
+                                                   actionLink("filter_gs3", "View gene-sets in table")
+                                     ),
+                                     absolutePanel(id="nw_color_legend", class="panel panel-default", fixed=F,
+                                                   draggable=F, top=10, left="auto", right=25, bottom="auto",
+                                                   width=200, height=80, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
+                                                   plotOutput("network_color_legend", width="200px", height="70px")
                                      )
                               ),
                               column(4,
@@ -414,12 +426,8 @@ ui <- dashboardPage(
                                                )
                                      )
                               )
-                     ),
-                     absolutePanel(id="nw_color_legend", class="panel panel-default", fixed=TRUE,
-                                   draggable=F, top=100, left=20, right="auto", bottom="auto",
-                                   width = 400, height=50, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
-                                   plotOutput("network_color_legend", width="400px", height="50px")
                      )
+                     
                      ))
             ),
             tabPanel(title="Heatmap", value="tab_heatmap",
@@ -427,13 +435,10 @@ ui <- dashboardPage(
             ),
             tabPanel(title="Help", value="tab_help",
                      HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
-            ),
+            )
           #)
         #)
       #),
-      absolutePanel(bottom="10px", right="10px", fixed=T,
-                    HTML(paste("<center><font color='#888888'>This page was generated by the exploreGSAres function in piano v",packageVersion("piano"),"</center>",sep=""))
-      )
     ))),
 
 # ===================================================================================    
@@ -481,7 +486,10 @@ ui <- dashboardPage(
                              log_gs_plots=FALSE,
                              visible_columns=gsatab_colnames[!gsatab_colnames%in%c(grep("p \\(",gsatab_colnames, value=T),grep("Stat",gsatab_colnames, value=T))],
                              physics=TRUE,
-                             colorLegendInfo=NULL)
+                             colorLegendInfo=NULL,
+                             nwGeneSets=NULL,
+                             genesets=genesets,
+                             maxNcharGenetable=TRUE)
       
       # -----------------------------------------------------------------------------
       #output$loggo <- renderImage({
@@ -495,7 +503,6 @@ ui <- dashboardPage(
       output$text_runinfo1 <- renderUI({ 
         tmp <- gsares$info
         info <- c(
-          "<h4>Gene/gene-set info</h4>",
           paste("<b>Input:</b>",tmp$removedGSnoGenes + tmp$removedGSsizeLimit + tmp$nGeneSets,"gene-sets,",tmp$nGenesStatistics,"genes<br>"),
           paste("- Removed",tmp$removedGSsizeLimit,"gene-sets not matching the size limits<br>"),
           paste("- Removed",tmp$removedGenesGSC,"genes from GSC due to lack of matching gene-level statistics<br>"),
@@ -508,7 +515,6 @@ ui <- dashboardPage(
       output$text_runinfo2 <- renderUI({ 
         tmp <- gsares$info
         info <- c(
-          "<h4>Analysis details</h4>",
           paste("<b>Total run time:</b>",round(gsares$runtime[3]/60,2),"min<br>"),
           paste("<b>GSA method:</b>",gsares$geneSetStat,"<br>"),
           paste("<b>Gene-set statistic name:</b>",gsares$gsStatName,"<br>"),
@@ -602,6 +608,7 @@ ui <- dashboardPage(
                                                 selection=list(mode='single', target='row'),
                                                 filter="none",
                                                 rownames=F,
+                                                fillContainer=T,
                                                 extensions=c("Scroller"),
                                                 options = list(initComplete=JS(
                                                     # this is to set color format of first row
@@ -618,7 +625,7 @@ ui <- dashboardPage(
       observeEvent(input$gsaresTable_rows_selected, {
         rval$sel_gs <- rval$gs_table$Name[input$gsaresTable_rows_selected]
         rval$red_gene <- ""
-        updateTabsetPanel(session,"tabset1",selected="tab_gssum")
+        updateNavbarPage(session,"navbarpage",selected="tab_gssum")
         selectRows(dataTableProxy("gsaresTable", session), list())
       })
       
@@ -628,31 +635,42 @@ ui <- dashboardPage(
       })
       
       observeEvent(input$link_tab_gsares, {
-        updateTabsetPanel(session,"tabset1",selected="tab_gsares")
+        updateNavbarPage(session,"navbarpage",selected="tab_gsares")
       })
       
       # Tables with info:
       output$gsTable2 <- renderTable({
-        tmp <- GSAsummaryTable(gsares)[,-1]
-        tmp <- tmp[names(gsares$gsc)==rval$sel_gs,gsatab_colnames[gsatab_colnames%in%colnames(tmp)]]
+        tmp <- geneSetSummary(gsares,rval$sel_gs)
+        tmp <- tmp$stats
+        rownames(tmp) <- tmp[,1]
+        tmp <- rbind(
+        format(rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])), digits=3, scientific=T),
+        format(rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2])), digits=3, scientific=T)
+        )
+        rownames(tmp) <- c("p-value","Adjusted p-value")
+        colnames(tmp) <- rev(c("Distinct directional (down)","Mixed directional (down)","Non-directional","Mixed directional (up)", "Distinct directional (up)"))
         t(tmp)
-        # tmp <- geneSetSummary(gsares,rval$sel_gs)
-        # tmp <- tmp$stats
-        # rownames(tmp) <- tmp[,1]
-        # tmp <- rbind(
-        # rev(c(tmp["Stat (dist.dir.dn)",2],tmp["Stat (mix.dir.dn)",2],tmp["Stat (non-dir)",2],tmp["Stat (mix.dir.up)",2],tmp["Stat (dist.dir.up)",2])),
-        # format(rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])), digits=3, scientific=T),
-        # format(rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2])), digits=3, scientific=T)
-        # )
-        # rownames(tmp) <- c("Gene-set statistic","p-value","Adjusted p-value")
-        # colnames(tmp) <- rev(c("Distinct directional (down)","Mixed directional (down)","Non-directional","Mixed directional (up)", "Distinct directional (up)"))
-        # t(tmp)
-      }, rownames=T,colnames=F)
+      }, rownames=T,colnames=T)
       
       output$gsNgenes <- renderUI({
         tmp <- geneSetSummary(gsares,rval$sel_gs)
-        tmp <- paste("<b>The gene-set contains ",tmp$stats[tmp$stats$Name=="Genes (tot)",2],
-                     " genes </b><br>",
+        tmp_tot <- tmp$stats[tmp$stats$Name=="Genes (tot)",2]
+        tmp_up <- tmp$stats[tmp$stats$Name=="Genes (up)",2]
+        tmp_dn <- tmp$stats[tmp$stats$Name=="Genes (dn)",2]
+        if(tmp_up>0) {
+          tmp_up <- paste("up:",tmp_up)
+        } else {
+          tmp_up <- NULL 
+        }
+        if(tmp_dn>0) {
+          tmp_dn <- paste("down:",tmp_dn)
+        } else {
+          tmp_dn <- NULL 
+        }
+        tmp <- ""
+        if(!is.null(tmp_up) | !is.null(tmp_dn)) tmp <- paste("(",paste(tmp_up, tmp_dn, collapse=", )"),")",sep="")
+        tmp <- paste("<b>The gene-set contains ",tmp_tot,
+                     " genes </b>", tmp, "<br>",
                      sep=""
         )
         HTML(tmp)
@@ -676,12 +694,12 @@ ui <- dashboardPage(
       })
       observeEvent(input$view_gene, {
         rval$sel_gene <- rval$red_gene
-        updateTabsetPanel(session,"tabset1",selected="tab_geneinfo")
+        updateNavbarPage(session,"navbarpage",selected="tab_geneinfo")
       }) 
       observeEvent(input$view_genes_table, {
         rval$gene_table <- genetable_all[genetable_all$`Gene ID` %in% names(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats),]
         rval$sel_geneset_for_filtering <- rval$sel_gs
-        updateTabsetPanel(session,"tabset1",selected="tab_genetable")
+        updateNavbarPage(session,"navbarpage",selected="tab_genetable")
       })
       
       # Genes in gene-set list:
@@ -707,15 +725,21 @@ ui <- dashboardPage(
       output$gsNeighbors <- renderUI({
         tmp <- names(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats)
         tmp <- setdiff(names(gsares$gsc)[unlist(lapply(gsares$gsc, function(x) sum(tmp%in%x)>=input$nNeighborGenesets))], rval$sel_gs)
-        HTML(paste(paste("<a href='#'"," onclick='Shiny.onInputChange(",'"links_genesets_click", "',tmp,'"',");'","><font color='#000000'>",tmp,"</font></a>",sep=""),collapse=", "))
+        HTML(paste("<b>",rval$sel_gs,"</b>,",sep=""),paste(paste("<a href='#'"," onclick='Shiny.onInputChange(",'"links_genesets_click", "',tmp,'"',");'","><font color='#000000'>",tmp,"</font></a>",sep=""),collapse=", "))
       })
       observeEvent(input$filter_gs2, { # action link in ui
         tmp1 <- names(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats)
         tmp1 <- setdiff(names(gsares$gsc)[unlist(lapply(gsares$gsc, function(x) sum(tmp1%in%x)>=input$nNeighborGenesets))], rval$sel_gs)
         tmp2 <- GSAsummaryTable(gsares)
-        rval$gs_table <- tmp2[tmp2$Name %in% tmp1,]
+        rval$gs_table <- tmp2[tmp2$Name %in% c(tmp1,rval$sel_gs),]
         rval$geneset_filtering_text <- paste("Gene-sets neighboring",rval$sel_gs)
-        updateTabsetPanel(session,"tabset1",selected="tab_gsares")
+        rval$genesets <- setNames(append(rval$genesets,list(rval$gs_table$Name)),c(names(rval$genesets),rval$geneset_filtering_text))
+        if(any(names(rval$genesets) == "No available gene-sets")) {
+          rval$genesets <- rval$genesets[rval$genesets != "No available gene-sets"]
+        }
+        updateSelectInput(session, "network_genesetlist", 
+                          choices=setNames(names(rval$genesets),names(rval$genesets)))
+        updateNavbarPage(session,"navbarpage",selected="tab_gsares")
       })
       
       # Plots:
@@ -856,17 +880,11 @@ ui <- dashboardPage(
         rval$gene_table <- genetable_all
       }) 
       
-      output$ncharSlider <- renderUI({
-        tmp <- length(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats)
-        sliderInput("maxNcharGenetable", NULL, 10, 1000, 50, round=T, step=1, ticks=F, width="300px")
-      })
-      outputOptions(output, "ncharSlider", suspendWhenHidden=FALSE, priority=10)
-      
       output$geneTable <- DT::renderDataTable({apply(rval$gene_table,2,function(x) {
-                                                  if(is.null(input$maxNcharGenetable)) {
+                                                  if(rval$maxNcharGenetable) {
                                                     tmp <- 50
                                                   } else {
-                                                    tmp <- input$maxNcharGenetable
+                                                    tmp <- 10000
                                                   }
                                                   paste("<div title='",ifelse(is.na(x),"",x),
                                                         "' class='DT_genetable_cell'><p>",
@@ -880,7 +898,7 @@ ui <- dashboardPage(
         selection=list(mode='single', target='row'),
         filter="none",
         rownames=F,
-        extensions=c("Scroller"),
+        extensions=c("Scroller","FixedColumns"),
         fillContainer=T,
         options = list(initComplete=JS(
         # this is to set color format of first row
@@ -889,21 +907,27 @@ ui <- dashboardPage(
         "}"),
         dom = 'frtip',
         deferRender=TRUE,
-        scrollY="calc(100vh - 240px)",
+        scrollY="calc(100vh - 250px)",
         scrollX=T,
-        scroller=TRUE)
+        scroller=TRUE,
+        fixedColumns=list(leftColumns=1))
       )
+      
       observeEvent(input$geneTable_rows_selected, {
         rval$sel_gene <- rval$gene_table$`Gene ID`[input$geneTable_rows_selected]
         rval$red_gene <- ""
-        updateTabsetPanel(session,"tabset1",selected="tab_geneinfo")
+        updateNavbarPage(session,"navbarpage",selected="tab_geneinfo")
         selectRows(dataTableProxy("geneTable", session), list())
+      })
+      
+      observeEvent(input$truncate_gene_table, {
+        rval$maxNcharGenetable <- ifelse(rval$maxNcharGenetable,FALSE,TRUE)
       })
       
       
       # Gene summary --------------------------------------------------------
       observeEvent(input$link_tab_genetable, { # action link in ui
-        updateTabsetPanel(session,"tabset1",selected="tab_genetable")
+        updateNavbarPage(session,"navbarpage",selected="tab_genetable")
       })
       
       output$text_selected_gene <- renderText({ 
@@ -912,8 +936,12 @@ ui <- dashboardPage(
       
       output$info_selected_gene <- renderUI({
         HTML(paste("<b>Gene-level statistic:</b>",gsares$geneLevelStats[rval$sel_gene,],"<br>",
-                   "<b>Direction:</b>",ifelse(is.na(gsares_directions[rval$sel_gene,]),"NA",ifelse(gsares_directions[rval$sel_gene,]>0,"Up","Down")),"<br>",
-                   ifelse(ncol(genetable_all)>4,paste("<b>",colnames(genetable_all)[-c(1,2,3,4)], ":</b>",t(genetable_all[rval$sel_gene,-c(1,2,3,4)]), collapse="<br>"),""))
+                   "<b>Direction:</b>",ifelse(is.na(gsares_directions[rval$sel_gene,]),"NA",ifelse(gsares_directions[rval$sel_gene,]>0,"Up","Down")))
+        )
+      })
+      
+      output$anno_selected_gene <- renderUI({
+        HTML(paste(ifelse(ncol(genetable_all)>4,paste("<b>",colnames(genetable_all)[-c(1,2,3,4)], ":</b>",t(genetable_all[rval$sel_gene,-c(1,2,3,4)]), collapse="<br>"),""))
         )
       })
       
@@ -928,13 +956,22 @@ ui <- dashboardPage(
         rval$sel_gene_for_filtering <- rval$sel_gene
         rval$geneset_filtering_text <- paste("Gene-sets containing", rval$sel_gene_for_filtering)
         rval$gs_table <- tmp[tmp$Name %in% gs_per_gene_list[[rval$sel_gene]],]
-        updateTabsetPanel(session,"tabset1",selected="tab_gsares")
+        
+        rval$genesets <- setNames(append(rval$genesets,list(rval$gs_table$Name)),c(names(rval$genesets),rval$geneset_filtering_text))
+        if(any(names(rval$genesets) == "No available gene-sets")) {
+          rval$genesets <- rval$genesets[rval$genesets != "No available gene-sets"]
+        }
+        updateSelectInput(session, "network_genesetlist", 
+                          choices=setNames(names(rval$genesets),names(rval$genesets)))
+        
+        updateNavbarPage(session,"navbarpage",selected="tab_gsares")
+        
       })
       observeEvent(input$links_genesets_click, {
         rval$sel_gs <- input$links_genesets_click
         rval$red_gene <- ""
         selectRows(dataTableProxy("gsaresTable", session), list())
-        updateTabsetPanel(session,"tabset1",selected="tab_gssum")
+        updateNavbarPage(session,"navbarpage",selected="tab_gssum")
       })
       
       # Network plot --------------------------------------------------------------------
@@ -946,9 +983,9 @@ ui <- dashboardPage(
           network_genesetlist <- NULL
         } else if(input$geneset_selection=="list") {
           network_significance <- 1
-          network_genesetlist <- genesets[[input$network_genesetlist]]
+          network_genesetlist <- rval$genesets[[input$network_genesetlist]]
         }
-        print(network_genesetlist)
+        
         nwPlot <- try(suppressWarnings(networkPlot2(gsares, 
                                class=unlist(strsplit(input$network_class,"_"))[1], 
                                direction=unlist(strsplit(input$network_class,"_"))[2], 
@@ -976,6 +1013,8 @@ ui <- dashboardPage(
                                           "nodes (gene-sets). Drawing large networks requires more memory, if you want to continue, increase the value of 'Maximum allowed nodes'",
                                           "or adjust the parameters to generate a smaller network, e.g. by decreasing the 'Significance cutoff'.",
                                           "Tip: Turn off the 'Physics simulation' for faster drawing of large networks.")
+          } else if(grepl("argument geneSets not matching gene-set names in argument gsaRes",nwPlot[1])) {
+            nw_notification_text <- "No gene-set lists available. Or all available lists contain incorrect gene-set names."
           }
           
           showNotification(nw_notification_text,
@@ -988,8 +1027,14 @@ ui <- dashboardPage(
         } else {
           removeNotification("nw_notification")
           rval$colorLegendInfo <- nwPlot$colorLegendInfo
+          rval$nwGeneSets <- nwPlot$x$nodes$geneSetNames
           suppressWarnings(nwPlot)
         }
+      })
+      
+      observeEvent(input$navbarpage, {
+        if(input$navbarpage != "tab_nwplot")
+          removeNotification("nw_notification")  
       })
       
       observeEvent(input$physics, {
@@ -998,14 +1043,22 @@ ui <- dashboardPage(
       
       output$network_color_legend <- renderPlot({
         plotColorLegend <- function() {
-        par(mar=c(2,0,0,0), oma=c(0,0,0,0))
+        par(mar=c(3.5,0,0,0), oma=c(0,0,0,0))
         plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", yaxt="n", ylim=c(0,1), xlim=rval$colorLegendInfo$range)
+        mtext("-log10(p)", side=1, line=2)
         xleft <- seq(from=rval$colorLegendInfo$range[1], to=rval$colorLegendInfo$range[2], length.out=length(rval$colorLegendInfo$colors))
         xright <- xleft + abs(xleft[1]-xleft[2])
         rect(xleft,0,xright,1, col=rval$colorLegendInfo$colors, border=NA)
         }
         tmp <- try(plotColorLegend(), silent=T)
         if(class(tmp)[1]=="try-error") plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", axes=F)
+      })
+      
+      observeEvent(input$filter_gs3, { # action link in ui
+        tmp <- GSAsummaryTable(gsares)
+        rval$geneset_filtering_text <- paste("Gene-sets in the network plot")
+        rval$gs_table <- tmp[tmp$Name %in% rval$nwGeneSets,]
+        updateNavbarPage(session,"navbarpage",selected="tab_gsares")
       })
       
     
