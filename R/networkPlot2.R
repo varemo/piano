@@ -84,8 +84,10 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     if(pValue == "dirupdn") {
       pValues <- apply(abs(cbind(gsaRes$pAdjDistinctDirUp[,test],gsaRes$pAdjDistinctDirDn[,test])),1,min,na.rm=TRUE)
       tmp     <- apply(abs(cbind(gsaRes$pAdjDistinctDirUp[,test],gsaRes$pAdjDistinctDirDn[,test])),1,which.min)==2
-      pValues[pValues == 0] <- min(c(min(pValues[pValues>0])/10,1e-10))
-      pValues[pValues == 1] <- 1/(1+1e-10)
+      pValuesZero <- pValues == 0
+      pValues[pValuesZero] <- min(c(pValues[pValues>0]/10, 1e-10), na.rm=TRUE)
+      pValuesOne <- pValues == 1
+      pValues[pValuesOne] <- 1/(1+1e-10)
       pValues[tmp] <- -pValues[tmp]
     }
     if(pValue == "mix") pValues <- gsaRes$pAdjNonDirectional[,test]
@@ -98,8 +100,10 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     if(pValue == "dirupdn") {
       pValues <- apply(abs(cbind(gsaRes$pDistinctDirUp[,test],gsaRes$pDistinctDirDn[,test])),1,min,na.rm=TRUE)
       tmp     <- apply(abs(cbind(gsaRes$pDistinctDirUp[,test],gsaRes$pDistinctDirDn[,test])),1,which.min)==2
-      pValues[pValues == 0] <- min(c(min(pValues[pValues>0])/10,1e-10))
-      pValues[pValues == 1] <- 1/(1+1e-10)
+      pValuesZero <- pValues == 0
+      pValues[pValuesZero] <- min(c(pValues[pValues>0]/10, 1e-10), na.rm=TRUE)
+      pValuesOne <- pValues == 1
+      pValues[pValuesOne == 1] <- 1/(1+1e-10)
       pValues[tmp] <- -pValues[tmp]
     }
     if(pValue == "mix") pValues <- gsaRes$pNonDirectional[,test]
@@ -107,7 +111,9 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     if(pValue == "subdn") pValues <- gsaRes$pMixedDirDn[,test]
   }
   if(pValue != "dirupdn") {
-    pValues[pValues == 0] <- min(c(min(pValues[pValues>0])/10,1e-10))
+    pValuesZero <- pValues == 0
+    pValues[pValuesZero] <- min(c(pValues[pValues>0]/10, 1e-10), na.rm=TRUE)
+    pValuesOne <- rep(FALSE, length(pValues))
   }
   
   # Get gene set names:
@@ -267,7 +273,10 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   } else {
     tmp2 <- "" 
   }
-  vHoverText <- paste(tmp, "<br>p-value: ", format(abs(pSelected),scientific=T,digits=3),tmp2,"<br>Genes: ", gsSize, sep="")
+  tmp3 <- pSelected
+  tmp3[pValuesZero[indSelected]] <- 0
+  tmp3[pValuesOne[indSelected]] <- 1*sign(tmp3[pValuesOne[indSelected]])
+  vHoverText <- paste(tmp, "<br>p-value: ", format(abs(tmp3),scientific=T,digits=3),"<br>-log10(p-value): ",round(log10(abs(tmp3)),3),tmp2,"<br>Genes: ", gsSize, sep="")
   
   #*********************************************
   # Predefined layouts:
