@@ -1,0 +1,14 @@
+---
+---
+
+$header-bg-color: #16967a !default;
+$header-bg-color-secondary: #002989 !default;
+$table-border-color: #ffffff;
+
+@import "{{ site.theme }}";
+
+table {
+    td {
+        padding: 0rem 0rem;
+    }
+}

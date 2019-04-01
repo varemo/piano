@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+
+    {% if site.google_analytics %}
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site.google_analytics }}');
+      </script>
+    {% endif %}
+    <meta charset="UTF-8">
+
+{% seo %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+  </head>
+  <body>
+
+    <header class="page-header" role="banner">
+      <img src="img/logo_white.png" width=400px><br><br>
+      <!-- <h1 class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1> -->
+      <!-- <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2> -->
+      <a href="index.html" class="btn">About</a>
+      <a href="install.html" class="btn">Install</a>
+      <a href="help.html" class="btn">Help</a>
+      <a href="https://bioconductor.org/packages/release/bioc/html/piano.html" class="btn">View on Bioconductor</a>
+      {% if site.github.is_project_page %}
+        <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
+      {% endif %}
+      {% if site.show_downloads %}
+        <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
+        <a href="{{ site.github.tar_url }}" class="btn">Download .tar.gz</a>
+      {% endif %}
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      {{ content }}
+
+      <footer class="site-footer">
+        <table>
+          <tr>
+            <td colspan="2">
+            </td>
+          </tr>
+          <tr>
+            <td>
+            Bioconductor:
+            <a href="http://bioconductor.org/packages/stats/bioc/piano/">
+              <img style="vertical-align:middle" border="0" src="http://bioconductor.org/shields/downloads/release/piano.svg" title="Ranking by number of downloads. A lower number means the package is downloaded more frequently. Determined within a package type (software, experiment, annotation, workflow) and uses the number of distinct IPs for the last 12 months.">
+            </a>
+            <a href="http://www.bioconductor.org/packages/release/bioc/html/piano.html">
+              <img style="vertical-align:middle" border="0" src="http://bioconductor.org/shields/years-in-bioc/piano.svg" title="How long since the package was first in a released Bioconductor version (or is it in devel only).">
+            </a>
+            <a href="http://bioconductor.org/checkResults/release/bioc-LATEST/piano/">
+              <img style="vertical-align:middle" border="0" src="http://bioconductor.org/shields/build/release/bioc/piano.svg" title="build results; click for full report">
+            </a>
+            </td>
+            <td rowspan="2">
+              <span class="__dimensions_badge_embed__" data-id="pub.1011010100" data-style="small_circle"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
+            </td>
+            <td rowspan="2">
+              <script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
+              <div data-badge-popover="right" data-badge-type="donut" data-doi="10.1093/nar/gkt111" data-hide-no-mentions="true" class="altmetric-embed"></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+          Bioconda:
+          <img style="vertical-align:middle" alt="(downloads)" src="https://img.shields.io/conda/dn/bioconda/bioconductor-piano.svg?style=flat">
+          <a href="https://quay.io/repository/biocontainers/bioconductor-piano">
+            <img style="vertical-align:middle" alt="docker_bioconductor-piano" src="https://quay.io/repository/biocontainers/bioconductor-piano/status">
+          </a>        
+          <a href="http://bioconda.github.io/recipes/bioconductor-piano/README.html">
+            <img style="vertical-align:middle" alt="install-with-bioconda" src="https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat">
+          </a>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              {% if site.github.is_project_page %}
+                <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.</span>
+              {% endif %}
+              <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> and is based on the <a href="https://github.com/pages-themes/cayman">Cayman theme</a>.</span>
+            </td>
+          </tr>
+        </table>
+      </footer>
+    </main>
+  </body>
+</html>

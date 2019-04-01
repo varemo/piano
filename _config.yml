@@ -1,0 +1,13 @@
+theme: jekyll-theme-cayman
+title: piano
+description: An R/Bioconductor package for gene set analysis
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - index.md
+  - install.md
+  - help.md
+  - publications.md
