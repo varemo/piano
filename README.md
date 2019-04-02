@@ -1,8 +1,3 @@
-[![](http://bioconductor.org/shields/downloads/piano.svg)](http://bioconductor.org/packages/stats/bioc/piano/)
-[![](http://bioconductor.org/shields/years-in-bioc/piano.svg)](https://www.bioconductor.org/packages/release/bioc/html/piano.html)
-[![](http://bioconductor.org/shields/build/release/bioc/piano.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/piano/)
-
-
 # piano - An R/Bioconductor package for gene set analysis
 
 More info on the piano [web page](https://varemo.github.io/piano/).
