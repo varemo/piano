@@ -11,7 +11,7 @@ BiocManager::install("piano")
 ```
 See also [piano on Bioconductor.org](https://www.bioconductor.org/packages/release/bioc/html/piano.html) and the [changelog](http://www.bioconductor.org/packages/release/bioc/news/piano/NEWS) for more information.
 
-## Development version
+## Development versions
 For the latest features, install the Bioconductor development version according to [these instructions](http://bioconductor.org/developers/how-to/useDevel/). Also see [this guide](https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html) on how to use `BiocManager` with different package/Bioconductor/R versions.
 
 The cutting edge code is available in the master branch (in principle identical to the Bioconductor development version) and in feature branches on [GitHub](https://github.com/varemo/piano). Install directly from GitHub in R with the command: 
