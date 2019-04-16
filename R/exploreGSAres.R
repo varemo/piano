@@ -535,7 +535,7 @@ ui <- dashboardPage(
       
       output$gsc_boxplot1 <- renderPlot({
         par(mfcol=c(2,1))
-        layout(mat = matrix(c(1,2),2,1, byrow=TRUE),  height = c(3,2))
+        layout(mat = matrix(c(1,2),2,1, byrow=TRUE), heights= c(3,2))
         tmp <- unlist(lapply(gsares$gsc,length))
         par(mar=c(0, 4.1, 1.1, 2.1))
         h <- hist(tmp, n=50, xlim=c(0,max(tmp)), xaxt="n", xlab=NULL, main=NULL, col="forestgreen")
@@ -544,7 +544,7 @@ ui <- dashboardPage(
         axis(1, las=2)
       })
       output$gsc_boxplot2 <- renderPlot({
-        layout(mat = matrix(c(1,2),2,1, byrow=TRUE),  height = c(3,2))
+        layout(mat = matrix(c(1,2),2,1, byrow=TRUE),  heights = c(3,2))
         tmp <- unlist(lapply(gs_per_gene_list,length))
         par(mar=c(0, 4.1, 1.1, 2.1))
         h <- hist(tmp, n=50, xlim=c(0,max(tmp)), xaxt="n", xlab=NULL, main=NULL, col="mediumpurple2")
