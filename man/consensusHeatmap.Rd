@@ -4,9 +4,10 @@
 \alias{consensusHeatmap}
 \title{Heatmap of top consensus gene sets}
 \usage{
-consensusHeatmap(resList, method = "median", cutoff = 5, adjusted = FALSE,
-  plot = TRUE, ncharLabel = 25, cellnote = "consensusScore",
-  columnnames = "full", colorkey = TRUE, colorgrad = NULL, cex = NULL)
+consensusHeatmap(resList, method = "median", cutoff = 5,
+  adjusted = FALSE, plot = TRUE, ncharLabel = 25,
+  cellnote = "consensusScore", columnnames = "full", colorkey = TRUE,
+  colorgrad = NULL, cex = NULL)
 }
 \arguments{
 \item{resList}{a list where each element is an object of class

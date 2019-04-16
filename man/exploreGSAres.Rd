@@ -4,15 +4,19 @@
 \alias{exploreGSAres}
 \title{Explore GSA results}
 \usage{
-exploreGSAres(gsares, browser = T, geneAnnot = NULL)
+exploreGSAres(gsares, browser = TRUE, geneAnnot = NULL, genesets)
 }
 \arguments{
-\item{browser}{a logical, whether or not to open the Shiny app in a brwoser
+\item{browser}{a logical, whether or not to open the Shiny app in a browser
 window. Set to \code{FALSE} to open an interactive window directly in
 RStudio.}
 
 \item{geneAnnot}{a \code{data.frame}, containing gene annotation. The first
 column should be gene IDs matching those in \code{gsares}.}
+
+\item{genesets}{a character vector or list (named or un-named) of character vectors
+containing subsets of gene-set names that can be selected and displayed in the 
+network plot.}
 
 \item{gsaRes}{an object of class \code{GSAres}, as returned from
 \code{runGSA()} or an object returned from \code{runGSAhyper()}.}
@@ -42,7 +46,7 @@ show up in the gene table and the gene summary tabs.
 
 }
 \seealso{
-\pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}}
+\pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}}, \code{\link{networkPlot2}}
 }
 \author{
 Leif Varemo \email{piano.rpkg@gmail.com}

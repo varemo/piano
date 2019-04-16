@@ -75,7 +75,7 @@ alternative to the \code{\link{GSAsummaryTable}} function or the
 }
 \seealso{
 \pkg{\link{piano}}, \code{\link{runGSA}},
-\code{\link{GSAsummaryTable}}, \code{\link{networkPlot}}
+\code{\link{GSAsummaryTable}}, \code{\link{networkPlot2}}, \code{\link{exploreGSAres}}
 }
 \author{
 Leif Varemo \email{piano.rpkg@gmail.com} and Intawat Nookaew

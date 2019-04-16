@@ -5,8 +5,8 @@
 \title{Load and preprocess microarray data}
 \usage{
 loadMAdata(datadir = getwd(), setup = "setup.txt", dataNorm,
-  platform = "NULL", annotation, normalization = "plier", filter = TRUE,
-  verbose = TRUE, ...)
+  platform = "NULL", annotation, normalization = "plier",
+  filter = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{datadir}{character string giving the directory in which to look for
