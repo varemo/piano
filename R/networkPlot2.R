@@ -1,5 +1,120 @@
-networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0.001, geneSets=NULL, overlap=0.1, 
-                         lay="visNetwork", physics=T, label="names", labelSize=22, ncharLabel=25, nodeSize=c(10,40), 
+#' Gene set network plot
+#' 
+#' Draws a network with gene sets as nodes and the thickness of the edges
+#' correlating to the number of shared genes. The gene set significance is
+#' visualized as color intensities. Gives an overview of the influence of
+#' overlap on significant gene sets. Uses package \code{visNetwork} for plotting.
+#' 
+#' In the case of \code{class="distinct"} and \code{direction="both"}, the
+#' distinct directional p-values (\code{pDistinctDirUp} and
+#' \code{pDistinctDirDn}, see \code{\link{runGSA}}) will be used in
+#' combination.
+#' 
+#' @param gsaRes an object of class \code{GSAres}, as returned from
+#' \code{runGSA()} or an object returned from \code{runGSAhyper()}.
+#' @param class a character string determining the p-values of which
+#' directionality class that should be used as significance information for the
+#' plot. Can be one of \code{"distinct"}, \code{"mixed"}, \code{"non"}. Has to
+#' be \code{"non"} if the result from \code{runGSAhyper()} is used.
+#' @param direction a character string giving the direction of regulation, can
+#' be either \code{"up"}, \code{"down"} or \code{"both"} (for
+#' \code{class="distinct"} only).
+#' @param adjusted a logical, if adjusted p-values should be used, or not. Note
+#' that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the
+#' adjusted p-values will be equal to the original p-values.
+#' @param significance the significance cut-off that determines which gene sets
+#' are included in the plot. Defaults to 0.001.
+#' @param geneSets a character vector of gene set names, to be included in the
+#' plot. Defaults to \code{NULL}, but if given, the argument
+#' \code{significance} will be ignored.
+#' @param lay One of \code{"visNetwork"} (or \code{"1"}), \code{"layout_nicely"} 
+#' (or \code{"2"}), \code{"layout_as_star"} (or \code{"3"}), \code{"layout_with_fr"} 
+#' (or \code{"4"}), \code{"layout_with_kk"} (or \code{"5"}), \code{"layout_with_sugiyama"} 
+#' (or \code{"6"}), \code{"layout_in_circle"} (or \code{"7"}), \code{"layout_on_grid"} 
+#' (or \code{"8"}), \code{"layout_as_tree"}, \code{"layout_on_sphere"}, 
+#' \code{"layout_randomly"}, \code{"layout_with_dh"}, \code{"layout_with_gem"}, 
+#' \code{"layout_with_graphopt"}, \code{"layout_with_lgl"}, \code{"layout_with_mds"}
+#' @param physics logical, whether or not to use physics simulation.
+#' @param overlap a positive numerical. Determines the smallest number or fraction of
+#' sharing genes between two gene-sets that is needed in order to draw a
+#' line/edge between the gene-sets. If >= 1, the argument is interpreted as number of genes. 
+#' If between 0 and 1, the argument is interprested as the fraction of genes of the 
+#' smalles gene-set in a given pair. Defaults to 0.1.
+#' @param label a character string, either \code{"names"} ,\code{"numbers"},
+#' \code{"numbersAndSizes"} or \code{"namesAndSizes"}, determining the labels
+#' used for the nodes. The names are the gene set names, numbers is an
+#' arbritary numbered list of the gene sets used in the plot connected to the
+#' named list returned by the funtion (see example). Sizes are the gene set sizes, e.g. the
+#' number of genes.
+#' @param labelSize the text size of the node labels.
+#' @param ncharLabel the number of characters to include in the node labels.
+#' @param nodeSize a numerical vector of length 2 giving the maximum and
+#' minimum node sizes. The node size represents the size of the gene set, and
+#' all values will be scaled to the given interval.
+#' @param edgeWidth a numerical vector of length 2 giving the maximum and
+#' minimum edge widths. The edge width represents the number of shared genes
+#' between two gene sets, and all values will be scaled to the given interval.
+#' @param edgeColor a character vector giving the colors to use for increasing
+#' edge width. Can also be set to a single color. Defaults to a gray-scale.
+#' @param scoreColors a character vector giving the colors from which the
+#' gradient used for node coloring will be created. In the case of
+#' \code{class="distinct"} and \code{direction="both"} the first half of the
+#' vector will be used for the up-regulated gene sets and the second part will
+#' be used for the down-regulated gene sets.
+#' @param naColor the color for gene-sets when selected p-value is NA
+#' @param main an optional character vector setting the title of the plot.
+#' @param submain an optional character vector setting the subtitle of the plot.
+#' @param seed random seed for reproducible layouts
+#' @param maxAllowedNodes if the set parameters results in a network with more than
+#' \code{maxAllowedNodes}, a error if given instead of drawing the network.
+#' @param shiny Only for internal use. Set to FALSE by default.
+#' @return Returns an object of class \code{visNetwork} that can be further manipulated,
+#' see examples.
+#' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
+#' \email{piano.rpkg@@gmail.com}
+#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}},
+#' \code{\link{exploreGSAres}}
+#' @examples
+#' 
+#'    # Load example input data to GSA:
+#'    data("gsa_input")
+#'    
+#'    # Load gene set collection:
+#'    gsc <- loadGSC(gsa_input$gsc)
+#'       
+#'    # Run gene set analysis:
+#'    gsares <- runGSA(geneLevelStats=gsa_input$pvals , directions=gsa_input$directions, 
+#'                     gsc=gsc, nPerm=500)
+#'       
+#'    # Network plot:
+#'    networkPlot2(gsares, class="non", significance=0.1)
+#'    
+#'    # Display number to gene-set name mapping:
+#'    res <- networkPlot2(gsares, class="non", significance=0.1)
+#'    res$x$nodes[,c("id","geneSetNames")]
+#'    
+#'    # Examples of reusing res later:
+#'    
+#'    # Draw same again:
+#'    visNetwork(res$x$nodes,res$x$edges)
+#'    # os simly just:
+#'    res
+#'    
+#'    # Draw only essential, rest is default:
+#'    visNetwork(res$x$nodes[,c("id","label")],res$x$edges[,c("from","to")])
+#'    
+#'    # Add custom options:
+#'    visNetwork(res$x$nodes[,c("id","label")],res$x$edges[,c("from","to")]) %>% 
+#'    visIgraphLayout("layout_in_circle")
+#'    
+#'    # Other example:
+#'    res %>% visNodes(shadow=F)
+#'    
+#'    # See package visNetwork for more examples
+
+
+networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0.001, geneSets=NULL, lay="visNetwork",
+                         physics=T, overlap=0.1, label="names", labelSize=22, ncharLabel=25, nodeSize=c(10,40), 
                          edgeWidth=c(1,15), edgeColor=NULL, scoreColors=NULL, naColor="yellow", main, submain, seed=1,
                          maxAllowedNodes=Inf, shiny=FALSE) {
   
@@ -353,19 +468,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   res$colorLegendInfo <- colorLegendInfo
   res
   
-  # Examples of reusing res later:
-  # Draw same again:
-  # visNetwork(res$x$nodes,res$x$edges)
-  # os simly just:
-  # res
-  # Draw only essential, rest is default:
-  # visNetwork(res$x$nodes[,c("id","label")],res$x$edges[,c("from","to")])
-  # Add custom options:
-  # visNetwork(res$x$nodes[,c("id","label")],res$x$edges[,c("from","to")]) %>% visIgraphLayout("layout_in_circle")
-  # Other example:
-  # res %>% visNodes(shadow=F)
-  # Display number to gene-set name mapping:
-  # res$x$nodes[,c("id","geneSetNames")]
+
 }
 
 
