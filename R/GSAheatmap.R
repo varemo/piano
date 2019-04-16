@@ -36,7 +36,7 @@
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
 #' \email{piano.rpkg@@gmail.com}
 #' @seealso \pkg{\link{piano}}, \code{\link{runGSA}},
-#' \code{\link{GSAsummaryTable}}, \code{\link{networkPlot}}
+#' \code{\link{GSAsummaryTable}}, \code{\link{networkPlot2}}, \code{\link{exploreGSAres}}
 #' @examples
 #' 
 #' 
