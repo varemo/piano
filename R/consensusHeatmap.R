@@ -68,15 +68,15 @@ consensusHeatmap <- function(resList, method="median", cutoff=5, adjusted=FALSE,
    
    # error check:
    tmp <- try(method <- match.arg(method, c("mean","median","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument method is not valid")
    }
    tmp <- try(cellnote <- match.arg(cellnote, c("consensusScore","medianPvalue","nGenes","none"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument cellnote is not valid")
    }
    tmp <- try(columnnames <- match.arg(columnnames, c("full","abbr"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument columnnames is not valid")
    }
    if(!is.null(colorgrad)) {

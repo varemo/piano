@@ -39,7 +39,7 @@ geneSetSummary <- function(gsaRes, geneSet) {
    
    # Error check:
    obj <- gsaRes
-   if(class(obj) != "GSAres") stop("argument GSAres has to be of class 'GSAres'")
+   if(!is(obj, "GSAres")) stop("argument GSAres has to be of class 'GSAres'")
    if(test > ncol(obj$nGenesTot)) stop("argument test is to large")
    gsc <- obj$gsc
    gsInd <- which(names(gsc) == geneSet)
@@ -74,7 +74,7 @@ geneSetSummary <- function(gsaRes, geneSet) {
    tmp <- obj$geneLevelStats
    geneLevelStats <- tmp[rownames(tmp)%in%genes,test]
    tmp <- obj$directions
-   if(class(tmp) == "character") {
+   if(is(tmp, "character")) {
       directions <- tmp
    } else {
       directions <- tmp[rownames(tmp)%in%genes,test]

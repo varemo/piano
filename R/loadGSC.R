@@ -74,13 +74,13 @@ loadGSC <- function(file, type="auto", addInfo) {
    }
    
    tmp <- try(type <- match.arg(type, c("auto","gmt","sbml","sif","data.frame"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument type set to unknown value")
    }
    
    # Check file extension if type="auto":
    if(type == "auto") {
-      if(class(file) == "character") {
+      if(is(file, "character")) {
          tmp <- unlist(strsplit(file,"\\."))
          type <- tolower(tmp[length(tmp)])
          if(!type %in% c("gmt","sif","sbml","xml")) stop(paste("can not handle .",type," file extension, read manually using e.g. read.delim() and load as data.frame",sep=""))
@@ -99,19 +99,19 @@ loadGSC <- function(file, type="auto", addInfo) {
       
      con <- file(file)
      tmp <- try(suppressWarnings(open(con)), silent=TRUE)
-     if(class(tmp) == "try-error") stop("file could not be read")
+     if(is(tmp, "try-error")) stop("file could not be read")
      if(addUserInfo == "skip") addInfo <- vector()
      gscList <- list()
      i <- 1
      tmp <- try(suppressWarnings(
-       while(length(l<-scan(con, nlines=1, what="character", quiet=T, sep="\t")) > 0) {
+       while(length(l<-scan(con, nlines=1, what="character", quiet=TRUE, sep="\t")) > 0) {
          if(addUserInfo == "skip") addInfo <- rbind(addInfo,l[1:2])
          tmp <- l[3:length(l)]
          gscList[[l[1]]] <- unique(tmp[tmp != "" & tmp != " " & !is.na(tmp)])
          i <- i + 1
        }
      ), silent=TRUE)
-     if(class(tmp) == "try-error") stop("file could not be read")
+     if(is(tmp, "try-error")) stop("file could not be read")
      close(con)
      
      # Remove duplicate gene sets:
@@ -130,7 +130,7 @@ loadGSC <- function(file, type="auto", addInfo) {
       if (!requireNamespace("rsbml", quietly = TRUE)) stop("package rsbml is missing")
       # Read sbml file:
       tmp <- try(sbml <- rsbml::rsbml_read(file))
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("file could not be read by rsbml_read()")
       }
       
@@ -190,7 +190,7 @@ loadGSC <- function(file, type="auto", addInfo) {
    } else if(type == "sif") {
       tmp <- try(gsc <- as.data.frame(read.delim(file, header=FALSE, quote="", as.is=TRUE), 
                                       stringsAsFactors=FALSE), silent=TRUE)
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("argument file could not be read and converted into a data.frame")
       }
       
@@ -225,7 +225,7 @@ loadGSC <- function(file, type="auto", addInfo) {
    # Gene set collection as data.frame:
    } else if(type == "data.frame") {
       tmp <- try(gsc <- as.data.frame(file, stringsAsFactors=FALSE), silent=TRUE)
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("argument file could not be converted into a data.frame")
       }
       # Get rid of factors:
@@ -261,12 +261,12 @@ loadGSC <- function(file, type="auto", addInfo) {
    # Additional info as data.frame:
    if(addUserInfo == "yes") {
       tmp <- try(addInfo <- as.data.frame(addInfo, stringsAsFactors=FALSE), silent=TRUE)
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("failed to convert additional info in argument 'addInfo' into a data.frame")
       }
    }
    
-   if(class(addInfo) == "data.frame") {
+   if(is(addInfo, "data.frame")) {
       
       # Check for 2 columns:
       if(ncol(addInfo) != 2) stop("additional info in argument 'file' or 'addInfo' has to contain 2 columns")

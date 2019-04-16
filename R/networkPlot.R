@@ -105,7 +105,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    #*********************************************
    
    tmp <- try(pValue <- match.arg(class, c("distinct","mixed","non"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument class is not valid")
    }
    if(pValue == "non") {
@@ -113,7 +113,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
       direction <- "none"
    } else {
       tmp <- try(direction <- match.arg(direction, c("up","down","both"), several.ok=FALSE), silent=TRUE)
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("argument direction is not valid")
       }
    }
@@ -139,8 +139,8 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    if(overlap <= 0) stop("argument overlap has to be at least 1")
    if(length(nodeSize) != 2) stop("argument nodeSize has to have length 2")
    if(length(edgeWidth) != 2) stop("argument edgeWidth has to have length 2")
-   if(class(adjusted) != "logical") stop("argument adjusted has to be TRUE or FALSE")
-   if(!missing(main)) if(class(main) != "character") stop("argument main has to be a character string")
+   if(!is(adjusted, "logical")) stop("argument adjusted has to be TRUE or FALSE")
+   if(!missing(main)) if(!is(main, "character")) stop("argument main has to be a character string")
    
    #########################################################
    # Adds possibility to use output object from runGSAhyper:
@@ -298,7 +298,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    
    # Node labels:
    tmp <- try(label <- match.arg(label, c("names","numbers","numbersAndSizes","namesAndSizes"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument label has to be set to either 'names' or 'numbers'")
    }
    tmp <- names(gsc)[indSignificant]
@@ -315,7 +315,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    # Set plotting layout:
    #*********************************************
    
-   if(class(lay) == "numeric") {
+   if(is(lay, "numeric")) {
       
       # Edge weight, inverse to number of edges and size (of the larger of the node pairs)
       # used by Fruchterman Reingold algorithm:
@@ -344,7 +344,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
       else if(lay == 5) lay <- layout_in_circle(g)
    
    # User defined layout function:   
-   } else if(class(lay) == "function"){
+   } else if(is(lay, "function")){
       lay <- lay(g)  
    }
    

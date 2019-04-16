@@ -130,13 +130,13 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
   if(!adjustMethod %in% c("holm","hochberg","hommel","bonferroni","BH","BY","fdr","none")) {
     stop("incorrect value of argument adjustMethod")
   }
-  if(class(plot) == "logical") {
+  if(is(plot, "logical")) {
      if(plot) {
         venn <- heatmap <- polarPlot <- volcano <- TRUE  
      } else {
         venn <- heatmap <- polarPlot <- volcano <- FALSE
      }
-  } else if(class(plot) == "character") {
+  } else if(is(plot, "character")) {
      venn <- heatmap <- polarPlot <- volcano <- FALSE
      if("venn" %in% plot) venn <- TRUE
      if("heatmap" %in% plot) heatmap <- TRUE
@@ -455,7 +455,7 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
   if(venn == TRUE) {
      combMat <- expand.grid(lapply(1:ncol(pValues),function(x) 0:1))
      signGeneList <- apply(pValues,2,function(x) which(x < significance))
-     if(class(signGeneList) != "list") {
+     if(!is(signGeneList, "list")) {
          tmp <- list()
          for(i in 1:ncol(signGeneList)) {
             tmp[[i]] <- signGeneList[,i]  

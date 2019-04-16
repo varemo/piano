@@ -33,9 +33,9 @@ GSAsummaryTable <- function(gsaRes, save=FALSE, file=NULL) {
    
    test <- 1 # which comparison, currently only 1 allowed!
    obj <- gsaRes
-   if(class(obj) != "GSAres") stop("argument GSAres has to be of class 'GSAres'")
+   if(!is(obj, "GSAres")) stop("argument GSAres has to be of class 'GSAres'")
    if(!is.null(file)) {
-      if(class(file) != "character") stop("argument file has to be of class 'character'")  
+      if(!is(file, "character")) stop("argument file has to be of class 'character'")  
    }
    if(test > ncol(obj$nGenesTot)) stop("argument test is to large")
    

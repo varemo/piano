@@ -13,11 +13,11 @@ print.GSC <- function(x, ...){
    print(unique(unlist(x$gsc))[1:m])
    cat("\nGene set size summary:\n")
    print(summary(unlist(lapply(x$gsc,length))))
-   if(class(x$addInfo) == "data.frame" | class(x$addInfo) == "matrix") {
+   if(is(x$addInfo, "data.frame") | is(x$addInfo, "matrix")) {
       k <- 10
       if(nrow(x$addInfo) < 10) k <- nrow(x$addInfo)
       cat(paste("\nFirst",k,"gene sets with additional info:\n"))
-      tmp <- x$addInfo[1:k,] 
+      tmp <- x$addInfo[1:k,]
       colnames(tmp) <- c("Gene set","Additional info")
       rownames(tmp) <- NULL
       for(i in 1:k) {
@@ -26,6 +26,6 @@ print.GSC <- function(x, ...){
       }
       print(tmp)
    } else {
-      cat("\nNo additional info available.\n")  
+      cat("\nNo additional info available.\n")
    }
 }

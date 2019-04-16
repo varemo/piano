@@ -80,7 +80,7 @@ polarPlot <- function(pValues, chromosomeMapping,
    
   
   # Load chromosome mapping:
-  if(class(chromosomeMapping) == "character") {
+  if(is(chromosomeMapping, "character")) {
     if(file.exists(chromosomeMapping)) {
       chromosomeMapping <- as.data.frame(read.delim(chromosomeMapping, header=TRUE, sep="\t",
                            row.names=1, as.is=TRUE),stringsAsFactors=FALSE,quote="")

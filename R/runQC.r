@@ -398,7 +398,7 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
 
 
   # Below is the code that runs the selected functions:
-  if(class(arrayData) != "ArrayData") {
+  if(!is(arrayData, "ArrayData")) {
     stop("argument arrayData is not of class ArrayData")
   }
 

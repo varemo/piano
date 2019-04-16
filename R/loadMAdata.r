@@ -1,12 +1,12 @@
 #' Load and preprocess microarray data
-#' 
+#'
 #' Loads, preprocesses and annotates microarray data to be further used by
 #' downstream functions in the \pkg{\link{piano}} package.
-#' 
+#'
 #' This function requires at least two inputs: (1) data, either CEL files in
 #' the directory specified by \code{datadir} or normalized data specified by
 #' \code{dataNorm}, and (2) experimental setup specified by \code{setup}.
-#' 
+#'
 #' The setup shold be either a tab delimited text file with column headers or a
 #' \code{data.frame}. The first column should contain the names of the CEL
 #' files or the column names used for the normalized data, please be sure to
@@ -14,7 +14,7 @@
 #' Additional columns should assign attributes in some category to each array.
 #' (For an example run the example below and look at the object
 #' \code{myArrayData$setup}.)
-#' 
+#'
 #' The \pkg{piano} package is customized for yeast 2.0 arrays and annotation
 #' will work automatically, if the cdfName of the arrays equals \emph{Yeast_2}.
 #' If using normalized yeast 2.0 data as input, the user needs to set the
@@ -26,7 +26,7 @@
 #' files. Note also that \code{annotation} overrides \code{platform}, so if the
 #' user wants to use an alternative annotation for yeast, this can be done
 #' simply by specifying this in \code{annotation}.
-#' 
+#'
 #' The annotation should have the column headers \emph{Gene name},
 #' \emph{Chromosome} and \emph{Chromosome location}. The \emph{Gene name} is
 #' used in the heatmap in \code{diffExp} and the \emph{Chromosome} and
@@ -35,18 +35,18 @@
 #' using a text file the first column should have the header \emph{probeID} or
 #' similar. The filtering step discards all probes not listed in the
 #' annotation.
-#' 
+#'
 #' Normalization is performed on all CEL file data using one of the Affymetrix
 #' methods: PLIER (\code{"plier"}) as implemented by
 #' \code{\link[plier:justPlier]{justPlier}}, RMA (Robust Multi-Array Average)
 #' (\code{"rma"}) expression measure as implemented by
 #' \code{\link[affy:rma]{rma}} or MAS 5.0 expression measure \code{"mas5"} as
 #' implemented by \code{\link[affy:mas5]{mas5}}.
-#' 
+#'
 #' It is possible to pass additional arguments to
 #' \code{\link[affy:read.affybatch]{ReadAffy}}, e.g.  \code{cdfname} as this
 #' might be required for some types of CEL files.
-#' 
+#'
 #' @param datadir character string giving the directory in which to look for
 #' the data. Defaults to \code{getwd()}.
 #' @param setup character string giving the name of the file containing the
@@ -74,12 +74,12 @@
 #' @param \dots additional arguments to be passed to \code{ReadAffy}.
 #' @return An \code{ArrayData} object (which is essentially a \code{list}) with
 #' the following elements:
-#' 
+#'
 #' \item{dataRaw}{raw data as an AffyBatch object}
 #' \item{dataNorm}{\code{data.frame} containing normalized expression values}
 #' \item{setup}{\code{data.frame} containing experimental setup}
 #' \item{annotation}{\code{data.frame} containing annotation}
-#' 
+#'
 #' Depending on input arguments the \code{ArrayData} object may not include
 #' \code{dataRaw} and/or \code{annotation}.
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
@@ -92,17 +92,17 @@
 #' - analysis of Affymetrix GeneChip data at the probe level.
 #' \emph{Bioinformatics.} \bold{20}, 3, 307-315 (2004).
 #' @examples
-#' 
+#'
 #'   # Get path to example data and setup files:
 #'   dataPath <- system.file("extdata", package="piano")
-#' 
+#'
 #'   # Load normalized data:
 #'   myArrayData <- loadMAdata(datadir=dataPath, dataNorm="norm_data.txt.gz", platform="yeast2")
-#' 
+#'
 #'   # Print to look at details:
 #'   myArrayData
-#' 
-#' 
+#'
+#'
 loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
                              platform="NULL", annotation, normalization="plier",
                              filter=TRUE, verbose=TRUE, ...) {
@@ -111,7 +111,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
    if (!requireNamespace("affy", quietly = TRUE)) stop("package affy is missing")
    #if(!try(require(plier))) stop("package plier is missing") # old, line below is preferred:
    if (!requireNamespace("plier", quietly = TRUE)) stop("package plier is missing")
-  
+
   # Argument check:
   if(!normalization %in% c("plier","rma","mas5")) {
     stop("incorrect value of argument normalization")
@@ -126,8 +126,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
       message(mes)
     }
   }
-  
-  
+
+
 
   # Load the data:
   nCelFiles <- length(dir(path=datadir, pattern = ".*cel", all.files=FALSE,
@@ -141,7 +141,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     if(sum(duplicated(colnames(affy::exprs(dataRaw)))) > 0) stop("found samples with identical names")
     .verb("...done", verbose)
   } else if(!missing(dataNorm)) {
-    if(class(dataNorm) == "character") {
+    if(is(dataNorm, "character")) {
       # If no CEL-files, or if selected, load txt-file
       dataFilePath <- paste(datadir, "/", dataNorm, sep="")
       if(!file.exists(dataFilePath)) {
@@ -163,11 +163,11 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
   }
   # This (above) creates object 'dataRaw' or 'dataNorm' depending on the input
   # (cel or txt).
-  
-  
-  
+
+
+
   # Load the setup:
-  if(class(setup) == "character") {
+  if(is(setup, "character")) {
     setupFilePath <- paste(datadir, "/", setup, sep="")
     if(!file.exists(setupFilePath)) {
       stop("could not find the setup file")
@@ -181,16 +181,16 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
   } else {
     setup <- as.data.frame(setup, stringsAsFactors=FALSE)
   }
-  
-  
+
+
   # Normalize the raw data:
   if(exists("dataRaw", inherits=FALSE)) {
     # iterplier qubic spline
     if(normalization == "plier") {
       .verb("Preprocessing using PLIER with cubic spline normalization...", verbose)
        dataNorm <- affy::normalize.AffyBatch.qspline(dataRaw, type="pmonly", verbose=FALSE)
-       tmp <- suppressWarnings(tmp <- capture.output(dataNorm <- plier::justPlier(dataNorm,normalize=FALSE, 
-                                                                           usemm=FALSE, concpenalty=0.08, 
+       tmp <- suppressWarnings(tmp <- capture.output(dataNorm <- plier::justPlier(dataNorm,normalize=FALSE,
+                                                                           usemm=FALSE, concpenalty=0.08,
                                                                            plieriteration=30000)))
 	    dataNorm <- as.data.frame(affy::exprs(dataNorm),stringsAsFactors=FALSE)
 	    colnames(dataNorm) <- gsub("\\.CEL","",colnames(dataNorm), ignore.case=TRUE)
@@ -229,8 +229,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
   } else {
     annotationInfo <- "none"
   }
-  
-  
+
+
   if(annotationInfo != "none") {
     if(annotationInfo == "yeast2") {
       #if(!try(require(yeast2.db))) stop("package yeast2.db is needed for annotationInfo='yeast2'") # old, line below is preferred:
@@ -255,10 +255,10 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
       annot <- annot[2:ncol(annot)]
       colnames(annot) <- c("geneName","chromosome","start") # <- remove sys.name?
       .verb("...done", verbose)
-      
+
     } else if(annotationInfo == "asArgument") {
       # Else annotate from annotation-argument:
-      if(class(annotation) == "character") {
+      if(is(annotation, "character")) {
         .verb("Creating annotation...", verbose)
         annotFilePath <- paste(datadir, "/", annotation, sep="")
         if(!file.exists(annotFilePath)) {
@@ -276,7 +276,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
         annot[,1] <- as.character(annotation[,1])
         annot[,2] <- as.character(annotation[,2])
       }
-      
+
       # Check for NAs:
       suppressWarnings(tmp <- as.numeric(as.character(annot[,3])))
       if(!all(!is.na(tmp))) stop("the chromosome location in annotation has to be numerical")
@@ -291,8 +291,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
   } else {
     warning("no annotation created, may cause limitation in downstream functions")
   }
-  
-  
+
+
   if(filter == TRUE & exists("annot", inherits=FALSE)) {
     # Remove unmapped probes:
       .verb("Removing unmapped probes...", verbose)
@@ -306,8 +306,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
 	  warning("annotation required for filtering, filtering step is omitted")
 	}
 
-  
-  
+
+
   # Check sample name consistency:
   tmp1 <- length(rownames(setup))
   tmp2 <- length(colnames(dataNorm))
@@ -317,7 +317,7 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     stop("inconsistant sample names in dataNorm and setup")
   }
 
-  
+
   # Construct ArrayData object as return:
   if(exists("dataRaw", inherits=FALSE) & exists("annot", inherits=FALSE)) {
     arrayData <- list(dataRaw=dataRaw, dataNorm=dataNorm, setup=setup, annotation=annot)
@@ -328,8 +328,8 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
   } else {
     arrayData <- list(dataNorm=dataNorm, setup=setup)
   }
-  class(arrayData) = "ArrayData"
+  class(arrayData) <- "ArrayData"
 
   return(arrayData)
-  
+
 }

@@ -39,17 +39,17 @@ exploreGSAres <- function(gsaRes, browser=TRUE, geneAnnot=NULL, genesets) {
   gsares <- gsaRes
 
   # Argument checking:
-  if(class(gsares) != "GSAres") stop("argument gsares is not of class GSAres")
+  if(!is(gsares, "GSAres")) stop("argument gsares is not of class GSAres")
   if(!is.logical(browser)) stop("argument browser is not a logical")
   if(!is.null(geneAnnot)) {
     if(sum(duplicated(geneAnnot[,1]))>0) stop("geneAnnot may not contain duplicated gene IDs")
     if(sum(geneAnnot[,1]%in%rownames(gsares$geneLevelStats)) == 0) stop("no overlap between genes in geneAnnot and gsares")
   }
   if(missing(genesets)) genesets <- list("No available gene-sets" = "No available gene-sets")
-  if(class(genesets)=="list") {
+  if(is(genesets, "list")) {
     if(unique(unlist(lapply(genesets, class)))[1] != "character" | length(unique(unlist(lapply(genesets, class))))>1) stop("genesets has to be a character vector or a list of character vectors")
   } else {
-    if(class(genesets) != "character") stop("genesets has to be a character vector or a list of character vectors")
+    if(!is(genesets, "character")) stop("genesets has to be a character vector or a list of character vectors")
     genesets <- list(genesets)
   }
   if(is.null(names(genesets))) names(genesets) <- paste("Gene-set list", seq(from=1, to=length(genesets)))
@@ -1004,10 +1004,10 @@ ui <- dashboardPage(
                                edgeWidth=input$edgeWidth,
                                overlap=switch(input$genes_or_percent, genes=input$edge_overlap, percent=input$edge_overlap/100),
                                maxAllowedNodes=input$maxAllowedNodes,
-                               shiny=T,
+                               shiny=TRUE,
                                main=NULL,
-                               submain=NULL)), silent=T)
-        if(class(nwPlot)[1]=="try-error") {
+                               submain=NULL)), silent=TRUE)
+        if(is(nwPlot[1], "try-error")) {
           nw_notification_text <- gsub(".*: (.*)","\\1",nwPlot[1])
           if(grepl("less than two gene sets were selected, can not plot",nwPlot[1])) {
             nw_notification_text <- "For the given parameters, less than two gene sets were selected. Try adjusting the significance cutoff."

@@ -126,7 +126,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   #*********************************************
   
   tmp <- try(pValue <- match.arg(class, c("distinct","mixed","non"), several.ok=FALSE), silent=TRUE)
-  if(class(tmp) == "try-error") {
+  if(is(tmp, "try-error")) {
     stop("argument class is not valid")
   }
   if(pValue == "non") {
@@ -134,7 +134,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     direction <- "none"
   } else {
     tmp <- try(direction <- match.arg(direction, c("up","down","both"), several.ok=FALSE), silent=TRUE)
-    if(class(tmp) == "try-error") {
+    if(is(tmp, "try-error")) {
       stop("argument direction is not valid")
     }
   }
@@ -160,7 +160,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   if(overlap <= 0) stop("argument overlap has to be larger than zero")
   if(length(nodeSize) != 2) stop("argument nodeSize has to have length 2")
   if(length(edgeWidth) != 2) stop("argument edgeWidth has to have length 2")
-  if(class(adjusted) != "logical") stop("argument adjusted has to be TRUE or FALSE")
+  if(!is(adjusted, "logical")) stop("argument adjusted has to be TRUE or FALSE")
   if(!missing(main)) if(!class(main) %in% c("character","NULL")) stop("argument main has to be a character string")
   
   if(!lay%in% c("visNetwork","layout_nicely","layout_as_star","layout_with_fr","layout_with_kk",
@@ -366,7 +366,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
 
   # Node labels:
   tmp <- try(label <- match.arg(label, c("names","numbers","numbersAndSizes","namesAndSizes"), several.ok=FALSE), silent=TRUE)
-  if(class(tmp) == "try-error") {
+  if(is(tmp, "try-error")) {
     stop("argument label has to be set to either 'names' or 'numbers'")
   }
   tmp <- names(gsc)[indSelected]

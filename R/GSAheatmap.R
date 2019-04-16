@@ -58,7 +58,7 @@ GSAheatmap <- function(gsaRes, cutoff=5, adjusted=FALSE, ncharLabel=25, cellnote
                        colorkey=TRUE, colorgrad=NULL, cex=NULL) {
    
    tmp <- try(cellnote <- match.arg(cellnote, c("pvalue","rank","nGenes","none"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument cellnote is not valid")
    }
    if(cellnote=="pvalue") cellnote<-"medianPvalue"

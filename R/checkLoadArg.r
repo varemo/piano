@@ -18,22 +18,22 @@ checkLoadArg <- function(statistics,
    #*********************************************
    
    # Check verbose:
-   if(class(verbose) != "logical") stop("argument verbose has to be TRUE or FALSE")
+   if(!is(verbose, "logical")) stop("argument verbose has to be TRUE or FALSE")
    
    # Check ncpus:
-   if(class(ncpus) != "numeric") stop("argument ncpus should be an integer")
+   if(!is(ncpus, "numeric")) stop("argument ncpus should be an integer")
    if(length(ncpus) != 1) stop("argument ncpus should be an integer")
    
    # Check statMethod:
    tmp <- try(statMethod <- match.arg(statMethod, c("fisher","stouffer","reporter","tailStrength","wilcoxon",
                                                     "mean","median","sum","maxmean","gsea","fgsea","page"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument geneSetStat set to unknown method")
    }
    
    # Check signMethod:
    tmp <- try(signMethod <- match.arg(signMethod, c("geneSampling","samplePermutation","nullDist"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument signifMethod set to unknown method")
    }
    if(signMethod == "geneSampling") signMethod <- "geneperm"
@@ -56,7 +56,7 @@ checkLoadArg <- function(statistics,
    # Check adjMethod:
    tmp <- try(adjMethod <- match.arg(adjMethod, c("holm", "hochberg", "hommel", "bonferroni", 
                                                   "BH", "BY","fdr", "none"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument adjMethod set to unknown method")
    }
    if(!adjMethod %in% c("fdr","none") & statMethod == "gsea") {
@@ -79,7 +79,7 @@ checkLoadArg <- function(statistics,
    
    # Statistics as matrix like object:
    tmp <- try(statistics <- as.matrix(statistics), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument geneLevelStats could not be converted into a matrix")
    }
    
@@ -139,7 +139,7 @@ checkLoadArg <- function(statistics,
    # Signs as matrix like object:
    if(!is.null(signs) & statType != "t") {
       tmp <- try(signs <- as.matrix(signs), silent=TRUE)
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("argument directions could not be converted into a matrix")
       }
       
@@ -222,7 +222,7 @@ checkLoadArg <- function(statistics,
    #*********************************************
    
    # Check if gsc is a list:
-   if(class(gsc) != "GSC") stop("argument gsc should have class 'GSC' as output from loadGSC()")
+   if(!is(gsc, "GSC")) stop("argument gsc should have class 'GSC' as output from loadGSC()")
 
    # Extract and remove addInfo data.frame from gsc:
    addInfo <- gsc$addInfo
@@ -249,7 +249,7 @@ checkLoadArg <- function(statistics,
    info$removedGSsizeLimit <- tmp - length(gsc)
    
    # Number of gene sets with additional info:
-   if(class(addInfo) != "character") {
+   if(!is(addInfo, "character")) {
       tmp <- sum(addInfo[,1] %in% names(gsc))
       info$nGeneSetsWithAddInfo <- tmp
    } else {
@@ -285,7 +285,7 @@ checkLoadArg <- function(statistics,
          
          # Sample permutations as matrix like object:
          tmp <- try(permStatistics[[i]] <- as.matrix(permStatistics[[i]]), silent=TRUE)
-         if(class(tmp) == "try-error") {
+         if(is(tmp, "try-error")) {
             stop("permStats could not be converted into a matrix")
          }
          
@@ -334,7 +334,7 @@ checkLoadArg <- function(statistics,
          # Signs as matrix like object:
          if(!is.null(permSigns) & statType != "t") {
             tmp <- try(permSigns[[i]] <- as.matrix(permSigns[[i]]), silent=TRUE)
-            if(class(tmp) == "try-error") {
+            if(is(tmp, "try-error")) {
                stop("permDirections could not be converted into a matrix")
             }
             

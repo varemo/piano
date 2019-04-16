@@ -72,7 +72,7 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
    
    # Error check:
    tmp <- try(pValue <- match.arg(class, c("distinct","mixed","non"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument class is not valid")
    }
    if(pValue == "non") {
@@ -80,7 +80,7 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
       direction <- "none"
    } else {
       tmp <- try(direction <- match.arg(direction, c("up","down"), several.ok=FALSE), silent=TRUE)
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("argument direction is not valid")
       }
    }
@@ -91,11 +91,11 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
    if(pValue == "mixed" & direction == "down") pValue <-"subdn"
    
    tmp <- try(method <- match.arg(method, c("mean","median","max","Borda","Copeland"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument method is not valid")
    }
    tmp <- try(rowNames <- match.arg(rowNames, c("names","ranks","none"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument rowNames is not valid")
    }
    
