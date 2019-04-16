@@ -76,11 +76,11 @@ exploreGSAres <- function(gsaRes, browser=TRUE, geneAnnot=NULL, genesets) {
   selected_class_network <- selectable_classes_network[[1]]
 
   if(selected_class_network == "distinct_both") {
-    cutoff_network <- signif(sort(c(gsares$pAdjDistinctDirUp,gsares$pAdjDistinctDirDn), decreasing=F)[20],2)
+    cutoff_network <- signif(sort(c(gsares$pAdjDistinctDirUp,gsares$pAdjDistinctDirDn), decreasing=FALSE)[20],2)
   } else if(selected_class_network == "non_NULL") {
-    cutoff_network <- signif(sort(gsares$pAdjNonDirectional, decreasing=F)[20],2)
+    cutoff_network <- signif(sort(gsares$pAdjNonDirectional, decreasing=FALSE)[20],2)
   } else if(selected_class_network == "mixed_up") {
-    cutoff_network <- signif(sort(c(gsares$pAdjMixedDirUp), decreasing=F)[20],2)
+    cutoff_network <- signif(sort(c(gsares$pAdjMixedDirUp), decreasing=FALSE)[20],2)
   }
   if(cutoff_network==0) cutoff_network <- 1e-6
 
@@ -93,9 +93,9 @@ exploreGSAres <- function(gsaRes, browser=TRUE, geneAnnot=NULL, genesets) {
 
 #     ui <- fluidPage(
 ui <- dashboardPage(
-      dashboardHeader(disable=T),
-      dashboardSidebar(disable=T),
-      dashboardBody(navbarPage("Explore your GSA results",id="navbarpage",selected="tab_gsainfo", collapsible=T,
+      dashboardHeader(disable=TRUE),
+      dashboardSidebar(disable=TRUE),
+      dashboardBody(navbarPage("Explore your GSA results",id="navbarpage",selected="tab_gsainfo", collapsible=TRUE,
 
       # fluidRow(
       #   column(8,
@@ -179,7 +179,7 @@ ui <- dashboardPage(
                      HTML("</td></tr></table>"),
                      DT::dataTableOutput('gsaresTable',height="100%"),
                      absolutePanel(id="controls", class="panel panel-default", fixed=FALSE,
-                                   draggable=F, top=110, left=20, right="auto", bottom="auto",
+                                   draggable=FALSE, top=110, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
                                    actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
                                    HTML("<span style='display:inline-block; width: 100px;'></span><b>Toggle columns:</b><span style='display:inline-block; width: 30px;'></span>"),
@@ -255,7 +255,7 @@ ui <- dashboardPage(
                      HTML("</td></tr></table>"),
                      DT::dataTableOutput('geneTable', height="100%"),
                      absolutePanel(id="controls", class="panel panel-default", fixed=FALSE,
-                                   draggable=F, top=110, left=20, right="auto", bottom="auto",
+                                   draggable=FALSE, top=110, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
                                    actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
                                    HTML("<span style='display:inline-block; width: 100px;'></span>"),
@@ -303,23 +303,23 @@ ui <- dashboardPage(
                      hidden(div(id="tab_nwplot",
                      HTML("<br>"),
                      fluidRow(column(8,
-                                     box(title=NULL, status="primary", height="85vh", width="100%", solidHeader = T,
+                                     box(title=NULL, status="primary", height="85vh", width="100%", solidHeader =TRUE,
                                                 visNetworkOutput("network", width = "100%", height = "80vh")
                                      ),
-                                     absolutePanel(id="nw_geneset_table", class="panel panel-default", fixed=F,
-                                                   draggable=F, top=10, left=30, right="auto", bottom="auto",
+                                     absolutePanel(id="nw_geneset_table", class="panel panel-default", fixed=FALSE,
+                                                   draggable=FALSE, top=10, left=30, right="auto", bottom="auto",
                                                    width=200, height=80, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
                                                    actionLink("filter_gs3", "View gene-sets in table")
                                      ),
-                                     absolutePanel(id="nw_color_legend", class="panel panel-default", fixed=F,
-                                                   draggable=F, top=10, left="auto", right=25, bottom="auto",
+                                     absolutePanel(id="nw_color_legend", class="panel panel-default", fixed=FALSE,
+                                                   draggable=FALSE, top=10, left="auto", right=25, bottom="auto",
                                                    width=200, height=80, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
                                                    plotOutput("network_color_legend", width="200px", height="70px")
                                      )
                               ),
                               column(4,
                                      #wellPanel(style="background-color: #ffffff",
-                                     box(title="Gene-set p-value to display", status="primary", collapsible=T, width="100%",
+                                     box(title="Gene-set p-value to display", status="primary", collapsible=TRUE, width="100%",
                                                #fluidRow(column(12,HTML("<h4>Gene-set p-value to display</h4>"))),
                                                fluidRow(column(6,
                                                         selectInput("network_class", HTML("<b>P-value class</b>"),
@@ -335,7 +335,7 @@ ui <- dashboardPage(
                                                )
                                      ),
                                      #wellPanel(style="background-color: #ffffff",
-                                     box(title="Gene-set selection", status="primary", collapsible=T, width="100%",
+                                     box(title="Gene-set selection", status="primary", collapsible=TRUE, width="100%",
                                                #fluidRow(column(12,HTML("<h4>Gene-set selection</h4>"))),
                                                fluidRow(column(6,
                                                         selectInput("geneset_selection","Select gene-set by",
@@ -359,7 +359,7 @@ ui <- dashboardPage(
                                                )
                                      ),
                                      #wellPanel(style="background-color: #ffffff",
-                                     box(title="Network layout", status="primary", collapsible=T, width="100%",
+                                     box(title="Network layout", status="primary", collapsible=TRUE, width="100%",
                                                #fluidRow(column(12,HTML("<h4>Network layout</h4>"))),
                                                fluidRow(column(8,
                                                         selectInput("layout", label=NULL,
@@ -386,10 +386,10 @@ ui <- dashboardPage(
                                                )
                                      ),
                                      #wellPanel(style="background-color: #ffffff",
-                                     box(title="Node properties", status="primary", collapsible=T, width="100%", collapsed=T,          
+                                     box(title="Node properties", status="primary", collapsible=TRUE, width="100%", collapsed=TRUE,
                                                #fluidRow(column(12,HTML("<h4>Node properties</h4>"))),
                                                fluidRow(column(12,
-                                                        sliderInput("nodeSize", label="Size range", min=1, max=100, value=c(10,40), ticks=F)
+                                                        sliderInput("nodeSize", label="Size range", min=1, max=100, value=c(10,40), ticks=FALSE)
                                                         )
                                                ),
                                                fluidRow(column(3,
@@ -410,10 +410,10 @@ ui <- dashboardPage(
                                                )
                                      ),
                                      #wellPanel(style="background-color: #ffffff",
-                                     box(title="Edge properties", status="primary", collapsible=T, width="100%", collapsed=T,
+                                     box(title="Edge properties", status="primary", collapsible=TRUE, width="100%", collapsed=TRUE,
                                                #fluidRow(column(12,HTML("<h4>Edge properties</h4>"))),
                                                fluidRow(column(12,
-                                                        sliderInput("edgeWidth", label="Width range", min=1, max=50, value=c(1,15), ticks=F)
+                                                        sliderInput("edgeWidth", label="Width range", min=1, max=50, value=c(1,15), ticks=FALSE)
                                                         )
                                                ),
                                                fluidRow(column(12,HTML("<b>Required node overlap to draw edge</b>"))),
@@ -464,7 +464,7 @@ ui <- dashboardPage(
       colnames(genetable_all) <- c("Gene ID","Gene-level statistic","Sign (FC direction)","In gene-sets")
 
       if(!is.null(geneAnnot)) {
-        genetable_all <- merge(genetable_all, geneAnnot, by=1, all.x=T)
+        genetable_all <- merge(genetable_all, geneAnnot, by=1, all.x=TRUE)
         colnames(genetable_all) <- c("Gene ID","Gene-level statistic","Sign (FC direction)","In gene-sets", colnames(geneAnnot)[-1])
         rownames(genetable_all) <- genetable_all[,1]
       }
@@ -487,7 +487,7 @@ ui <- dashboardPage(
                              red_gene="",
                              gene_table=genetable_all,
                              log_gs_plots=FALSE,
-                             visible_columns=gsatab_colnames[!gsatab_colnames%in%c(grep("p \\(",gsatab_colnames, value=T),grep("Stat",gsatab_colnames, value=T))],
+                             visible_columns=gsatab_colnames[!gsatab_colnames%in%c(grep("p \\(",gsatab_colnames, value=TRUE),grep("Stat",gsatab_colnames, value=TRUE))],
                              physics=TRUE,
                              colorLegendInfo=NULL,
                              nwGeneSets=NULL,
@@ -541,7 +541,7 @@ ui <- dashboardPage(
         par(mar=c(0, 4.1, 1.1, 2.1))
         h <- hist(tmp, n=50, xlim=c(0,max(tmp)), xaxt="n", xlab=NULL, main=NULL, col="forestgreen")
         par(mar=c(5, 4.1, 0, 2.1))
-        boxplot(tmp, horizontal=T, ylim=c(0,max(tmp)), col="forestgreen", axes=F, xlab="Number of genes")
+        boxplot(tmp, horizontal=TRUE, ylim=c(0,max(tmp)), col="forestgreen", axes=FALSE, xlab="Number of genes")
         axis(1, las=2)
       })
       output$gsc_boxplot2 <- renderPlot({
@@ -550,7 +550,7 @@ ui <- dashboardPage(
         par(mar=c(0, 4.1, 1.1, 2.1))
         h <- hist(tmp, n=50, xlim=c(0,max(tmp)), xaxt="n", xlab=NULL, main=NULL, col="mediumpurple2")
         par(mar=c(5, 4.1, 0, 2.1))
-        boxplot(tmp, horizontal=T, ylim=c(0,max(tmp)), col="mediumpurple2", axes=F, xlab="Number of gene-sets")
+        boxplot(tmp, horizontal=TRUE, ylim=c(0,max(tmp)), col="mediumpurple2", axes=FALSE, xlab="Number of gene-sets")
         axis(1, las=2)
       })
 
@@ -574,7 +574,7 @@ ui <- dashboardPage(
 
       # Toggle columns events:
       observeEvent(input$toggle_genes, {
-        tmp <- grep("Genes",gsatab_colnames, value=T)
+        tmp <- grep("Genes",gsatab_colnames, value=TRUE)
         if(all(tmp%in%rval$visible_columns)) {
           rval$visible_columns <- rval$visible_columns[!rval$visible_columns %in% tmp]
         } else {
@@ -582,7 +582,7 @@ ui <- dashboardPage(
         }
       })
       observeEvent(input$toggle_padj, {
-        tmp <- grep("p adj",gsatab_colnames, value=T)
+        tmp <- grep("p adj",gsatab_colnames, value=TRUE)
         if(all(tmp%in%rval$visible_columns)) {
           rval$visible_columns <- rval$visible_columns[!rval$visible_columns %in% tmp]
         } else {
@@ -590,7 +590,7 @@ ui <- dashboardPage(
         }
       })
       observeEvent(input$toggle_p, {
-        tmp <- grep("p \\(",gsatab_colnames, value=T)
+        tmp <- grep("p \\(",gsatab_colnames, value=TRUE)
         if(all(tmp%in%rval$visible_columns)) {
           rval$visible_columns <- rval$visible_columns[!rval$visible_columns %in% tmp]
         } else {
@@ -598,7 +598,7 @@ ui <- dashboardPage(
         }
       })
       observeEvent(input$toggle_stats, {
-        tmp <- grep("Stat",gsatab_colnames, value=T)
+        tmp <- grep("Stat",gsatab_colnames, value=TRUE)
         if(all(tmp%in%rval$visible_columns)) {
           rval$visible_columns <- rval$visible_columns[!rval$visible_columns %in% tmp]
         } else {
@@ -607,11 +607,11 @@ ui <- dashboardPage(
       })
 
       output$gsaresTable <- DT::renderDataTable({tmp <- rval$gs_table[gsatab_colnames[gsatab_colnames%in%rval$visible_columns]]},
-                                                server=T, escape=F, 
+                                                server=TRUE, escape=FALSE,
                                                 selection=list(mode='single', target='row'),
                                                 filter="none",
-                                                rownames=F,
-                                                fillContainer=T,
+                                                rownames=FALSE,
+                                                fillContainer=TRUE,
                                                 extensions=c("Scroller"),
                                                 options = list(initComplete=JS(
                                                     # this is to set color format of first row
@@ -621,7 +621,7 @@ ui <- dashboardPage(
                                                     dom = 'frtip',
                                                     deferRender=TRUE,
                                                     scrollY="calc(100vh - 250px)",
-                                                    scrollX=T,
+                                                    scrollX=TRUE,
                                                     scroller=TRUE
                                                 ))
 
@@ -647,13 +647,13 @@ ui <- dashboardPage(
         tmp <- tmp$stats
         rownames(tmp) <- tmp[,1]
         tmp <- rbind(
-        format(rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])), digits=3, scientific=T),
-        format(rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2])), digits=3, scientific=T)
+        format(rev(c(tmp["p (dist.dir.dn)",2],tmp["p (mix.dir.dn)",2],tmp["p (non-dir)",2],tmp["p (mix.dir.up)",2],tmp["p (dist.dir.up)",2])), digits=3, scientific=TRUE),
+        format(rev(c(tmp["p adj (dist.dir.dn)",2],tmp["p adj (mix.dir.dn)",2],tmp["p adj (non-dir)",2],tmp["p adj (mix.dir.up)",2],tmp["p adj (dist.dir.up)",2])), digits=3, scientific=TRUE)
         )
         rownames(tmp) <- c("p-value","Adjusted p-value")
         colnames(tmp) <- rev(c("Distinct directional (down)","Mixed directional (down)","Non-directional","Mixed directional (up)", "Distinct directional (up)"))
         t(tmp)
-      }, rownames=T,colnames=T)
+      }, rownames=TRUE,colnames=TRUE)
 
       output$gsNgenes <- renderUI({
         tmp <- geneSetSummary(gsares,rval$sel_gs)
@@ -723,7 +723,7 @@ ui <- dashboardPage(
       # Neighbor gene-sets:
       output$gsNeighborsSlider <- renderUI({
         tmp <- length(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats)
-        sliderInput("nNeighborGenesets", NULL, 1, tmp, min(c(5,tmp)), round=T, step=1, ticks=F, width="300px")
+        sliderInput("nNeighborGenesets", NULL, 1, tmp, min(c(5,tmp)), round=TRUE, step=1, ticks=FALSE, width="300px")
       })
       output$gsNeighbors <- renderUI({
         tmp <- names(geneSetSummary(gsares,rval$sel_gs)$geneLevelStats)
@@ -761,7 +761,7 @@ ui <- dashboardPage(
           tmp <- tmp$geneLevelStats
         }
         abline(v=tmp, lty=2)
-        hist(tmp2,100,col=ifelse(gsares$geneStatType=="p-signed","indianred2","grey"), add=T)
+        hist(tmp2,100,col=ifelse(gsares$geneStatType=="p-signed","indianred2","grey"), add=TRUE)
 
         # Highlight selected gene:
         observeEvent(input$gsHist_click, {
@@ -778,7 +778,7 @@ ui <- dashboardPage(
         tmp <- geneSetSummary(gsares,rval$sel_gs)
         tmp <- tmp$geneLevelStats[tmp$directions<=0]
         abline(v=tmp, lty=2)
-        hist(tmp2,100,col="skyblue2", add=T)
+        hist(tmp2,100,col="skyblue2", add=TRUE)
 
         # Highlight selected gene:
         observeEvent(input$gsHist_click2, {
@@ -801,7 +801,7 @@ ui <- dashboardPage(
 
         if(gsares$geneStatType=="p-signed") {
           bp <- boxplot(list(gls_all_dn, gls_all_up, gls_gs_dn, gls_gs_up),
-                        horizontal=T, 
+                        horizontal=TRUE,
                         names=c(paste("All genes down (",length(gls_all_dn),")",sep=""),
                                 paste("All genes up (",length(gls_all_up),")",sep=""),
                                 "Gene-set genes (down)","Gene-set genes (up)"),
@@ -809,7 +809,7 @@ ui <- dashboardPage(
                         col=c("skyblue2","indianred2","white","white"),
                         border=c("black","black","dodgerblue3","red"),
                         main="", xlab="Gene-level statistics",
-                        outline=T, outcol="white")
+                        outline=TRUE, outcol="white")
 
           # Add outliers:
           tmp <- cbind(bp$out,bp$group)
@@ -828,10 +828,10 @@ ui <- dashboardPage(
 
         } else {
           bp <- boxplot(list(gls_all, gls_gs),
-                        horizontal=T, names=c(paste("All genes (",length(gls_all),")",sep=""),"Genes in gene-set"), las=1,
+                        horizontal=TRUE, names=c(paste("All genes (",length(gls_all),")",sep=""),"Genes in gene-set"), las=1,
                         col=c("grey","white"),
                         main="", xlab="Gene-level statistics",
-                        outline=T, outcol="white")
+                        outline=TRUE, outcol="white")
           # Add outliers:
           tmp <- cbind(bp$out,bp$group)
           tmp <- tmp[tmp[,2] == 1,]
@@ -897,12 +897,12 @@ ui <- dashboardPage(
                                                 }
                                                 )
                                                },
-        server=T, escape=F, 
+        server=TRUE, escape=FALSE,
         selection=list(mode='single', target='row'),
         filter="none",
-        rownames=F,
+        rownames=FALSE,
         extensions=c("Scroller","FixedColumns"),
-        fillContainer=T,
+        fillContainer=TRUE,
         options = list(initComplete=JS(
         # this is to set color format of first row
         "function(settings, json) {",
@@ -911,7 +911,7 @@ ui <- dashboardPage(
         dom = 'frtip',
         deferRender=TRUE,
         scrollY="calc(100vh - 250px)",
-        scrollX=T,
+        scrollX=TRUE,
         scroller=TRUE,
         fixedColumns=list(leftColumns=1))
       )
@@ -1023,7 +1023,7 @@ ui <- dashboardPage(
           showNotification(nw_notification_text,
                            id="nw_notification",
                            duration=NULL,
-                           closeButton=T,
+                           closeButton=TRUE,
                            type="error")
           rval$colorLegendInfo <- NULL # to fail (= hide) the colorlegend plot
           cat() # needed to avoid visNetwork error print in console
@@ -1053,8 +1053,8 @@ ui <- dashboardPage(
           xright <- xleft + abs(xleft[1]-xleft[2])
           rect(xleft,0,xright,1, col=rval$colorLegendInfo$colors, border=NA)
         }
-        tmp <- try(plotColorLegend(), silent=T)
-        if(class(tmp)[1]=="try-error") plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", axes=F)
+        tmp <- try(plotColorLegend(), silent=TRUE)
+        if(is(tmp[1], "try-error")) plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", axes=FALSE)
       })
 
       observeEvent(input$filter_gs3, { # action link in ui

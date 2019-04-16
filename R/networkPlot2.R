@@ -115,7 +115,7 @@
 
 
 networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0.001, geneSets=NULL, lay="visNetwork",
-                         physics=T, overlap=0.1, label="names", labelSize=22, ncharLabel=25, nodeSize=c(10,40), 
+                         physics=TRUE, overlap=0.1, label="names", labelSize=22, ncharLabel=25, nodeSize=c(10,40), 
                          edgeWidth=c(1,15), edgeColor=NULL, scoreColors=NULL, naColor="yellow", main, submain, seed=1,
                          maxAllowedNodes=Inf, shiny=FALSE) {
   
@@ -335,12 +335,12 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     }
     vColor <- rep(NA,length(pSelectedLog10))
     tmp <- pSelectedLog10[pSelectedLog10 > 0 & !is.na(pSelectedLog10)]
-    vColor[pSelectedLog10 > 0 & !is.na(pSelectedLog10)] <- gradColorsUp[round(rescale(tmp,c(1,100),c(-1e-8,max(abs(pSelectedLog10),3,na.rm=T))))]
+    vColor[pSelectedLog10 > 0 & !is.na(pSelectedLog10)] <- gradColorsUp[round(rescale(tmp,c(1,100),c(-1e-8,max(abs(pSelectedLog10),3,na.rm=TRUE))))]
     tmp <- abs(pSelectedLog10[pSelectedLog10 < 0 & !is.na(pSelectedLog10)])
-    vColor[pSelectedLog10 < 0 & !is.na(pSelectedLog10)] <- gradColorsDn[round(rescale(tmp,c(1,100),c(-1e-8,max(abs(pSelectedLog10),3,na.rm=T))))]
+    vColor[pSelectedLog10 < 0 & !is.na(pSelectedLog10)] <- gradColorsDn[round(rescale(tmp,c(1,100),c(-1e-8,max(abs(pSelectedLog10),3,na.rm=TRUE))))]
     
     colorLegendInfo$colors <- c(rev(gradColorsDn),gradColorsUp)
-    colorLegendInfo$range <- max(abs(pSelectedLog10),3,na.rm=T)*c(-1,1)
+    colorLegendInfo$range <- max(abs(pSelectedLog10),3,na.rm=TRUE)*c(-1,1)
     
   } else {
     if(is.null(scoreColors)) {
@@ -357,10 +357,10 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
     }
     gradColors <- colorRampPalette(tmp,interpolate="linear")(100)
     vColor <- rep(NA, length(pSelectedLog10))
-    vColor[!is.na(pSelectedLog10)] <- gradColors[round(rescale(pSelectedLog10[!is.na(pSelectedLog10)],c(1,100),c(-1e-8,max(pSelectedLog10,3,na.rm=T))))]
+    vColor[!is.na(pSelectedLog10)] <- gradColors[round(rescale(pSelectedLog10[!is.na(pSelectedLog10)],c(1,100),c(-1e-8,max(pSelectedLog10,3,na.rm=TRUE))))]
     
     colorLegendInfo$colors <- gradColors
-    colorLegendInfo$range <- c(0,max(pSelectedLog10,3,na.rm=T))
+    colorLegendInfo$range <- c(0,max(pSelectedLog10,3,na.rm=TRUE))
   }
   vColor[is.na(vColor)] <- naColor
 
@@ -392,7 +392,7 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   tmp3 <- pSelected
   tmp3[pValuesZero[indSelected]] <- 0
   tmp3[pValuesOne[indSelected]] <- 1*sign(tmp3[pValuesOne[indSelected]])
-  vHoverText <- paste(tmp, "<br>p-value: ", format(abs(tmp3),scientific=T,digits=3),"<br>-log10(p-value): ",round(log10(abs(tmp3)),3),tmp2,"<br>Genes: ", gsSize, sep="")
+  vHoverText <- paste(tmp, "<br>p-value: ", format(abs(tmp3),scientific=TRUE,digits=3),"<br>-log10(p-value): ",round(log10(abs(tmp3)),3),tmp2,"<br>Genes: ", gsSize, sep="")
   
   #*********************************************
   # Predefined layouts:
@@ -456,12 +456,12 @@ networkPlot2 <- function(gsaRes, class, direction, adjusted=TRUE, significance=0
   # Plot:
   if(lay=="visNetwork" | lay==1) {
     res <- visNetwork(nodes=vn$nodes, edges=vn$edges, main=main, submain=submain) %>%
-      visNodes(font=list(size=as.character(labelSize),face="arial"), shadow=T) %>%
+      visNodes(font=list(size=as.character(labelSize),face="arial"), shadow=TRUE) %>%
       visLayout(randomSeed=seed) %>%
       visPhysics(enabled=physics)
   } else {
     res <- visNetwork(nodes=vn$nodes, edges=vn$edges, main=main, submain=submain) %>%
-      visNodes(font=list(size=as.character(labelSize),face="arial"), shadow=T) %>%
+      visNodes(font=list(size=as.character(labelSize),face="arial"), shadow=TRUE) %>%
       visIgraphLayout(layout=lay, physics=physics, randomSeed=seed)
   }
   

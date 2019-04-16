@@ -13,7 +13,7 @@ GSCsignificanceBatch <- function(statistics, statType, signs, gsc, statMethod, s
          #if(!try(suppressMessages(require(snowfall)))) stop("package snowfall is missing") # old, line below is preferred:
          if (!requireNamespace("snowfall", quietly = TRUE)) stop("package snowfall is missing")
          # Initialize parallelization:
-         tmp<-capture.output(suppressMessages(snowfall::sfInit(parallel=T,cpus=ncpus)))
+         tmp<-capture.output(suppressMessages(snowfall::sfInit(parallel=TRUE,cpus=ncpus)))
          # Run in parallel:
          tmp <- snowfall::sfLapply(1:ncpus,GSCstatGenePerm, statistics, signs, gsc, statType, statMethod, 
                          nGenes, nGenesUp, nGenesDn, nPerm/ncpus, gseaParam)

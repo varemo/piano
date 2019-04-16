@@ -58,7 +58,7 @@ GSAsummaryTable <- function(gsaRes, save=FALSE, file=NULL) {
                      cbind(obj$nGenesDn)[,test],
                      cbind(obj$statMixedDirDn)[,test], 
                      cbind(obj$pMixedDirDn)[,test], 
-                     cbind(obj$pAdjMixedDirDn)[,test], stringsAsFactors=F)
+                     cbind(obj$pAdjMixedDirDn)[,test], stringsAsFactors=FALSE)
    
    colnames(tab) <- c("Name", "Genes (tot)", "Stat (dist.dir)", "Stat (dist.dir.up)", "p (dist.dir.up)", "p adj (dist.dir.up)",
                       "Stat (dist.dir.dn)", "p (dist.dir.dn)", "p adj (dist.dir.dn)", "Stat (non-dir.)", "p (non-dir.)", "p adj (non-dir.)",

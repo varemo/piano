@@ -223,7 +223,7 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
          cexPoint <- 1.2
       }
       boxplot(rankMat[,topInd], range=1.5, log=logScale, col="black",border="red",outline=!showLegend,
-              pars=list(whisklty=0,staplelty=0,boxlty=0,outpch=20,outcol="darkgray",outcex=0.4,medlwd=1.5),horizontal=T,names=rowNames,
+              pars=list(whisklty=0,staplelty=0,boxlty=0,outpch=20,outcol="darkgray",outcex=0.4,medlwd=1.5),horizontal=TRUE,names=rowNames,
               oma=c(0,0,0,20),mar=c(0,0,0,20), las=1, cex.axis=cexLabel, main=main,yaxt=yaxt,xlab="Individual ranks",
               ylab=ylabel,cex.lab=cexLabel)
       if(showLegend) {
@@ -233,7 +233,7 @@ consensusScores <- function(resList, class, direction, n=50, adjusted=FALSE, met
       }
       boxplot(rankMat[,topInd],col="black", log=logScale, range=1.5,border="red",outline=FALSE,
               pars=list(whisklty=1,whisklwd=0.5,whiskcol="black",staplelty=0,boxlty=0,medlwd=1.5),
-              add=TRUE,horizontal=T,names=rowNames,las=1, cex.axis=cexLabel,yaxt=yaxt,xlab="Individual ranks",
+              add=TRUE,horizontal=TRUE,names=rowNames,las=1, cex.axis=cexLabel,yaxt=yaxt,xlab="Individual ranks",
               ylab=ylabel,cex.lab=cexLabel)
    }
    if(is.null(names(resList))) {

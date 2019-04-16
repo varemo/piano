@@ -6,7 +6,7 @@
 \usage{
 networkPlot2(gsaRes, class, direction, adjusted = TRUE,
   significance = 0.001, geneSets = NULL, lay = "visNetwork",
-  physics = T, overlap = 0.1, label = "names", labelSize = 22,
+  physics = TRUE, overlap = 0.1, label = "names", labelSize = 22,
   ncharLabel = 25, nodeSize = c(10, 40), edgeWidth = c(1, 15),
   edgeColor = NULL, scoreColors = NULL, naColor = "yellow", main,
   submain, seed = 1, maxAllowedNodes = Inf, shiny = FALSE)

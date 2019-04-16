@@ -76,7 +76,7 @@ writeFilesForKiwi <- function(gsaRes, label="", overwrite=FALSE) {
    } else if(gsaRes$geneStatType == "p-signed") {
       p <- gsaRes$geneLevelStats
       fc <- gsaRes$directions
-      glTable <- data.frame(g=rownames(p),p=p[,1],FC=fc[,1],stringsAsFactors=F)
+      glTable <- data.frame(g=rownames(p),p=p[,1],FC=fc[,1],stringsAsFactors=FALSE)
       colnames(glTable) <- c("g","p","FC")
    } else {
      warning("Only gene-level p-values are currently supported to be exported to Kiwi. Skipping GLS-file.") # Not supported in Kiwi yet
