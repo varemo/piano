@@ -5,7 +5,7 @@
 #' visualized as color intensities. Gives an overview of the influence of
 #' overlap on significant gene sets.
 #' 
-#' In the case of \code{pValue="distinct"} and \code{direction="both"}, the
+#' In the case of \code{class="distinct"} and \code{direction="both"}, the
 #' distinct directional p-values (\code{pDistinctDirUp} and
 #' \code{pDistinctDirDn}, see \code{\link{runGSA}}) will be used in
 #' combination. Using the \code{geneSets} and \code{lay} arguments, multiple
@@ -21,7 +21,7 @@
 #' be \code{"non"} if the result from \code{runGSAhyper()} is used.
 #' @param direction a character string giving the direction of regulation, can
 #' be either \code{"up"}, \code{"down"} or \code{"both"} (for
-#' \code{pValue="distinct"} only).
+#' \code{class="distinct"} only).
 #' @param adjusted a logical, if adjusted p-values should be used, or not. Note
 #' that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the
 #' adjusted p-values will be equal to the original p-values.
