@@ -55,12 +55,9 @@ exploreGSAres <- function(gsaRes, browser=TRUE, geneAnnot=NULL, genesets) {
   if(any(names(genesets) == "")) names(genesets)[names(genesets)==""] <- paste("Gene-set list", seq(from=1, to=sum(names(genesets)=="")))
   
   # Check packages now, otherwise delayed error during app browsing, if missing:
-  suppressMessages(suppressWarnings(tmp <- tryCatch(require("shiny"))))
-  if(!tmp) stop("missing package shiny")
-  suppressMessages(suppressWarnings(tmp <- tryCatch(require("shinyjs"))))
-  if(!tmp) stop("missing package shinyjs")
-  suppressMessages(suppressWarnings(tmp <- tryCatch(require("DT")))) 
-  if(!tmp) stop("missing package DT")
+  if(!"shiny"%in%installed.packages()[,"Package"]) stop("missing package shiny")
+  if(!"shinyjs"%in%installed.packages()[,"Package"]) stop("missing package shinyjs")
+  if(!"DT"%in%installed.packages()[,"Package"]) stop("missing package DT")
   
   # Set needed variables for network plot:
   selectable_classes_network <- list()
