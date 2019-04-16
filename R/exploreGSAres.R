@@ -8,13 +8,16 @@
 #' 
 #' @param gsaRes an object of class \code{GSAres}, as returned from
 #' \code{runGSA()} or an object returned from \code{runGSAhyper()}.
-#' @param browser a logical, whether or not to open the Shiny app in a brwoser
+#' @param browser a logical, whether or not to open the Shiny app in a browser
 #' window. Set to \code{FALSE} to open an interactive window directly in
 #' RStudio.
 #' @param geneAnnot a \code{data.frame}, containing gene annotation. The first
 #' column should be gene IDs matching those in \code{gsares}.
+#' @param genesets a character vector or list (named or un-named) of character vectors
+#' containing subsets of gene-set names that can be selected and displayed in the 
+#' network plot.
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com}
-#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}}
+#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}}, \code{\link{networkPlot2}}
 #' @examples
 #' 
 #'    # Load example input data to GSA:
@@ -30,7 +33,7 @@
 #'    # Explore results:
 #'    exploreGSAres(gsares)
 #' 
-exploreGSAres <- function(gsares, browser=T, geneAnnot=NULL, genesets) {
+exploreGSAres <- function(gsares, browser=TRUE, geneAnnot=NULL, genesets) {
   
   # Argument checking:
   if(class(gsares) != "GSAres") stop("argument gsares is not of class GSAres")
@@ -1043,12 +1046,12 @@ ui <- dashboardPage(
       
       output$network_color_legend <- renderPlot({
         plotColorLegend <- function() {
-        par(mar=c(3.5,0,0,0), oma=c(0,0,0,0))
-        plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", yaxt="n", ylim=c(0,1), xlim=rval$colorLegendInfo$range)
-        mtext("-log10(p)", side=1, line=2)
-        xleft <- seq(from=rval$colorLegendInfo$range[1], to=rval$colorLegendInfo$range[2], length.out=length(rval$colorLegendInfo$colors))
-        xright <- xleft + abs(xleft[1]-xleft[2])
-        rect(xleft,0,xright,1, col=rval$colorLegendInfo$colors, border=NA)
+          par(mar=c(3.5,0,0,0), oma=c(0,0,0,0))
+          plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", yaxt="n", ylim=c(0,1), xlim=rval$colorLegendInfo$range)
+          mtext("-log10(p)", side=1, line=2)
+          xleft <- seq(from=rval$colorLegendInfo$range[1], to=rval$colorLegendInfo$range[2], length.out=length(rval$colorLegendInfo$colors))
+          xright <- xleft + abs(xleft[1]-xleft[2])
+          rect(xleft,0,xright,1, col=rval$colorLegendInfo$colors, border=NA)
         }
         tmp <- try(plotColorLegend(), silent=T)
         if(class(tmp)[1]=="try-error") plot(1,1,col="white",cex=0, bty="n", ylab="", xlab="", axes=F)
