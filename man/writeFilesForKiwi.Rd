@@ -39,7 +39,7 @@ for network-based visualization of the GSA results (http://sysbio.se/kiwi).
 
    # Load some example GSA results:
    data(gsa_results)
-   
+
    # Write the files:
    writeFilesForKiwi(gsa_results,"exp1")
 
