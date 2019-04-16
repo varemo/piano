@@ -96,6 +96,7 @@
 #'    # Examples of reusing res later:
 #'    
 #'    # Draw same again:
+#'    require(visNetwork)
 #'    visNetwork(res$x$nodes,res$x$edges)
 #'    # os simly just:
 #'    res
@@ -108,7 +109,7 @@
 #'    visIgraphLayout("layout_in_circle")
 #'    
 #'    # Other example:
-#'    res %>% visNodes(shadow=F)
+#'    res %>% visNodes(shadow=FALSE)
 #'    
 #'    # See package visNetwork for more examples
 

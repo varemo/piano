@@ -4,9 +4,12 @@
 \alias{exploreGSAres}
 \title{Explore GSA results}
 \usage{
-exploreGSAres(gsares, browser = TRUE, geneAnnot = NULL, genesets)
+exploreGSAres(gsaRes, browser = TRUE, geneAnnot = NULL, genesets)
 }
 \arguments{
+\item{gsaRes}{an object of class \code{GSAres}, as returned from
+\code{runGSA()} or an object returned from \code{runGSAhyper()}.}
+
 \item{browser}{a logical, whether or not to open the Shiny app in a browser
 window. Set to \code{FALSE} to open an interactive window directly in
 RStudio.}
@@ -17,9 +20,6 @@ column should be gene IDs matching those in \code{gsares}.}
 \item{genesets}{a character vector or list (named or un-named) of character vectors
 containing subsets of gene-set names that can be selected and displayed in the 
 network plot.}
-
-\item{gsaRes}{an object of class \code{GSAres}, as returned from
-\code{runGSA()} or an object returned from \code{runGSAhyper()}.}
 }
 \description{
 Explore GSA results interactively in a web browser using \code{shiny}.
@@ -42,7 +42,7 @@ show up in the gene table and the gene summary tabs.
                     gsc=gsc, nPerm=500)
       
    # Explore results:
-   exploreGSAres(gsares)
+   \dontrun{exploreGSAres(gsares)}
 
 }
 \seealso{
