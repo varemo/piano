@@ -55,7 +55,7 @@
 #' edge width. Can also be set to a single color. Defaults to a gray-scale.
 #' @param scoreColors a character vector giving the colors from which the
 #' gradient used for node coloring will be created. In the case of
-#' \code{pValue="distinct"} and \code{direction="both"} the first half of the
+#' \code{class="distinct"} and \code{direction="both"} the first half of the
 #' vector will be used for the up-regulated gene sets and the second part will
 #' be used for the down-regulated gene sets.
 #' @param main an optional character vector setting the title of the plot.
@@ -65,7 +65,8 @@
 #' \code{lay} argument in order to draw a subsequent plot with the same layout.
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
 #' \email{piano.rpkg@@gmail.com}
-#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}},
+#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}}, 
+#' \code{\link{networkPlot2}}, \code{\link{exploreGSAres}},
 #' \code{\link{layout}}
 #' @examples
 #' 
@@ -93,6 +94,10 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
                         label="names", cexLabel=0.9, ncharLabel=25, cexLegend=1, nodeSize=c(10,40), edgeWidth=c(1,15), 
                         edgeColor=NULL, scoreColors=NULL, main) {
    
+   message("-------------------------------------------------------------------------------\n
+  A newer function 'networkPlot2()' with the same purpose is now available!\n
+-------------------------------------------------------------------------------\n\n")
+  
    test <- 1 # Which contrast? Currently only one allowed!
    
    #*********************************************
