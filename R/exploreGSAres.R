@@ -111,12 +111,12 @@ ui <- dashboardPage(
             #type = "tabs", 
             tabPanel(title="Run info", value="tab_gsainfo",
                      useShinyjs(),
-                     includeCSS("css/cosmo.css"),
-                     includeCSS("css/toggle_switch.css"),
-                     includeCSS("css/style.css"),
-                     #includeCSS(system.file("shiny", "css", "cosmo.css", package="piano")),
-                     #includeCSS(system.file("shiny", "css", "toggle_switch.css", package="piano")),
-                     #includeCSS(system.file("shiny", "css", "style.css", package="piano")),
+                     #includeCSS("css/cosmo.css"),
+                     #includeCSS("css/toggle_switch.css"),
+                     #includeCSS("css/style.css"),
+                     includeCSS(system.file("shiny", "css", "cosmo.css", package="piano")),
+                     includeCSS(system.file("shiny", "css", "toggle_switch.css", package="piano")),
+                     includeCSS(system.file("shiny", "css", "style.css", package="piano")),
                      tags$head(
                        tags$style(
                          HTML(".shiny-notification {
