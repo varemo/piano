@@ -5,7 +5,7 @@
 #' visualized as color intensities. Gives an overview of the influence of
 #' overlap on significant gene sets.
 #' 
-#' In the case of \code{pValue="distinct"} and \code{direction="both"}, the
+#' In the case of \code{class="distinct"} and \code{direction="both"}, the
 #' distinct directional p-values (\code{pDistinctDirUp} and
 #' \code{pDistinctDirDn}, see \code{\link{runGSA}}) will be used in
 #' combination. Using the \code{geneSets} and \code{lay} arguments, multiple
@@ -21,7 +21,7 @@
 #' be \code{"non"} if the result from \code{runGSAhyper()} is used.
 #' @param direction a character string giving the direction of regulation, can
 #' be either \code{"up"}, \code{"down"} or \code{"both"} (for
-#' \code{pValue="distinct"} only).
+#' \code{class="distinct"} only).
 #' @param adjusted a logical, if adjusted p-values should be used, or not. Note
 #' that if \code{runGSA} was run with the argument \code{adjMethod="none"}, the
 #' adjusted p-values will be equal to the original p-values.
@@ -55,7 +55,7 @@
 #' edge width. Can also be set to a single color. Defaults to a gray-scale.
 #' @param scoreColors a character vector giving the colors from which the
 #' gradient used for node coloring will be created. In the case of
-#' \code{pValue="distinct"} and \code{direction="both"} the first half of the
+#' \code{class="distinct"} and \code{direction="both"} the first half of the
 #' vector will be used for the up-regulated gene sets and the second part will
 #' be used for the down-regulated gene sets.
 #' @param main an optional character vector setting the title of the plot.
@@ -65,7 +65,8 @@
 #' \code{lay} argument in order to draw a subsequent plot with the same layout.
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
 #' \email{piano.rpkg@@gmail.com}
-#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}},
+#' @seealso \pkg{\link{piano}}, \code{\link{runGSA}}, \code{\link{GSAheatmap}}, 
+#' \code{\link{networkPlot2}}, \code{\link{exploreGSAres}},
 #' \code{\link{layout}}
 #' @examples
 #' 
@@ -93,6 +94,10 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
                         label="names", cexLabel=0.9, ncharLabel=25, cexLegend=1, nodeSize=c(10,40), edgeWidth=c(1,15), 
                         edgeColor=NULL, scoreColors=NULL, main) {
    
+   message("-------------------------------------------------------------------------------\n
+  A newer function 'networkPlot2()' with the same purpose is now available!\n
+-------------------------------------------------------------------------------\n\n")
+  
    test <- 1 # Which contrast? Currently only one allowed!
    
    #*********************************************
@@ -100,7 +105,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    #*********************************************
    
    tmp <- try(pValue <- match.arg(class, c("distinct","mixed","non"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument class is not valid")
    }
    if(pValue == "non") {
@@ -108,7 +113,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
       direction <- "none"
    } else {
       tmp <- try(direction <- match.arg(direction, c("up","down","both"), several.ok=FALSE), silent=TRUE)
-      if(class(tmp) == "try-error") {
+      if(is(tmp, "try-error")) {
          stop("argument direction is not valid")
       }
    }
@@ -134,8 +139,8 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    if(overlap <= 0) stop("argument overlap has to be at least 1")
    if(length(nodeSize) != 2) stop("argument nodeSize has to have length 2")
    if(length(edgeWidth) != 2) stop("argument edgeWidth has to have length 2")
-   if(class(adjusted) != "logical") stop("argument adjusted has to be TRUE or FALSE")
-   if(!missing(main)) if(class(main) != "character") stop("argument main has to be a character string")
+   if(!is(adjusted, "logical")) stop("argument adjusted has to be TRUE or FALSE")
+   if(!missing(main)) if(!is(main, "character")) stop("argument main has to be a character string")
    
    #########################################################
    # Adds possibility to use output object from runGSAhyper:
@@ -293,7 +298,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    
    # Node labels:
    tmp <- try(label <- match.arg(label, c("names","numbers","numbersAndSizes","namesAndSizes"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument label has to be set to either 'names' or 'numbers'")
    }
    tmp <- names(gsc)[indSignificant]
@@ -310,7 +315,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
    # Set plotting layout:
    #*********************************************
    
-   if(class(lay) == "numeric") {
+   if(is(lay, "numeric")) {
       
       # Edge weight, inverse to number of edges and size (of the larger of the node pairs)
       # used by Fruchterman Reingold algorithm:
@@ -339,7 +344,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
       else if(lay == 5) lay <- layout_in_circle(g)
    
    # User defined layout function:   
-   } else if(class(lay) == "function"){
+   } else if(is(lay, "function")){
       lay <- lay(g)  
    }
    

@@ -6,8 +6,8 @@
 \usage{
 diffExp(arrayData, contrasts, chromosomeMapping, fitMethod = "ls",
   adjustMethod = "fdr", significance = 0.001, plot = TRUE,
-  heatmapCutoff = 1e-10, volcanoFC = 2, colors = c("red", "green", "blue",
-  "yellow", "orange", "purple", "tan", "cyan", "gray60", "black"),
+  heatmapCutoff = 1e-10, volcanoFC = 2, colors = c("red", "green",
+  "blue", "yellow", "orange", "purple", "tan", "cyan", "gray60", "black"),
   save = FALSE, verbose = TRUE)
 }
 \arguments{

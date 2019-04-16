@@ -33,9 +33,9 @@ GSAsummaryTable <- function(gsaRes, save=FALSE, file=NULL) {
    
    test <- 1 # which comparison, currently only 1 allowed!
    obj <- gsaRes
-   if(class(obj) != "GSAres") stop("argument GSAres has to be of class 'GSAres'")
+   if(!is(obj, "GSAres")) stop("argument GSAres has to be of class 'GSAres'")
    if(!is.null(file)) {
-      if(class(file) != "character") stop("argument file has to be of class 'character'")  
+      if(!is(file, "character")) stop("argument file has to be of class 'character'")  
    }
    if(test > ncol(obj$nGenesTot)) stop("argument test is to large")
    
@@ -58,7 +58,7 @@ GSAsummaryTable <- function(gsaRes, save=FALSE, file=NULL) {
                      cbind(obj$nGenesDn)[,test],
                      cbind(obj$statMixedDirDn)[,test], 
                      cbind(obj$pMixedDirDn)[,test], 
-                     cbind(obj$pAdjMixedDirDn)[,test], stringsAsFactors=F)
+                     cbind(obj$pAdjMixedDirDn)[,test], stringsAsFactors=FALSE)
    
    colnames(tab) <- c("Name", "Genes (tot)", "Stat (dist.dir)", "Stat (dist.dir.up)", "p (dist.dir.up)", "p adj (dist.dir.up)",
                       "Stat (dist.dir.dn)", "p (dist.dir.dn)", "p adj (dist.dir.dn)", "Stat (non-dir.)", "p (non-dir.)", "p adj (non-dir.)",

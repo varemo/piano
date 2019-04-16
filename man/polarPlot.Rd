@@ -23,6 +23,9 @@ the chromosome mapping. See details below.}
 
 \item{verbose}{verbose? Defaults to \code{TRUE}.}
 }
+\value{
+Does not return any object.
+}
 \description{
 Produces a Polar plot, mapping p-values to chromosome location. This
 function is used by \code{\link{diffExp}}.

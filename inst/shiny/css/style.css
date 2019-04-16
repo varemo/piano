@@ -1,0 +1,130 @@
+/*! Overriding values in default css file */
+
+input.form-control.shiny-bound-input {
+  height: 12px;
+}
+
+
+/*! DataTables tables */
+th.dt-right,
+th.sorting {
+  width: 1px;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+
+/*! Page margins and layout, bg color */
+body{
+ background-color: #ecf0f5; 
+}
+.content{
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+html, body{
+  margin:0 !important;
+  padding:0 !important;
+}
+
+
+/*! Buttons - e.g. "Download" and "Generate new layout" */
+.btn-primary {
+  color: #ffffff;
+  background-color: #3F8CBA;
+  border-color: #2780e3;
+}
+.btn-primary:focus,
+.btn-primary.focus {
+  color: #ffffff;
+  background-color: #3F8CBA;
+  border-color: #10427b;
+}
+.btn-primary:hover {
+  color: #ffffff;
+  background-color: #347AA4;
+  border-color: #1862b5;
+}
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  color: #ffffff;
+  background-color: #3F8CBA;
+  border-color: #1862b5;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: 0px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.btn:active,
+.btn.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.btn-box-tool {
+  color: #3F8CBA;
+  text-decoration: none;
+}
+.btn-box-tool:hover,
+.btn-box-tool:focus,
+.btn-box-tool.focus {
+  color: #347AA4;
+  text-decoration: none;
+}
+.btn-box-tool:focus,
+.btn-box-tool:active:focus,
+.btn-box-tool.active:focus,
+.btn-box-tool.focus,
+.btn-box-tool:active.focus,
+.btn-box-tool.active.focus {
+  color: #3F8CBA;
+  text-decoration: none;
+}
+
+
+/*! Menu/navigation bar at top */
+.navbar-default {
+  background-color: #3F8CBA;
+  border-color: #ecf0f5;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #ffffff;
+  background-color: none;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ffffff;
+  background-color: #347AA4;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #000000;
+  background-color: #ecf0f5;
+}

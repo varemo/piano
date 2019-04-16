@@ -4,8 +4,8 @@
 \alias{runGSAhyper}
 \title{Gene set analysis with Fisher's exact test}
 \usage{
-runGSAhyper(genes, pvalues, pcutoff, universe, gsc, gsSizeLim = c(1, Inf),
-  adjMethod = "fdr")
+runGSAhyper(genes, pvalues, pcutoff, universe, gsc, gsSizeLim = c(1,
+  Inf), adjMethod = "fdr")
 }
 \arguments{
 \item{genes}{a vector of all genes in your experiment, or a small list of

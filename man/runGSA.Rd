@@ -5,9 +5,9 @@
 \title{Gene set analysis}
 \usage{
 runGSA(geneLevelStats, directions = NULL, geneSetStat = "mean",
-  signifMethod = "geneSampling", adjMethod = "fdr", gsc, gsSizeLim = c(1,
-  Inf), permStats = NULL, permDirections = NULL, nPerm = 10000,
-  gseaParam = 1, ncpus = 1, verbose = TRUE)
+  signifMethod = "geneSampling", adjMethod = "fdr", gsc,
+  gsSizeLim = c(1, Inf), permStats = NULL, permDirections = NULL,
+  nPerm = 10000, gseaParam = 1, ncpus = 1, verbose = TRUE)
 }
 \arguments{
 \item{geneLevelStats}{a vector or a one-column data.frame or matrix,
@@ -247,7 +247,7 @@ The Annals of Applied Statistics 1, 107-129 (2007).
 \seealso{
 \pkg{\link{piano}}, \code{\link{loadGSC}},
 \code{\link{GSAsummaryTable}}, \code{\link{geneSetSummary}},
-\code{\link{networkPlot}}, \pkg{\link[HTSanalyzeR]{HTSanalyzeR-package}},
+\code{\link{networkPlot2}}, \code{\link{exploreGSAres}}, \pkg{\link[HTSanalyzeR]{HTSanalyzeR-package}},
 \pkg{\link[PGSEA]{PGSEA}}, \pkg{\link[samr]{samr}},
 \pkg{\link[limma]{limma}}, \pkg{\link[GSA]{GSA}}, \pkg{\link[fgsea]{fgsea}}
 }

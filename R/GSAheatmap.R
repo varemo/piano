@@ -36,7 +36,7 @@
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
 #' \email{piano.rpkg@@gmail.com}
 #' @seealso \pkg{\link{piano}}, \code{\link{runGSA}},
-#' \code{\link{GSAsummaryTable}}, \code{\link{networkPlot}}
+#' \code{\link{GSAsummaryTable}}, \code{\link{networkPlot2}}, \code{\link{exploreGSAres}}
 #' @examples
 #' 
 #' 
@@ -58,7 +58,7 @@ GSAheatmap <- function(gsaRes, cutoff=5, adjusted=FALSE, ncharLabel=25, cellnote
                        colorkey=TRUE, colorgrad=NULL, cex=NULL) {
    
    tmp <- try(cellnote <- match.arg(cellnote, c("pvalue","rank","nGenes","none"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument cellnote is not valid")
    }
    if(cellnote=="pvalue") cellnote<-"medianPvalue"

@@ -28,6 +28,7 @@
 #' @param colors a character vector of colors to be used in the PCA plot.
 #' @param save should the figures be saved? Defaults to \code{FALSE}.
 #' @param verbose verbose? Defaults to \code{TRUE}.
+#' @return Does not return any object.
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
 #' \email{piano.rpkg@@gmail.com}
 #' @seealso \pkg{\link{piano}}, \code{\link{loadMAdata}},
@@ -397,7 +398,7 @@ runQC <- function(arrayData, rnaDeg=TRUE, nuseRle=TRUE, hist=TRUE,
 
 
   # Below is the code that runs the selected functions:
-  if(class(arrayData) != "ArrayData") {
+  if(!is(arrayData, "ArrayData")) {
     stop("argument arrayData is not of class ArrayData")
   }
 

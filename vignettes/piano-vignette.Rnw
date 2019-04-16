@@ -629,7 +629,7 @@ If we wish to get a list of all gene sets that are significant above some cutoff
 <<>>==
 gsaResTab <- GSAsummaryTable(gsaRes)
 # Which columns contain p-values:
-grep("p \\(",colnames(gsaResTab),value=T)
+grep("p \\(",colnames(gsaResTab),value=TRUE)
 grep("p \\(",colnames(gsaResTab))
 @
 We see that the p-values in the non-directional class (significant gene sets if enriched by significant genes, disregardful of up- or down-regulation) are found in column 10. To get a list of gene sets with non-directional p<0.0001:

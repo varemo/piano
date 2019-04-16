@@ -34,6 +34,7 @@
 #' @param colors character vector of colors to be used by the Polar plot.
 #' @param save should the figures be saved? Defaults to \code{FALSE}.
 #' @param verbose verbose? Defaults to \code{TRUE}.
+#' @return Does not return any object.
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
 #' \email{piano.rpkg@@gmail.com}
 #' @seealso \pkg{\link{piano}}, \code{\link{diffExp}},
@@ -79,7 +80,7 @@ polarPlot <- function(pValues, chromosomeMapping,
    
   
   # Load chromosome mapping:
-  if(class(chromosomeMapping) == "character") {
+  if(is(chromosomeMapping, "character")) {
     if(file.exists(chromosomeMapping)) {
       chromosomeMapping <- as.data.frame(read.delim(chromosomeMapping, header=TRUE, sep="\t",
                            row.names=1, as.is=TRUE),stringsAsFactors=FALSE,quote="")

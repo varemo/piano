@@ -94,7 +94,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,In
       stop("argument genes is required")
    } else {
       genes <- as.vector(as.matrix(genes))
-      if(class(genes) != "character") stop("argument genes should be a character vector")  
+      if(!is(genes, "character")) stop("argument genes should be a character vector")  
       if(length(unique(genes)) != length(genes)) stop("argument genes should contain no duplicated entries")
    }
    
@@ -105,7 +105,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,In
    
    # If pvalues set, check in [0,1] and numeric vector of length length(genes)
       pvalues <- as.vector(as.matrix(pvalues))
-      if(class(pvalues) != "numeric") stop("argument pvalues should be a numeric vector")
+      if(!is(pvalues, "numeric")) stop("argument pvalues should be a numeric vector")
       if(length(pvalues) != length(genes)) stop("argument pvalues should be the same length as argument genes")
       if(max(pvalues)>1 | min(pvalues)<0) stop("pvalues need to lie between 0 and 1")
    }
@@ -122,7 +122,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,In
    } else {
       
    # If pcutoff set, check length 1 and numeric and in [0,1]
-      if(length(pcutoff) != 1 & class(pcutoff) != "numeric") stop("argument pcutoff should be a numeric of length 1")
+      if(length(pcutoff) != 1 & !is(pcutoff, "numeric")) stop("argument pcutoff should be a numeric of length 1")
       if(max(pcutoff)>1 | min(pcutoff)<0) stop("argument pcutoff needs to lie between 0 and 1")
    }
    
@@ -130,7 +130,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,In
    if(missing(gsc)) {
       stop("argument gsc needs to be given")  
    } else {
-      if(class(gsc) != "GSC") stop("argument gsc should be of class GSC, as returned by the loadGSC function")
+      if(!is(gsc, "GSC")) stop("argument gsc should be of class GSC, as returned by the loadGSC function")
    }
    
    # If pvalues are not all 0, and universe not set, set to genes
@@ -147,7 +147,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,In
    } else {
       
    # If universe set, check character vector
-      if(class(universe) != "character") stop("argument universe should be a character vector")
+      if(!is(universe, "character")) stop("argument universe should be a character vector")
       if(!all(pvalues==0)) stop("if universe is given, genes should be only the genes of interest, i.e. pvalues should all be set to 0.")            
    }
    
@@ -166,7 +166,7 @@ runGSAhyper <- function(genes, pvalues, pcutoff, universe, gsc, gsSizeLim=c(1,In
    # Check adjMethod:
    tmp <- try(adjMethod <- match.arg(adjMethod, c("holm", "hochberg", "hommel", "bonferroni", 
                                                   "BH", "BY","fdr", "none"), several.ok=FALSE), silent=TRUE)
-   if(class(tmp) == "try-error") {
+   if(is(tmp, "try-error")) {
       stop("argument adjMethod set to unknown method")
    }
 
