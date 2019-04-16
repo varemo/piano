@@ -31,10 +31,12 @@
 #'                     gsc=gsc, nPerm=500)
 #'       
 #'    # Explore results:
-#'    exploreGSAres(gsares)
+#'    \dontrun{exploreGSAres(gsares)}
 #' 
-exploreGSAres <- function(gsares, browser=TRUE, geneAnnot=NULL, genesets) {
-  
+exploreGSAres <- function(gsaRes, browser=TRUE, geneAnnot=NULL, genesets) {
+
+  gsares <- gsaRes
+    
   # Argument checking:
   if(class(gsares) != "GSAres") stop("argument gsares is not of class GSAres")
   if(!is.logical(browser)) stop("argument browser is not a logical")
