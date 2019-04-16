@@ -18,8 +18,11 @@ RStudio.}
 column should be gene IDs matching those in \code{gsares}.}
 
 \item{genesets}{a character vector or list (named or un-named) of character vectors
-containing subsets of gene-set names that can be selected and displayed in the 
+containing subsets of gene-set names that can be selected and displayed in the
 network plot.}
+}
+\value{
+Does not return any object.
 }
 \description{
 Explore GSA results interactively in a web browser using \code{shiny}.
@@ -33,14 +36,14 @@ show up in the gene table and the gene summary tabs.
 
    # Load example input data to GSA:
    data("gsa_input")
-   
+
    # Load gene set collection:
    gsc <- loadGSC(gsa_input$gsc)
-      
+
    # Run gene set analysis:
-   gsares <- runGSA(geneLevelStats=gsa_input$pvals , directions=gsa_input$directions, 
+   gsares <- runGSA(geneLevelStats=gsa_input$pvals , directions=gsa_input$directions,
                     gsc=gsc, nPerm=500)
-      
+
    # Explore results:
    \dontrun{exploreGSAres(gsares)}
 

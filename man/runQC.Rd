@@ -35,6 +35,9 @@ PCA. Defaults to 1.}
 
 \item{verbose}{verbose? Defaults to \code{TRUE}.}
 }
+\value{
+Does not return any object.
+}
 \description{
 Performs a set of quality control methods and produces the results as
 figures.

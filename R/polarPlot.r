@@ -34,6 +34,7 @@
 #' @param colors character vector of colors to be used by the Polar plot.
 #' @param save should the figures be saved? Defaults to \code{FALSE}.
 #' @param verbose verbose? Defaults to \code{TRUE}.
+#' @return Does not return any object.
 #' @author Leif Varemo \email{piano.rpkg@@gmail.com} and Intawat Nookaew
 #' \email{piano.rpkg@@gmail.com}
 #' @seealso \pkg{\link{piano}}, \code{\link{diffExp}},
