@@ -7,8 +7,8 @@ Author@R: c(person("Leif", "Varemo", email = "piano.rpkg@gmail.com", role = "aut
             person("Intawat", "Nookaew", email = "piano.rpkg@gmail.com", role = "aut"))
 Author: Leif Varemo <piano.rpkg@gmail.com> and Intawat Nookaew <piano.rpkg@gmail.com>
 Maintainer: Leif Varemo <piano.rpkg@gmail.com>
-Depends: R (>= 2.14.0)
-Imports: BiocGenerics, Biobase, gplots, igraph, relations, marray, fgsea, shiny, DT, htmlwidgets, shinyjs, shinydashboard, visNetwork, scales
+Depends: R (>= 3.5)
+Imports: BiocGenerics, Biobase, gplots, igraph, relations, marray, fgsea, shiny, DT, htmlwidgets, shinyjs, shinydashboard, visNetwork, scales, grDevices, graphics, stats, utils, methods
 Suggests: yeast2.db, rsbml, plotrix, limma, affy, plier, affyPLM, gtools, biomaRt, snowfall, AnnotationDbi
 Description: Piano performs gene set analysis using various statistical methods, from different gene level statistics and a wide range of gene-set collections. Furthermore, the Piano package contains functions for combining the results of multiple runs of gene set analyses.
 License: GPL (>=2)
