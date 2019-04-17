@@ -435,10 +435,10 @@ ui <- dashboardPage(
             ),
             tabPanel(title="Heatmap", value="tab_heatmap",
                      HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
-            ),
-            tabPanel(title="Help", value="tab_help",
-                     HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
-            )
+            )#,
+            #tabPanel(title="Help", value="tab_help",
+            #         HTML("<br><br>This feature is currently unavailable but will be added soon! For now, use the <tt>GSAheatmap</tt> funtion in R.")
+            #)
           #)
         #)
       #),
