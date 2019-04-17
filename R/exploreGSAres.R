@@ -181,7 +181,7 @@ ui <- dashboardPage(
                      absolutePanel(id="controls", class="panel panel-default", fixed=FALSE,
                                    draggable=FALSE, top=110, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
-                                   actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
+                                   downloadButton("download_gs_table", "Download table", class="btn btn-primary btn-xs"),
                                    HTML("<span style='display:inline-block; width: 100px;'></span><b>Toggle columns:</b><span style='display:inline-block; width: 30px;'></span>"),
                                    HTML('Gene count<label class="switch"><input type="checkbox" onclick="Shiny.onInputChange(\'toggle_genes\', Math.random())" checked><span class="slider round"></span></label>'),
                                    HTML('Adjusted p-value<label class="switch"><input type="checkbox" onclick="Shiny.onInputChange(\'toggle_padj\', Math.random())" checked><span class="slider round"></span></label>'),
@@ -257,7 +257,7 @@ ui <- dashboardPage(
                      absolutePanel(id="controls", class="panel panel-default", fixed=FALSE,
                                    draggable=FALSE, top=110, left=20, right="auto", bottom="auto",
                                    width = "auto", height=70, style="border: 0px; box-shadow: 0px 0px; background-color: rgba(255, 255, 255, 0);",
-                                   actionButton("dowload", "Download table", class="btn btn-primary btn-xs"),
+                                   downloadButton("download_gene_table", "Download table", class="btn btn-primary btn-xs"),
                                    HTML("<span style='display:inline-block; width: 100px;'></span>"),
                                    HTML('<b>Truncate long: </b><label class="switch"><input type="checkbox" onclick="Shiny.onInputChange(\'truncate_gene_table\', Math.random())" checked><span class="slider round"></span></label>'),
                                    HTML("<span style='display:inline-block; width: 5px;'></span>"),
@@ -631,6 +631,16 @@ ui <- dashboardPage(
         updateNavbarPage(session,"navbarpage",selected="tab_gssum")
         selectRows(dataTableProxy("gsaresTable", session), list())
       })
+      
+      output$download_gs_table <- downloadHandler(
+        filename = function() {
+          paste("gene-set_table", ".csv", sep = "")
+        },
+        content = function(file) {
+          write.csv(rval$gs_table[gsatab_colnames[gsatab_colnames%in%rval$visible_columns]], file, row.names=FALSE)
+        }
+      )
+      
 
       # Gene-set summary ------------------------------------------------------------
       output$text_selected_gs <- renderText({
@@ -926,6 +936,15 @@ ui <- dashboardPage(
       observeEvent(input$truncate_gene_table, {
         rval$maxNcharGenetable <- ifelse(rval$maxNcharGenetable,FALSE,TRUE)
       })
+      
+      output$download_gene_table <- downloadHandler(
+        filename = function() {
+          paste("gene_table", ".csv", sep = "")
+        },
+        content = function(file) {
+          write.csv(rval$gene_table, file, row.names=FALSE)
+        }
+      )
 
 
       # Gene summary --------------------------------------------------------
