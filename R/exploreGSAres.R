@@ -1052,7 +1052,8 @@ ui <- dashboardPage(
           removeNotification("nw_notification")
           rval$colorLegendInfo <- nwPlot$colorLegendInfo
           rval$nwGeneSets <- nwPlot$x$nodes$geneSetNames
-          suppressWarnings(nwPlot)
+          suppressWarnings(nwPlot %>% visExport(type="png", name="gene-set-network", 
+                                                style="color: #ffffff; background-color: #3F8CBA; border-color: #2780e3; font-size: 13px;"))
         }
       })
 
