@@ -20,9 +20,9 @@ geneSets <- loadGSC(gsa_input$gsc)
 geneSets
 
 # Run gene-set analysis:
-gsares <- rungGSA(gsa_input$pvals,
-                  gsa_input$directions,
-                  gsc = geneSets)
+gsares <- runGSA(gsa_input$pvals,
+                 gsa_input$directions,
+                 gsc = geneSets)
 
 # Explore the results in an interactive Shiny app:
 exploreGSAres(gsares)
