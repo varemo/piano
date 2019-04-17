@@ -1,0 +1,19 @@
+---
+title: "Running gene-set anaysis"
+author:
+- name: "Leif Varemo Wigge"
+  affiliation: 
+  - Shared affiliation
+  - Additional affiliation
+- name: Second Author
+  affiliation: Shared affiliation
+  email: corresponding@author.com
+package: "piano"
+output: BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Quick start}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Hello world

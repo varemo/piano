@@ -1,19 +1,20 @@
 Package: piano
 Type: Package
 Title: Platform for integrative analysis of omics data
-Version: 1.99.1
+Version: 1.99.2
 Date: 2019-04-17
-Author@R: c(person("Leif", "Varemo", email = "piano.rpkg@gmail.com", role = "aut"), 
+Author@R: c(person("Leif", "Varemo Wigge", email = "piano.rpkg@gmail.com", role = "aut"), 
             person("Intawat", "Nookaew", email = "piano.rpkg@gmail.com", role = "aut"))
-Author: Leif Varemo <piano.rpkg@gmail.com> and Intawat Nookaew <piano.rpkg@gmail.com>
-Maintainer: Leif Varemo <piano.rpkg@gmail.com>
+Author: Leif Varemo Wigge <piano.rpkg@gmail.com> and Intawat Nookaew <piano.rpkg@gmail.com>
+Maintainer: Leif Varemo Wigge <piano.rpkg@gmail.com>
 Depends: R (>= 3.5)
 Imports: BiocGenerics, Biobase, gplots, igraph, relations, marray, fgsea, shiny, DT, htmlwidgets, shinyjs, shinydashboard, visNetwork, scales, grDevices, graphics, stats, utils, methods
-Suggests: yeast2.db, rsbml, plotrix, limma, affy, plier, affyPLM, gtools, biomaRt, snowfall, AnnotationDbi
+Suggests: yeast2.db, rsbml, plotrix, limma, affy, plier, affyPLM, gtools, biomaRt, snowfall, AnnotationDbi, knitr, rmarkdown, BiocStyle
 Description: Piano performs gene set analysis using various statistical methods, from different gene level statistics and a wide range of gene-set collections. Furthermore, the Piano package contains functions for combining the results of multiple runs of gene set analyses.
 License: GPL (>=2)
 biocViews: Microarray, Preprocessing, QualityControl, DifferentialExpression,
            Visualization, GeneExpression, GeneSetEnrichment, Pathways
 URL: http://www.sysbio.se/piano
 BugReports: https://github.com/varemo/piano/issues
+VignetteBuilder: knitr
 RoxygenNote: 6.1.1
