@@ -21,7 +21,7 @@ geneSets
 
 # Run gene-set analysis:
 gsares <- rungGSA(gsa_input$pvals,
-                  gsa_ipnut$directions,
+                  gsa_input$directions,
                   gsc = geneSets)
 
 # Explore the results in an interactive Shiny app:
