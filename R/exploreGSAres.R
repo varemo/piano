@@ -911,7 +911,7 @@ ui <- dashboardPage(
         selection=list(mode='single', target='row'),
         filter="none",
         rownames=FALSE,
-        extensions=c("Scroller","FixedColumns"),
+        extensions=c("Scroller"),#,"FixedColumns"),
         fillContainer=TRUE,
         options = list(initComplete=JS(
         # this is to set color format of first row
@@ -922,11 +922,13 @@ ui <- dashboardPage(
         deferRender=TRUE,
         scrollY="calc(100vh - 250px)",
         scrollX=TRUE,
-        scroller=TRUE,
-        fixedColumns=list(leftColumns=1))
+        scroller=TRUE
+        #fixedColumns=list(leftColumns=1))
+        )
       )
 
       observeEvent(input$geneTable_rows_selected, {
+        print(class(rval$gene_table[,"Gene-level statistic"]))
         rval$sel_gene <- rval$gene_table$`Gene ID`[input$geneTable_rows_selected]
         rval$red_gene <- ""
         updateNavbarPage(session,"navbarpage",selected="tab_geneinfo")
