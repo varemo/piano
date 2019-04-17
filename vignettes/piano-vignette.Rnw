@@ -67,14 +67,14 @@ library(piano)
 \huge \textbf{Vignette}
 
 \vspace{11cm}
-\normalsize\noindent \textbf{Leif Varemo, Intawat Nookaew}
+\normalsize\noindent \textbf{Leif Varemo Wigge, Intawat Nookaew}
 
 \vspace{0.3cm}
 \small\noindent \today
 
 \vspace{0.3cm}
 \small\noindent {Systems and Synthetic Biology\\
-Department of Chemical and Biological Engineering\\ 
+Department of Biology and Biological Engineering\\ 
 Chalmers University of Technology\\ 
 SE-412 96 Gothenburg, Sweden}
 \end{center}
@@ -96,7 +96,7 @@ Section \ref{sec:start} covers installation, Section \ref{sec:ma} covers microar
 
 
 \subsection{Contact}
-For questions regarding \pkg{piano}, contact the authors, Leif Varemo and Intawat Nookaew at \mbox{\texttt{piano.rpkg@gmail.com}}.
+For questions regarding \pkg{piano}, contact the authors at \mbox{\texttt{piano.rpkg@gmail.com}}.
 
 \subsection{Citation}
 If you use \pkg{piano} in your research please cite:
