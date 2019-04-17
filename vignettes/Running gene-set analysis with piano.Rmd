@@ -1,0 +1,65 @@
+---
+title: "Running gene-set anaysis with `piano`"
+author:
+- name: "Leif Varemo Wigge"
+  affiliation: 
+  - Department of Biology and Biological Engineering, Chalmers University of Technology
+  - National Bioinformatics Infrastructure Sweden (NBIS), SciLifeLab
+package: "piano"
+output: BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Running gene-set anaysis with piano}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Quick start
+
+1. Load piano and example data:
+
+```{r}
+library(piano)
+data("gsa_input")
+```
+
+2. Take a look at the structure of the input data:
+
+```{r}
+head(gsa_input$gsc,10)
+head(gsa_input$pvals, 10)
+head(gsa_input$directions, 10)
+```
+
+3. Load gene-set collection and take a look at the resulting object:
+
+```{r}
+geneSets <- loadGSC(gsa_input$gsc)
+geneSets
+
+```
+
+4. Run gene-set analysis:
+
+```{r results='hide', message=F}
+gsares <- runGSA(gsa_input$pvals,
+                 gsa_input$directions,
+                 gsc = geneSets,
+                 nPerm = 500) # set to 500 for fast run
+```
+*Note: `nPerm` was set to 500 to get a short runtime for this vignette, in reality use a higher number, e.g. 10,000 (default).*
+
+5. Explore the results in an interactive Shiny app:
+```{r eval=F}
+exploreGSAres(gsares)
+```
+
+This opens a browser window with an interactive interface where the results can be explored in detail.
+
+# Session info
+Here is the output of `sessionInfo()` on the system on which this document was compiled.
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+
