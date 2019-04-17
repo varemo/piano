@@ -3,11 +3,8 @@ title: "Running gene-set anaysis"
 author:
 - name: "Leif Varemo Wigge"
   affiliation: 
-  - Shared affiliation
-  - Additional affiliation
-- name: Second Author
-  affiliation: Shared affiliation
-  email: corresponding@author.com
+  - Department of Biology and Biological Engineering, Chalmers University of Technology
+  - National Bioinformatics Infrastructure Sweden (NBIS), SciLifeLab
 package: "piano"
 output: BiocStyle::html_document
 vignette: >
