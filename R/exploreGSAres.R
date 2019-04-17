@@ -893,7 +893,7 @@ ui <- dashboardPage(
         rval$gene_table <- genetable_all
       })
 
-      output$geneTable <- DT::renderDataTable({apply(rval$gene_table,2,function(x) {
+      output$geneTable <- DT::renderDataTable({apply(cbind(rank(rval$gene_table$`Gene-level statistic`),rval$gene_table),2,function(x) {
                                                   if(rval$maxNcharGenetable) {
                                                     tmp <- 50
                                                   } else {
@@ -922,7 +922,9 @@ ui <- dashboardPage(
         deferRender=TRUE,
         scrollY="calc(100vh - 250px)",
         scrollX=TRUE,
-        scroller=TRUE
+        scroller=TRUE,
+        columnDefs=list(list(orderData=0, targets=2),
+                        list(visible=FALSE, targets=0))
         #fixedColumns=list(leftColumns=1))
         )
       )
