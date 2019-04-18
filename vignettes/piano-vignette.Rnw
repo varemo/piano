@@ -1,5 +1,7 @@
-% \VignetteIndexEntry{Piano - Platform for Integrative Analysis of Omics data}
-% \VignetteDepends{piano}
+%\VignetteIndexEntry{Piano - Platform for Integrative Analysis of Omics data}
+%\VignetteDepends{piano}
+%\VignetteKeywords{piano}
+%\VignettePackage{piano}
 
 % !TeX encoding = latin1
 \documentclass[11pt,a4paper]{article}
