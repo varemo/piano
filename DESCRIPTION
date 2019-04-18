@@ -1,8 +1,8 @@
 Package: piano
 Type: Package
 Title: Platform for integrative analysis of omics data
-Version: 1.99.4
-Date: 2019-04-17
+Version: 1.99.5
+Date: 2019-04-18
 Author@R: c(person("Leif", "Varemo Wigge", email = "piano.rpkg@gmail.com", role = "aut"), 
             person("Intawat", "Nookaew", email = "piano.rpkg@gmail.com", role = "aut"))
 Author: Leif Varemo Wigge <piano.rpkg@gmail.com> and Intawat Nookaew <piano.rpkg@gmail.com>
