@@ -9,6 +9,7 @@ package: "piano"
 output: BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{Running gene-set anaysis with piano}
+  %\VignetteDepends{piano}
   %\VignetteKeywords{piano}
   %\VignettePackage{piano}
   %\VignetteEngine{knitr::rmarkdown}
