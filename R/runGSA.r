@@ -169,9 +169,9 @@
 #' \email{piano.rpkg@@gmail.com}
 #' @seealso \pkg{\link{piano}}, \code{\link{loadGSC}},
 #' \code{\link{GSAsummaryTable}}, \code{\link{geneSetSummary}},
-#' \code{\link{networkPlot2}}, \code{\link{exploreGSAres}}, \pkg{\link[HTSanalyzeR]{HTSanalyzeR-package}},
+#' \code{\link{networkPlot2}}, \code{\link{exploreGSAres}}, \pkg{\link{HTSanalyzeR}},
 #' \pkg{\link[PGSEA]{PGSEA}}, \pkg{\link[samr]{samr}},
-#' \pkg{\link[limma]{limma}}, \pkg{\link[GSA]{GSA}}, \pkg{\link[fgsea]{fgsea}}
+#' \pkg{\link{limma}}, \pkg{\link[GSA]{GSA}}, \pkg{\link[fgsea]{fgsea}}
 #' @references Fisher, R. Statistical methods for research workers. Oliver and
 #' Boyd, Edinburgh, (1932).
 #' 
