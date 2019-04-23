@@ -4,7 +4,7 @@
 #' of \pkg{limma}. Optionally produces a Venn diagram, heatmap, Polar plot and
 #' volcano plot.
 #' 
-#' This function uses \pkg{\link{limma}} to calculate p-values measuring
+#' This function uses \pkg{\link[limma:01.Introduction]{limma}} to calculate p-values measuring
 #' differential expression in the given \code{contrasts}. The
 #' \code{uniqueFactors} given by \code{\link{extractFactors}} can be used to
 #' define a contrast vector, where each element should be a character string on
@@ -88,7 +88,7 @@
 #' \email{piano.rpkg@@gmail.com}
 #' @seealso \pkg{\link{piano}}, \code{\link{loadMAdata}},
 #' \code{\link{extractFactors}}, \code{\link{polarPlot}}, \code{\link{runGSA}},
-#' \pkg{\link{limma}}, \code{\link{venn}}, \code{\link{heatmap.2}}
+#' \pkg{\link[limma:01.Introduction]{limma}}, \code{\link{venn}}, \code{\link{heatmap.2}}
 #' @references Smyth, G. K. (2005). Limma: linear models for microarray data.
 #' In: 'Bioinformatics and Computational Biology Solutions using R and
 #' Bioconductor'. R. Gentleman, V. Carey, S. Dudoit, R. Irizarry, W.  Huber
