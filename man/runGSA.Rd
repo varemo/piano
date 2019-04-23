@@ -247,9 +247,9 @@ The Annals of Applied Statistics 1, 107-129 (2007).
 \seealso{
 \pkg{\link{piano}}, \code{\link{loadGSC}},
 \code{\link{GSAsummaryTable}}, \code{\link{geneSetSummary}},
-\code{\link{networkPlot2}}, \code{\link{exploreGSAres}}, \pkg{\link[HTSanalyzeR]{HTSanalyzeR-package}},
+\code{\link{networkPlot2}}, \code{\link{exploreGSAres}}, \pkg{\link[HTSanalyzeR:HTSanalyzeR-package]{HTSanalyzeR}},
 \pkg{\link[PGSEA]{PGSEA}}, \pkg{\link[samr]{samr}},
-\pkg{\link[limma]{limma}}, \pkg{\link[GSA]{GSA}}, \pkg{\link[fgsea]{fgsea}}
+\pkg{\link[limma:01.Introduction]{limma}}, \pkg{\link[GSA]{GSA}}, \pkg{\link[fgsea]{fgsea}}
 }
 \author{
 Leif Varemo \email{piano.rpkg@gmail.com} and Intawat Nookaew
