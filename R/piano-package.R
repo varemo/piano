@@ -15,7 +15,7 @@
 #' \code{\link{consensusHeatmap}}) take a list of result objects given by
 #' \code{runGSA} for this step. The second part of the Piano package contains a
 #' set of functions devoted for an easy-to-use approach on microarray analysis
-#' (wrapped around the \pkg{affy} and \pkg{\link[limma:01.Introduction]{limma}}
+#' (wrapped around the \pkg{affy} and \pkg{\link[limma:01Introduction]{limma}}
 #' packages), which are constructed to integrate nicely with the downstream GSA
 #' part. The starting function in this case is \code{\link{loadMAdata}}.
 #' 

@@ -126,7 +126,7 @@ Gautier, L., Cope, L., Bolstad, B. M., and Irizarry, R. A.  affy
 \pkg{\link{piano}}, \code{\link{runQC}}, \code{\link{diffExp}},
 \code{\link[affy:read.affybatch]{ReadAffy}},
 \code{\link[affy:expresso]{expresso}},
-\code{\link[plier:justPlier]{justPlier}}, \code{\link[yeast2.db:yeast2.db]{yeast2.db}}
+\code{\link[plier:justPlier]{justPlier}}, \code{\link[yeast2.db:yeast2BASE]{yeast2.db}}
 }
 \author{
 Leif Varemo \email{piano.rpkg@gmail.com} and Intawat Nookaew

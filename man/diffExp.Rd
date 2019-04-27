@@ -72,7 +72,7 @@ of \pkg{limma}. Optionally produces a Venn diagram, heatmap, Polar plot and
 volcano plot.
 }
 \details{
-This function uses \pkg{\link[limma:01.Introduction]{limma}} to calculate p-values measuring
+This function uses \pkg{\link[limma:01Introduction]{limma}} to calculate p-values measuring
 differential expression in the given \code{contrasts}. The
 \code{uniqueFactors} given by \code{\link{extractFactors}} can be used to
 define a contrast vector, where each element should be a character string on
@@ -140,7 +140,7 @@ Bioconductor'. R. Gentleman, V. Carey, S. Dudoit, R. Irizarry, W.  Huber
 \seealso{
 \pkg{\link{piano}}, \code{\link{loadMAdata}},
 \code{\link{extractFactors}}, \code{\link{polarPlot}}, \code{\link{runGSA}},
-\pkg{\link[limma:01.Introduction]{limma}}, \code{\link{venn}}, \code{\link{heatmap.2}}
+\pkg{\link[limma:01Introduction]{limma}}, \code{\link{venn}}, \code{\link{heatmap.2}}
 }
 \author{
 Leif Varemo \email{piano.rpkg@gmail.com} and Intawat Nookaew

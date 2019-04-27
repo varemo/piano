@@ -87,7 +87,7 @@
 #' @seealso \pkg{\link{piano}}, \code{\link{runQC}}, \code{\link{diffExp}},
 #' \code{\link[affy:read.affybatch]{ReadAffy}},
 #' \code{\link[affy:expresso]{expresso}},
-#' \code{\link[plier:justPlier]{justPlier}}, \code{\link[yeast2.db:yeast2.db]{yeast2.db}}
+#' \code{\link[plier:justPlier]{justPlier}}, \code{\link[yeast2.db:yeast2BASE]{yeast2.db}}
 #' @references Gautier, L., Cope, L., Bolstad, B. M., and Irizarry, R. A.  affy
 #' - analysis of Affymetrix GeneChip data at the probe level.
 #' \emph{Bioinformatics.} \bold{20}, 3, 307-315 (2004).
