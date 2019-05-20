@@ -1029,7 +1029,7 @@ ui <- dashboardPage(
                                shiny=TRUE,
                                main=NULL,
                                submain=NULL)), silent=TRUE)
-        if(is(nwPlot[1], "try-error")) {
+        if(is(nwPlot, "try-error")) {
           nw_notification_text <- gsub(".*: (.*)","\\1",nwPlot[1])
           if(grepl("less than two gene sets were selected, can not plot",nwPlot[1])) {
             nw_notification_text <- "For the given parameters, less than two gene sets were selected. Try adjusting the significance cutoff."
