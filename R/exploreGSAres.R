@@ -930,7 +930,6 @@ ui <- dashboardPage(
       )
 
       observeEvent(input$geneTable_rows_selected, {
-        print(class(rval$gene_table[,"Gene-level statistic"]))
         rval$sel_gene <- rval$gene_table$`Gene ID`[input$geneTable_rows_selected]
         rval$red_gene <- ""
         updateNavbarPage(session,"navbarpage",selected="tab_geneinfo")
