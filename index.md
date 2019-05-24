@@ -6,8 +6,17 @@ title: piano
 
 ## Overview of piano
 
-Piano is used for running gene set analysis (GSA) using a selection of available methods (some of which are also implemented in separate packages or other software) and starting from different kinds of gene level statistics. The advantage with using piano is that all of these methods can be run using the same setup, resulting in minimal effort for the user when switching between methods. Additionally, piano contains a new approach which divides the gene set results into directionality classes,
-giving deeper information about the underlying gene pattern. Further on, piano contains functions to perform consensus analysis, i.e. combining the results of multiple GSA runs. For details, see the publication below.
+### Gene set analysis using a variety of methods
+Piano is used for running gene set analysis (GSA) using a selection of available methods (some of which are also implemented in separate packages or other software) and starting from different kinds of gene level statistics. The advantage with using piano is that all of these methods can be run using the same setup, resulting in minimal effort for the user when switching between methods. 
+
+### Directionality of gene sets
+Piano contains a new approach which divides the gene set results into directionality classes, giving deeper information about the underlying gene pattern.  For details, see the publication below.
+
+### Consensus gene set analysis
+Piano contains functions to perform consensus analysis, i.e. combining the results of multiple GSA runs.
+
+### Explore GSA results in an interactive Shiny app
+Using the function `exploreGSAres` one can interactively and visually explore the GSA results. See a demo [here](https://leifscilife.shinyapps.io/exploreGSAres/) (note that the app will run substantially smoother when launching it locally from within R).
 
 ## Citation
 
