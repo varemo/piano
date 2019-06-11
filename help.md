@@ -5,7 +5,8 @@ title: piano
 # Help
 
 ## Documentation
-- [Manual/vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/piano/inst/doc/piano-vignette.pdf)
+- [Package vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/piano/inst/doc/piano-vignette.pdf)
+- [Gene-set analysis with piano](https://bioconductor.org/packages/release/bioc/vignettes/piano/inst/doc/Running_gene-set_analysis_with_piano.html)
 - [Function reference](https://www.bioconductor.org/packages/release/bioc/manuals/piano/man/piano.pdf)
 
 ## Quick start
