@@ -27,7 +27,7 @@ import(
   shiny
 )
 
-importFrom(Biobase, exprs, featureNames, sampleNames)
+importFrom(Biobase, exprs, "exprs<-", featureNames, sampleNames)
 importFrom(gplots, heatmap.2, venn)
 importFrom(marray, maColorBar)
 importFrom(relations, relation_class_ids, relation_consensus)

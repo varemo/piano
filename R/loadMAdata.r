@@ -136,9 +136,9 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
     # Load CEL-files
     .verb("Loading CEL files...", verbose)
     dataRaw <- affy::ReadAffy(celfile.path=datadir, ...)
-    colnames(affy::exprs(dataRaw)) <- gsub("\\.CEL","",colnames(affy::exprs(dataRaw)), ignore.case=TRUE)
-    colnames(affy::exprs(dataRaw)) <- gsub("\\.gz","",colnames(affy::exprs(dataRaw)), ignore.case=TRUE)
-    if(sum(duplicated(colnames(affy::exprs(dataRaw)))) > 0) stop("found samples with identical names")
+    colnames(exprs(dataRaw)) <- gsub("\\.CEL","",colnames(exprs(dataRaw)), ignore.case=TRUE)
+    colnames(exprs(dataRaw)) <- gsub("\\.gz","",colnames(exprs(dataRaw)), ignore.case=TRUE)
+    if(sum(duplicated(colnames(exprs(dataRaw)))) > 0) stop("found samples with identical names")
     .verb("...done", verbose)
   } else if(!missing(dataNorm)) {
     if(is(dataNorm, "character")) {
@@ -192,21 +192,21 @@ loadMAdata <- function(datadir=getwd(), setup="setup.txt", dataNorm,
        tmp <- suppressWarnings(tmp <- capture.output(dataNorm <- plier::justPlier(dataNorm,normalize=FALSE,
                                                                            usemm=FALSE, concpenalty=0.08,
                                                                            plieriteration=30000)))
-	    dataNorm <- as.data.frame(affy::exprs(dataNorm),stringsAsFactors=FALSE)
+	    dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
 	    colnames(dataNorm) <- gsub("\\.CEL","",colnames(dataNorm), ignore.case=TRUE)
        colnames(dataNorm) <- gsub("\\.gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)
 	  } else if(normalization == "rma") {
       .verb("Preprocessing using RMA with quantile normalization...", verbose)
       dataNorm <- affy::rma(dataRaw,verbose=FALSE)
-      dataNorm <- as.data.frame(affy::exprs(dataNorm),stringsAsFactors=FALSE)
+      dataNorm <- as.data.frame(exprs(dataNorm),stringsAsFactors=FALSE)
 	    colnames(dataNorm) <- gsub("\\.CEL","",colnames(dataNorm), ignore.case=TRUE)
        colnames(dataNorm) <- gsub("\\.gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)
 	  } else if(normalization == "mas5") {
 	    .verb("Preprocessing using MAS 5.0 with quantile normalization...", verbose)
       dataNorm <- affy::mas5(dataRaw,verbose=FALSE)
-      dataNorm <- as.data.frame(log2(affy::exprs(dataNorm)),stringsAsFactors=FALSE)
+      dataNorm <- as.data.frame(log2(exprs(dataNorm)),stringsAsFactors=FALSE)
 	    colnames(dataNorm) <- gsub("\\.CEL","",colnames(dataNorm), ignore.case=TRUE)
 	    colnames(dataNorm) <- gsub("\\.gz","",colnames(dataNorm), ignore.case=TRUE)
 	    .verb("...done", verbose)
