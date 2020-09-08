@@ -1,1 +1,2 @@
-CHECKprepend: export _R_CHECK_FORCE_SUGGESTS_=0 &&
+CHECKprepend.win:
+CHECKprepend.mac: _R_CHECK_FORCE_SUGGESTS_=0
