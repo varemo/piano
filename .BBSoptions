@@ -1,0 +1,1 @@
+CHECKprepend: export _R_CHECK_FORCE_SUGGESTS_=0 &&
