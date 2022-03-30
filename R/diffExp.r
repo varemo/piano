@@ -304,7 +304,7 @@ diffExp <- function(arrayData, contrasts, chromosomeMapping,
        names(tmp) <- rownames(arrayData$annotation)
        tmp <- as.data.frame(tmp,stringsAsFactors=FALSE)
        topTab <- merge(x=topTab,y=tmp,by.x="ID",by.y="row.names",all.y=TRUE,sort=FALSE)
-       topTab <- topTab[,c("ID","tmp","logFC","AveExpr","t","P.Value","adj.P.Val","B")]
+       topTab <- topTab[,c("ID","tmp",colnames(topTab)[!colnames(topTab)%in%c("ID","tmp")])]
        colnames(topTab)[1:2] <- c("ProbesetID","GeneName") 
     } else {
        colnames(topTab)[1] <- c("ProbesetID") 
