@@ -152,7 +152,7 @@ loadGSC <- function(file, type="auto", addInfo) {
             geneNames <- rep(NA,length(geneIDs))
             for (iGene in 1:length(geneIDs)) {
               
-              GG <- rsbml::name(rsbml::species(rsbml::model(sbml))[[geneIDs[iGene]]])
+              GG <- rsbml::name(species(rsbml::model(sbml))[[geneIDs[iGene]]])
               if ( length(strsplit(GG,':')[[1]]) > 1) {
                 geneNames = strsplit(GG,':')[[1]]
               }
@@ -176,8 +176,8 @@ loadGSC <- function(file, type="auto", addInfo) {
          stop("no gene association found")
       } else {
          for(iMet in 1:length(gsc)) {         
-            tmp1 <- rsbml::name(rsbml::species(rsbml::model(sbml))[[names(gsc)[iMet]]])
-            tmp2 <- rsbml::compartment(rsbml::species(rsbml::model(sbml))[[names(gsc)[iMet]]])
+            tmp1 <- rsbml::name(species(rsbml::model(sbml))[[names(gsc)[iMet]]])
+            tmp2 <- rsbml::compartment(species(rsbml::model(sbml))[[names(gsc)[iMet]]])
             names(gsc)[iMet] <- paste(tmp1," (",tmp2,")",sep="")
          }
       }
