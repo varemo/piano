@@ -4,9 +4,21 @@
 \alias{consensusScores}
 \title{Top consensus gene sets and boxplot}
 \usage{
-consensusScores(resList, class, direction, n = 50, adjusted = FALSE,
-  method = "median", plot = TRUE, cexLabel = 0.8, cexLegend = 1,
-  showLegend = TRUE, rowNames = "names", logScale = FALSE, main)
+consensusScores(
+  resList,
+  class,
+  direction,
+  n = 50,
+  adjusted = FALSE,
+  method = "median",
+  plot = TRUE,
+  cexLabel = 0.8,
+  cexLegend = 1,
+  showLegend = TRUE,
+  rowNames = "names",
+  logScale = FALSE,
+  main
+)
 }
 \arguments{
 \item{resList}{a list where each element is an object of class

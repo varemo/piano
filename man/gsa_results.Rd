@@ -4,8 +4,10 @@
 \name{gsa_results}
 \alias{gsa_results}
 \title{Gene set analysis result data}
-\format{A list where each element is an object of class GSAres, as returned
-by \code{runGSA}.}
+\format{
+A list where each element is an object of class GSAres, as returned
+by \code{runGSA}.
+}
 \description{
 This data set contains gene set analysis results, as returned by the
 \code{\link{runGSA}} function, that is used as example data for downstream

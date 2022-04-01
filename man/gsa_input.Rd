@@ -4,9 +4,11 @@
 \name{gsa_input}
 \alias{gsa_input}
 \title{Random input data for gene set analysis}
-\format{A list containing 3 elements: gsa_input$pvals and
+\format{
+A list containing 3 elements: gsa_input$pvals and
 gsa_input$directions are numeric vectors, gsa_input$gsc is a two-column
-matrix with gene names in the first column and gene set names in the second.}
+matrix with gene names in the first column and gene set names in the second.
+}
 \description{
 This data set is completely randomly generated and contains p-values for
 2000 genes, fold-changes for those genes and a gene set collection giving

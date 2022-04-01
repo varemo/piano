@@ -4,9 +4,14 @@
 \alias{polarPlot}
 \title{Polar plot}
 \usage{
-polarPlot(pValues, chromosomeMapping, colors = c("red", "green", "blue",
-  "yellow", "orange", "purple", "tan", "cyan", "gray60", "black"),
-  save = FALSE, verbose = TRUE)
+polarPlot(
+  pValues,
+  chromosomeMapping,
+  colors = c("red", "green", "blue", "yellow", "orange", "purple", "tan", "cyan",
+    "gray60", "black"),
+  save = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{pValues}{a \code{data.frame} containing p-values for different

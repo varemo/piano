@@ -4,9 +4,17 @@
 \alias{GSAheatmap}
 \title{Heatmap of top significant gene sets}
 \usage{
-GSAheatmap(gsaRes, cutoff = 5, adjusted = FALSE, ncharLabel = 25,
-  cellnote = "pvalue", columnnames = "full", colorkey = TRUE,
-  colorgrad = NULL, cex = NULL)
+GSAheatmap(
+  gsaRes,
+  cutoff = 5,
+  adjusted = FALSE,
+  ncharLabel = 25,
+  cellnote = "pvalue",
+  columnnames = "full",
+  colorkey = TRUE,
+  colorgrad = NULL,
+  cex = NULL
+)
 }
 \arguments{
 \item{gsaRes}{an object of class \code{GSAres}, as returned from

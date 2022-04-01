@@ -4,10 +4,19 @@
 \alias{runQC}
 \title{Run quality control}
 \usage{
-runQC(arrayData, rnaDeg = TRUE, nuseRle = TRUE, hist = TRUE,
-  boxplot = TRUE, pca = TRUE, colorFactor = 1, colors = c("red",
-  "green", "blue", "yellow", "orange", "purple", "tan", "cyan", "gray60",
-  "black", "white"), save = FALSE, verbose = TRUE)
+runQC(
+  arrayData,
+  rnaDeg = TRUE,
+  nuseRle = TRUE,
+  hist = TRUE,
+  boxplot = TRUE,
+  pca = TRUE,
+  colorFactor = 1,
+  colors = c("red", "green", "blue", "yellow", "orange", "purple", "tan", "cyan",
+    "gray60", "black", "white"),
+  save = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{arrayData}{an object of class \code{ArrayData}.}

@@ -4,11 +4,25 @@
 \alias{networkPlot}
 \title{Gene set network plot}
 \usage{
-networkPlot(gsaRes, class, direction, adjusted = FALSE,
-  significance = 0.001, geneSets = NULL, overlap = 1, lay = 1,
-  label = "names", cexLabel = 0.9, ncharLabel = 25, cexLegend = 1,
-  nodeSize = c(10, 40), edgeWidth = c(1, 15), edgeColor = NULL,
-  scoreColors = NULL, main)
+networkPlot(
+  gsaRes,
+  class,
+  direction,
+  adjusted = FALSE,
+  significance = 0.001,
+  geneSets = NULL,
+  overlap = 1,
+  lay = 1,
+  label = "names",
+  cexLabel = 0.9,
+  ncharLabel = 25,
+  cexLegend = 1,
+  nodeSize = c(10, 40),
+  edgeWidth = c(1, 15),
+  edgeColor = NULL,
+  scoreColors = NULL,
+  main
+)
 }
 \arguments{
 \item{gsaRes}{an object of class \code{GSAres}, as returned from
