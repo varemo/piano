@@ -331,7 +331,7 @@ networkPlot <- function(gsaRes, class, direction, adjusted=FALSE, significance=0
          }
       }
       if(min(eWeight) != max(eWeight)) {
-         eWeight <- (eWeight-min(eWeight))/(max(eWeight)-min(eWeight))*(100-0)+0
+         eWeight <- (eWeight-min(eWeight))/(max(eWeight)-min(eWeight))*(100-0)+0.1
       } else {
          eWeight <- rep(50,length(eWeight))
       }
